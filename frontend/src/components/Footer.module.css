@@ -1,0 +1,157 @@
+/* Footer.module.css */
+
+.footer {
+  background: linear-gradient(180deg, #0a0f1e 0%, #030712 100%);
+  border-top: 1px solid rgba(0, 212, 255, 0.1);
+  padding-top: 64px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+}
+
+/* Brand */
+.brand {}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.logoIcon {
+  font-size: 20px;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.8));
+}
+
+.logoText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+/* Links */
+.links {
+  display: contents;
+}
+
+.linkGroup {}
+
+.linkGroupTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linkList a,
+.linkList span {
+  color: #64748b;
+  font-size: 14px;
+  transition: color 0.2s;
+  cursor: default;
+}
+
+.linkList a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.linkList a:hover {
+  color: #00d4ff;
+}
+
+/* Bottom bar */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 20px 24px;
+}
+
+.bottomInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.copyright {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.badges {
+  display: flex;
+  gap: 12px;
+}
+
+.badge {
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  color: #64748b;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .bottomInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,435 @@
+/* Landing.module.css — Emerald / Matrix-green theme */
+
+/* ── Page ── */
+.page {
+  min-height: 100vh;
+  background: #010c09;
+  overflow-x: hidden;
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  min-height: 100vh;
+  padding: 120px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Background orbs */
+.orb1, .orb2 {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+  top: -100px; left: -100px;
+}
+.orb2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,229,176,0.05) 0%, transparent 70%);
+  bottom: 100px; right: -100px;
+}
+
+/* Hero content */
+.heroContent {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  max-width: 600px;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,255,136,0.06);
+  border: 1px solid rgba(0,255,136,0.18);
+  color: #00ff88;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.heroBadgeDot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+
+.heroTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #e8fff5;
+  margin-bottom: 20px;
+  animation: fadeUp 0.8s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.heroTitleAccent {
+  background: linear-gradient(135deg, #00ff88 0%, #00e5b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroDesc {
+  font-size: 17px;
+  color: #4d8a6e;
+  line-height: 1.72;
+  margin-bottom: 36px;
+  max-width: 520px;
+  animation: fadeUp 0.8s 0.15s ease both;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  animation: fadeUp 0.8s 0.25s ease both;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #00ff88 0%, #00c96a 100%);
+  border: none;
+  color: #010c09;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 13px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 24px rgba(0,255,136,0.25);
+  transition: all 0.25s;
+}
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 36px rgba(0,255,136,0.4);
+}
+
+.btnOutline {
+  background: transparent;
+  border: 1px solid rgba(0,255,136,0.3);
+  color: #00ff88;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 13px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.25s;
+}
+.btnOutline:hover {
+  background: rgba(0,255,136,0.06);
+  border-color: #00ff88;
+  box-shadow: 0 0 20px rgba(0,255,136,0.12);
+}
+
+/* Stats */
+.heroStats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  animation: fadeUp 0.8s 0.35s ease both;
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.statValue {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e8fff5;
+}
+.statLabel { font-size: 11px; color: #3d6b55; letter-spacing: 0.4px; }
+.statDivider { width: 1px; height: 36px; background: rgba(0,255,136,0.1); }
+
+/* ── Shield Illustration ── */
+.heroVisual {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+
+.shieldWrap {
+  position: relative;
+  width: 360px; height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+}
+.ring1 {
+  width: 320px; height: 320px;
+  border-color: rgba(0,255,136,0.1);
+  animation: rotateSlow 20s linear infinite;
+}
+.ring2 {
+  width: 240px; height: 240px;
+  border-color: rgba(0,229,176,0.12);
+  border-style: dashed;
+  animation: rotateSlow 14s linear infinite reverse;
+}
+.ring3 {
+  width: 160px; height: 160px;
+  border-color: rgba(0,255,136,0.07);
+  animation: rotateSlow 8s linear infinite;
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.shield {
+  width: 110px; height: 110px;
+  background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,229,176,0.08));
+  border: 2px solid rgba(0,255,136,0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.25); }
+  50%      { box-shadow: 0 0 50px rgba(0,255,136,0.55), 0 0 80px rgba(0,229,176,0.2); }
+}
+
+.shieldInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shieldIcon {
+  font-size: 44px;
+  filter: drop-shadow(0 0 12px rgba(0,255,136,0.8));
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.scanLine {
+  position: absolute;
+  top: 0; left: -50px; right: -50px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.9), transparent);
+  animation: scan 2.5s linear infinite;
+}
+@keyframes scan {
+  0%   { top: -10px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 110px; opacity: 0; }
+}
+
+.radarSweep {
+  position: absolute;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(0,255,136,0.12) 0deg, transparent 60deg, transparent 360deg);
+  animation: rotateSlow 4s linear infinite;
+}
+
+/* Floating nodes */
+.node { position: absolute; width: 10px; height: 10px; border-radius: 50%; }
+.nodeBlue   { background: #00ff88; top: 40px; right: 60px; box-shadow: 0 0 10px #00ff88; animation: float 4s ease-in-out infinite; }
+.nodePurple { background: #00e5b0; bottom: 60px; right: 40px; box-shadow: 0 0 10px #00e5b0; animation: float 3.5s 0.5s ease-in-out infinite; }
+.nodeGreen  { background: #fbbf24; bottom: 50px; left: 50px; box-shadow: 0 0 10px #fbbf24; animation: float 4.5s 1s ease-in-out infinite; }
+.nodeRed    { background: #fb7185; top: 60px; left: 50px; box-shadow: 0 0 10px #fb7185; animation: float 3.8s 0.3s ease-in-out infinite; }
+
+/* ── Sections ── */
+.section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #010c09, #04120d);
+}
+.howSection {
+  padding: 100px 0;
+  background: #010c09;
+}
+.sectionContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.sectionEyebrow {
+  display: inline-block;
+  color: #00ff88;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  color: #e8fff5;
+  margin-bottom: 16px;
+}
+.sectionDesc {
+  font-size: 16px;
+  color: #3d6b55;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Features grid */
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+/* Steps grid */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+.stepCard {
+  text-align: center;
+  padding: 32px 20px;
+  position: relative;
+}
+.stepNum {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00ff88, #00e5b0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.stepConnector {
+  position: absolute;
+  top: 52px;
+  right: -50%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0,255,136,0.25), rgba(0,229,176,0.25));
+}
+.stepTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e8fff5;
+  margin-bottom: 10px;
+}
+.stepDesc {
+  font-size: 14px;
+  color: #3d6b55;
+  line-height: 1.65;
+}
+
+/* CTA section */
+.ctaSection {
+  position: relative;
+  padding: 100px 24px;
+  text-align: center;
+  background: linear-gradient(180deg, #04120d, #010c09);
+  overflow: hidden;
+}
+.ctaOrb1, .ctaOrb2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.ctaOrb1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,255,136,0.07) 0%, transparent 70%);
+  top: -100px; left: 50%; transform: translateX(-50%);
+}
+.ctaOrb2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,229,176,0.06) 0%, transparent 70%);
+  bottom: 0; right: 10%;
+}
+.ctaContent {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.ctaTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: #e8fff5;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.ctaDesc {
+  font-size: 16px;
+  color: #3d6b55;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 100px 24px 60px;
+    min-height: auto;
+  }
+  .heroContent { max-width: 100%; }
+  .heroDesc { max-width: 100%; }
+  .heroButtons { justify-content: center; }
+  .heroStats { justify-content: center; }
+  .shieldWrap { width: 260px; height: 260px; }
+  .ring1 { width: 230px; height: 230px; }
+  .ring2 { width: 170px; height: 170px; }
+  .ring3 { width: 110px; height: 110px; }
+  .featuresGrid { grid-template-columns: repeat(2, 1fr); }
+  .stepsGrid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .stepConnector { display: none; }
+}
+@media (max-width: 640px) {
+  .featuresGrid { grid-template-columns: 1fr; }
+  .stepsGrid { grid-template-columns: 1fr; }
+  .heroStats { flex-wrap: wrap; gap: 16px; }
+}

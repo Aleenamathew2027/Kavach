@@ -1,0 +1,122 @@
+/* ============================================================
+   KAVACH – Global Design System v2
+   Unique Emerald / Matrix-green cybersecurity theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  /* Base backgrounds */
+  --bg-00: #010c09;
+  --bg-01: #04120d;
+  --bg-02: #071a13;
+  --bg-card: rgba(6, 20, 14, 0.85);
+
+  /* Accent palette  */
+  --em:    #00ff88;   /* primary emerald */
+  --em-d:  #00c96a;   /* darker emerald  */
+  --tl:    #00e5b0;   /* teal accent      */
+  --gold:  #fbbf24;   /* amber / gold     */
+  --rose:  #fb7185;   /* danger / warning */
+
+  /* Text */
+  --tx-hi:  #e8fff5;
+  --tx-md:  #7db89a;
+  --tx-lo:  #3d6b55;
+
+  /* Borders */
+  --bd-em:  rgba(0, 255, 136, 0.15);
+  --bd-sub: rgba(255, 255, 255, 0.06);
+
+  /* Gradients */
+  --grad-accent: linear-gradient(135deg, #00ff88, #00e5b0);
+  --grad-hero:   linear-gradient(135deg, #010c09 0%, #04120d 60%, #071a13 100%);
+  --grad-card:   linear-gradient(135deg, rgba(0,255,136,0.04) 0%, rgba(0,229,176,0.03) 100%);
+
+  /* Glows */
+  --glow-em:   0 0 24px rgba(0, 255, 136, 0.35);
+  --glow-em-s: 0 0 12px rgba(0, 255, 136, 0.2);
+
+  /* Fonts */
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', sans-serif;
+
+  /* Radius & timing */
+  --r-sm: 6px;  --r-md: 12px; --r-lg: 18px;
+  --ease: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-00);
+  color: var(--tx-hi);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#root { min-height: 100vh; width: 100%; }
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--tx-hi); }
+a { color: var(--em); text-decoration: none; transition: opacity var(--ease); }
+a:hover { opacity: 0.78; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-01); }
+::-webkit-scrollbar-thumb { background: var(--em-d); border-radius: 3px; }
+
+/* ---------- Utility ---------- */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.gradient-text {
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---------- Autofill Fix (global) ---------- */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 60px #071a13 inset !important;
+  -webkit-text-fill-color: #e8fff5 !important;
+  caret-color: #e8fff5;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ---------- Animations ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scanLine {
+  0%   { top: -4px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 16px rgba(0,255,136,0.25); }
+  50%       { box-shadow: 0 0 40px rgba(0,255,136,0.55), 0 0 64px rgba(0,229,176,0.2); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}

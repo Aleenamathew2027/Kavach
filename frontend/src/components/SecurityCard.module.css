@@ -1,0 +1,118 @@
+/* SecurityCard.module.css */
+
+.card {
+  background: rgba(4, 18, 13, 0.85);
+  border: 1px solid rgba(0, 255, 136, 0.06);
+  border-radius: 16px;
+  padding: 20px 22px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--sc-accent);
+  border-radius: 16px 16px 0 0;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--sc-border);
+  box-shadow: 0 8px 32px var(--sc-shadow);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.icon {
+  font-size: 20px;
+  opacity: 0.8;
+}
+
+.value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+/* Status badge */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sc-badge-bg);
+  border: 1px solid var(--sc-border);
+  color: var(--sc-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sc-text);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Color variants — emerald palette */
+.blue {
+  --sc-accent:    linear-gradient(90deg, #00ff88, #00e5b0);
+  --sc-border:    rgba(0, 255, 136, 0.22);
+  --sc-shadow:    rgba(0, 255, 136, 0.08);
+  --sc-badge-bg:  rgba(0, 255, 136, 0.06);
+  --sc-text:      #00ff88;
+}
+
+.green {
+  --sc-accent:    linear-gradient(90deg, #00c96a, #00e5b0);
+  --sc-border:    rgba(0, 201, 106, 0.25);
+  --sc-shadow:    rgba(0, 201, 106, 0.08);
+  --sc-badge-bg:  rgba(0, 201, 106, 0.06);
+  --sc-text:      #00c96a;
+}
+
+.purple {
+  --sc-accent:    linear-gradient(90deg, #00e5b0, #5eead4);
+  --sc-border:    rgba(0, 229, 176, 0.25);
+  --sc-shadow:    rgba(0, 229, 176, 0.08);
+  --sc-badge-bg:  rgba(0, 229, 176, 0.06);
+  --sc-text:      #00e5b0;
+}
+
+.orange {
+  --sc-accent:    linear-gradient(90deg, #fbbf24, #fb7185);
+  --sc-border:    rgba(251, 191, 36, 0.25);
+  --sc-shadow:    rgba(251, 191, 36, 0.08);
+  --sc-badge-bg:  rgba(251, 191, 36, 0.06);
+  --sc-text:      #fbbf24;
+}
