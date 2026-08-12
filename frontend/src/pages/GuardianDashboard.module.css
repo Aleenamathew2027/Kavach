@@ -1,0 +1,380 @@
+/* GuardianDashboard.module.css — Warm Editorial & Family Safety Theme */
+
+.page {
+  min-height: 100vh;
+  background: #faf8f5;
+  color: #1c1917;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+.header {
+  background: #ffffff;
+  border-bottom: 1px solid #ebe5dc;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #1c1917;
+  text-transform: uppercase;
+}
+
+.guardianTag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  background: #f2ede4;
+  color: #78716c;
+  border-radius: 2px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 4px 10px;
+}
+
+.indicatorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 1px solid #d6d3d1;
+  color: #57534e;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.logoutBtn:hover {
+  background: #1c1917;
+  color: #ffffff;
+  border-color: #1c1917;
+}
+
+/* ── MAIN CONTAINER ── */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+/* ── HERO SECTION ── */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.heroHeading {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-size: clamp(38px, 4.5vw, 54px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -1.5px;
+  color: #1c1917;
+  text-transform: uppercase;
+}
+
+.heroSubtitle {
+  font-size: 16px;
+  color: #78716c;
+}
+
+/* ── DUAL HERO CARDS: PROTECTED PERSON & SAFETY STATUS ── */
+.dualCards {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 32px;
+}
+
+/* Protected Person Card */
+.protectedPersonCard {
+  background: #ffffff;
+  border: 1px solid #ebe5dc;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cardHeaderLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #a8a29e;
+  text-transform: uppercase;
+}
+
+.personInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.personAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f2ede4;
+  color: #1c1917;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  border: 1px solid #e7e5e4;
+}
+
+.personName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1c1917;
+}
+
+.personRole {
+  font-size: 12px;
+  color: #78716c;
+  margin-top: 2px;
+}
+
+.cardFooterInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid #f5f5f4;
+  font-size: 12px;
+  color: #78716c;
+}
+
+/* Safety Status Card */
+.safetyStatusCard {
+  background: #166534;
+  color: #ffffff;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #166534;
+}
+
+.safetyStatusLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #bbf7d0;
+  text-transform: uppercase;
+}
+
+.safetyMain {
+  margin: 18px 0;
+}
+
+.safetyTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.safetySub {
+  font-size: 15px;
+  color: #dcfce7;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.safetyFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  color: #bbf7d0;
+}
+
+/* ── RECENT ALERTS SECTION ── */
+.alertsSection {
+  background: #ffffff;
+  border: 1px solid #ebe5dc;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid #f5f5f4;
+  padding-bottom: 14px;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #1c1917;
+  text-transform: uppercase;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+}
+
+.alertRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #fafaf9;
+}
+
+.alertRow:last-child {
+  border-bottom: none;
+}
+
+.alertLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alertEvent {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.alertTime {
+  font-size: 12px;
+  color: #78716c;
+}
+
+.alertBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* ── EMERGENCY & HELP SECTION ── */
+.emergencyCard {
+  background: #f5f2eb;
+  border: 1px solid #ebe5dc;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emergencyTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #1c1917;
+  text-transform: uppercase;
+}
+
+.emergencyText {
+  font-size: 13.5px;
+  color: #57534e;
+  line-height: 1.6;
+}
+
+.stepGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.stepBlock {
+  background: #ffffff;
+  border: 1px solid #ebe5dc;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  color: #44403c;
+  line-height: 1.5;
+}
+
+.stepNum {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #166534;
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .dualCards { grid-template-columns: 1fr; }
+  .stepGrid { grid-template-columns: 1fr; }
+}

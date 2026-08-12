@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import os
-from typing import Optional
+import secrets
+from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
@@ -26,20 +27,31 @@ http_bearer = HTTPBearer(auto_error=False)
 
 
 def hash_password(password: str) -> str:
-    """Hash a plain text password using bcrypt."""
+    """Hash a plain text password or code using bcrypt."""
     return pwd_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a plain text password against a stored hash."""
-    try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except Exception:
+    """Verify a plain text password or code against a stored hash or legacy plain text."""
+    if not plain_password or not hashed_password:
         return False
+    if hashed_password.startswith(("$2b$", "$2a$", "$2y$", "$argon2")):
+        try:
+            return pwd_context.verify(plain_password, hashed_password)
+        except Exception:
+            return False
+    # Fallback for unhashed legacy passwords
+    return secrets.compare_digest(plain_password, hashed_password)
+
+
+def generate_guardian_code() -> str:
+    """Generate a cryptographically secure 6-digit numeric access code."""
+    digits = "".join(secrets.choice("0123456789") for _ in range(6))
+    return digits
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create a signed JWT access token."""
+    """Create a signed JWT access token with role and subject."""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -49,6 +61,25 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
     return encoded_jwt
+
+
+def decode_access_token(token: str) -> Dict[str, Any]:
+    """Decode and validate a JWT access token."""
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired. Please log in again.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except (jwt.PyJWTError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 
 def get_db():
@@ -71,28 +102,21 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    token = credentials.credentials
-
-    try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
-        user_id_str: str = payload.get("sub")
-        if user_id_str is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token payload",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        user_id = int(user_id_str)
-    except jwt.ExpiredSignatureError:
+    payload = decode_access_token(credentials.credentials)
+    user_id_str: str = payload.get("sub")
+    if user_id_str is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired. Please log in again.",
+            detail="Invalid token payload",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    except (jwt.PyJWTError, ValueError):
+
+    try:
+        user_id = int(user_id_str)
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication token",
+            detail="Invalid token payload",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -105,3 +129,51 @@ def get_current_user(
         )
 
     return user
+
+
+def require_role(allowed_roles: List[str]):
+    """FastAPI dependency factory to enforce role-based access control."""
+    normalized_allowed = [r.lower().strip() for r in allowed_roles]
+
+    def role_dependency(
+        credentials: Optional[HTTPAuthorizationCredentials] = Depends(http_bearer),
+        db: Session = Depends(get_db),
+    ) -> Dict[str, Any]:
+        if credentials is None or not credentials.credentials:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication credentials were not provided",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        payload = decode_access_token(credentials.credentials)
+        token_role = str(payload.get("role", "")).lower().strip()
+
+        if not token_role or token_role not in normalized_allowed:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access forbidden: requires one of the following roles: {allowed_roles}",
+            )
+
+        user_id_str = payload.get("sub")
+        user = None
+        if user_id_str:
+            try:
+                user = db.query(User).filter(User.id == int(user_id_str)).first()
+            except ValueError:
+                pass
+
+        if token_role != "guardian" and user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User associated with token no longer exists",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        return {
+            "user": user,
+            "payload": payload,
+            "role": token_role,
+        }
+
+    return role_dependency

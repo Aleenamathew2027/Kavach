@@ -1,0 +1,134 @@
+/* UserNav.module.css — Warm Ivory & Forest Green Navigation */
+
+.topNav {
+  background: #ffffff;
+  border-bottom: 1px solid #ebe7df;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #1a3325;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.roleBadge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 3px 8px;
+  background: #f2ede4;
+  color: #4a5d4e;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #666666;
+  cursor: pointer;
+  padding: 8px 0;
+  text-transform: uppercase;
+  transition: color 0.15s ease;
+  position: relative;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: #1a3325;
+}
+
+.navLinkActive {
+  color: #1a3325;
+  font-weight: 700;
+}
+
+.navLinkActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #1a3325;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1a3325;
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 1px solid #dcd7cd;
+  color: #4a4a4a;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 7px 16px;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+.logoutBtn:hover {
+  background: #1a3325;
+  color: #ffffff;
+  border-color: #1a3325;
+}
+
+@media (max-width: 1024px) {
+  .navLinks { gap: 16px; font-size: 12px; }
+  .navContainer { padding: 0 20px; }
+}
+
+@media (max-width: 768px) {
+  .navLinks { display: none; }
+}

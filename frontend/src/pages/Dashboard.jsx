@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { api, getToken, getRole } from '../services/api';
 import DashboardNav from '../components/DashboardNav';
 import SecurityCard from '../components/SecurityCard';
 import styles from './Dashboard.module.css';
 
-/* ──────────────────────────────────────────────
-   CSS-only animated shield for the main status card
-   ────────────────────────────────────────────── */
 function ShieldStatus() {
   return (
     <div className={styles.shieldStatus} aria-hidden="true">
@@ -19,9 +17,6 @@ function ShieldStatus() {
   );
 }
 
-/* ──────────────────────────────────────────────
-   Threat level indicator
-   ────────────────────────────────────────────── */
 function ThreatLevel({ level = 'LOW' }) {
   const levels = ['LOW', 'MEDIUM', 'HIGH'];
   const colors = {
@@ -36,23 +31,14 @@ function ThreatLevel({ level = 'LOW' }) {
       <div className={styles.threatBars}>
         {levels.map((l) => {
           const isActive = l === level;
-          const isBelow  =
-            levels.indexOf(l) <= levels.indexOf(level);
+          const isBelow  = levels.indexOf(l) <= levels.indexOf(level);
           return (
-            <div
-              key={l}
-              className={styles.threatBarWrap}
-              aria-current={isActive ? 'true' : undefined}
-            >
+            <div key={l} className={styles.threatBarWrap} aria-current={isActive ? 'true' : undefined}>
               <div
                 className={styles.threatBar}
                 style={{
-                  background: isBelow
-                    ? colors[level].active
-                    : 'rgba(255,255,255,0.06)',
-                  boxShadow: isActive
-                    ? `0 0 12px ${colors[level].glow}`
-                    : 'none',
+                  background: isBelow ? colors[level].active : 'rgba(255,255,255,0.06)',
+                  boxShadow: isActive ? `0 0 12px ${colors[level].glow}` : 'none',
                 }}
               />
               <span
@@ -79,9 +65,6 @@ function ThreatLevel({ level = 'LOW' }) {
   );
 }
 
-/* ──────────────────────────────────────────────
-   Quick action cards data
-   ────────────────────────────────────────────── */
 const quickActions = [
   { id: 'analyze-message',  icon: '💬', label: 'Analyze Message',  desc: 'Check a suspicious message for scam patterns',   color: '#00d4ff' },
   { id: 'analyze-voice',    icon: '🎙️', label: 'Analyze Voice',    desc: 'Detect deepfake or impersonation in voice calls', color: '#7c3aed' },
@@ -89,71 +72,206 @@ const quickActions = [
   { id: 'analyze-document', icon: '📄', label: 'Analyze Document', desc: 'Scan a document for hidden threats',              color: '#f59e0b' },
 ];
 
-/* ──────────────────────────────────────────────
-   Dashboard Page
-   ────────────────────────────────────────────── */
-export default function Dashboard() {
+export default function Dashboard({ role: propRole }) {
   const [activeAction, setActiveAction] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [guardianCode, setGuardianCode] = useState(null);
+  const [guardianExpiry, setGuardianExpiry] = useState(null);
+  const [codeMsg, setCodeMsg] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const role = propRole || getRole();
+  const token = getToken();
+
+  useEffect(() => {
+    async function loadData() {
+      if (!token) return;
+      setLoading(true);
+      try {
+        if (role === 'admin') {
+          const data = await api.getAdminDashboard();
+          setDashboardData(data);
+        } else if (role === 'guardian') {
+          const data = await api.getGuardianDashboard();
+          setDashboardData(data);
+        } else {
+          const data = await api.getUserDashboard();
+          setDashboardData(data);
+        }
+
+        if (role !== 'guardian') {
+          const userData = await api.getMe();
+          setUserProfile(userData);
+        }
+      } catch (err) {
+        console.error('Failed to load dashboard data:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, [role, token]);
 
   const handleActionClick = (id) => {
     setActiveAction(id);
-    /* Future: open a modal or navigate to the analysis page */
     setTimeout(() => setActiveAction(null), 2000);
+  };
+
+  const handleGenerateGuardianCode = async () => {
+    try {
+      setCodeMsg('Generating code…');
+      const data = await api.generateGuardianCode();
+      setGuardianCode(data.code);
+      setGuardianExpiry(new Date(data.expires_at).toLocaleTimeString());
+      setCodeMsg('Code active for 24 hours. Share this with your trusted guardian.');
+    } catch (err) {
+      setCodeMsg(err.message || 'Failed to generate code.');
+    }
+  };
+
+  const handleRevokeGuardianCode = async () => {
+    try {
+      await api.revokeGuardianCode();
+      setGuardianCode(null);
+      setGuardianExpiry(null);
+      setCodeMsg('All guardian access codes have been revoked.');
+    } catch (err) {
+      setCodeMsg(err.message || 'Failed to revoke code.');
+    }
   };
 
   return (
     <div className={styles.page}>
-      <DashboardNav />
+      <DashboardNav role={role} />
 
       <div className={styles.layout}>
-        {/* ── Main content ── */}
         <main className={styles.main} id="main-content">
           {/* Welcome header */}
           <div className={styles.welcomeBar}>
             <div>
-              <h1 className={styles.welcomeTitle}>Welcome to KAVACH</h1>
+              <h1 className={styles.welcomeTitle}>
+                {role === 'admin' && '🛡️ Administrator Control Panel'}
+                {role === 'guardian' && '👁️ Guardian Monitoring Dashboard'}
+                {role === 'user' && `Welcome, ${userProfile?.full_name || 'KAVACH User'}`}
+              </h1>
               <p className={styles.welcomeDesc}>
-                Your digital safety status is{' '}
-                <span className={styles.welcomeSafe}>protected</span>. No threats detected.
+                {role === 'admin' && 'System-wide monitoring, user management, and security infrastructure status.'}
+                {role === 'guardian' && `Authorized view for protected user: ${dashboardData?.guarded_user?.full_name || 'Guarded User'} (${dashboardData?.guarded_user?.email || ''})`}
+                {role === 'user' && (
+                  <>
+                    Your digital safety status is{' '}
+                    <span className={styles.welcomeSafe}>protected</span>. No active threats detected.
+                  </>
+                )}
               </p>
             </div>
             <div className={styles.welcomeTime}>
               <span className={styles.welcomeTimeDot} />
-              <span className={styles.welcomeTimeLabel}>Live Monitoring</span>
+              <span className={styles.welcomeTimeLabel}>
+                {role === 'admin' ? 'SYSTEM LIVE' : role === 'guardian' ? 'GUARDIAN LINKED' : 'Live Monitoring'}
+              </span>
             </div>
           </div>
 
           {/* ── Security overview cards ── */}
           <section aria-label="Security overview" className={styles.cardsSection}>
             <div className={styles.statsGrid}>
-              <SecurityCard
-                icon="🛡️"
-                label="Security Status"
-                value="Safe"
-                status="Protected"
-                variant="green"
-              />
-              <SecurityCard
-                icon="⚠️"
-                label="Threats Detected"
-                value="0"
-                status="All Clear"
-                variant="blue"
-              />
-              <SecurityCard
-                icon="🔍"
-                label="Scans Completed"
-                value="0"
-                status="Ready"
-                variant="purple"
-              />
-              <SecurityCard
-                icon="⚡"
-                label="Protection Level"
-                value="Active"
-                status="Max Shield"
-                variant="orange"
-              />
+              {role === 'admin' ? (
+                <>
+                  <SecurityCard
+                    icon="👥"
+                    label="Total Registered Users"
+                    value={dashboardData?.total_users ?? '...'}
+                    status="Active in PostgreSQL"
+                    variant="green"
+                  />
+                  <SecurityCard
+                    icon="🔗"
+                    label="Active Guardian Links"
+                    value={dashboardData?.active_guardian_links ?? '0'}
+                    status="Verified Codes"
+                    variant="blue"
+                  />
+                  <SecurityCard
+                    icon="⚡"
+                    label="Admin Account"
+                    value="Active"
+                    status={dashboardData?.admin_email || 'admin@kavach.com'}
+                    variant="purple"
+                  />
+                  <SecurityCard
+                    icon="🛡️"
+                    label="System Status"
+                    value="100%"
+                    status="Operational"
+                    variant="orange"
+                  />
+                </>
+              ) : role === 'guardian' ? (
+                <>
+                  <SecurityCard
+                    icon="🛡️"
+                    label="Guarded Status"
+                    value="Safe"
+                    status={dashboardData?.security_status || 'Protected'}
+                    variant="green"
+                  />
+                  <SecurityCard
+                    icon="👤"
+                    label="Guarded Account"
+                    value={dashboardData?.guarded_user?.full_name || 'User'}
+                    status={dashboardData?.guarded_user?.email || ''}
+                    variant="blue"
+                  />
+                  <SecurityCard
+                    icon="⏳"
+                    label="Authorized Until"
+                    value={dashboardData?.authorized_until ? new Date(dashboardData.authorized_until).toLocaleDateString() : 'Active'}
+                    status="24-Hour Pass"
+                    variant="purple"
+                  />
+                  <SecurityCard
+                    icon="🚨"
+                    label="Active Alerts"
+                    value="0"
+                    status="All Clear"
+                    variant="orange"
+                  />
+                </>
+              ) : (
+                <>
+                  <SecurityCard
+                    icon="🛡️"
+                    label="Security Status"
+                    value="Safe"
+                    status="Protected"
+                    variant="green"
+                  />
+                  <SecurityCard
+                    icon="⚠️"
+                    label="Threats Detected"
+                    value="0"
+                    status="All Clear"
+                    variant="blue"
+                  />
+                  <SecurityCard
+                    icon="🔗"
+                    label="Guardian Links"
+                    value={dashboardData?.active_guardian_codes ?? 0}
+                    status="Active Codes"
+                    variant="purple"
+                  />
+                  <SecurityCard
+                    icon="⚡"
+                    label="Protection Level"
+                    value="Active"
+                    status="Max Shield"
+                    variant="orange"
+                  />
+                </>
+              )}
             </div>
           </section>
 
@@ -167,18 +285,20 @@ export default function Dashboard() {
               <div className={styles.bigStatusRight}>
                 <span className={styles.bigStatusBadge}>
                   <span className={styles.bigStatusDot} />
-                  SYSTEM ACTIVE
+                  {role === 'admin' ? 'ADMIN PRIVILEGES' : role === 'guardian' ? 'GUARDIAN ACCESS' : 'PROTECTION ACTIVE'}
                 </span>
                 <h2 className={styles.bigStatusTitle}>
-                  Your Digital Environment<br />
-                  <span className={styles.bigStatusAccent}>is Secure</span>
+                  {role === 'admin' && 'KAVACH Infrastructure Operational'}
+                  {role === 'guardian' && `Monitoring ${dashboardData?.guarded_user?.full_name || 'Protected User'}`}
+                  {role === 'user' && 'Your Digital Environment is Secure'}
                 </h2>
                 <p className={styles.bigStatusDesc}>
-                  KAVACH is actively monitoring your digital environment for threats.
-                  All protection modules are online and operational.
+                  {role === 'admin' && 'Real-time role enforcement, PostgreSQL transaction pools, and security analyzers are fully active.'}
+                  {role === 'guardian' && 'You have authorized guardian visibility into this user\'s AI scam protection modules and threat alerts.'}
+                  {role === 'user' && 'KAVACH AI models are actively guarding your messages, incoming calls, links, and transactions.'}
                 </p>
                 <div className={styles.bigStatusModules}>
-                  {['Scam Detection', 'Phishing Guard', 'Voice Analysis', 'Document Shield'].map((m) => (
+                  {(dashboardData?.protection_modules || ['Scam Detection', 'Phishing Guard', 'Voice Analysis', 'Document Shield']).map((m) => (
                     <span key={m} className={styles.moduleChip}>
                       <span className={styles.moduleChipDot} />
                       {m}
@@ -189,8 +309,103 @@ export default function Dashboard() {
             </section>
 
             {/* Threat level */}
-            <ThreatLevel level="LOW" />
+            <ThreatLevel level={dashboardData?.active_threat_level || 'LOW'} />
           </div>
+
+          {/* ── User-specific Guardian Code Management Section ── */}
+          {role === 'user' && (
+            <section
+              style={{
+                background: 'rgba(4, 18, 13, 0.8)',
+                border: '1px solid rgba(0, 255, 136, 0.15)',
+                borderRadius: '16px',
+                padding: '24px 28px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#e8fff5', margin: 0 }}>
+                    🛡️ Guardian Access Code
+                  </h3>
+                  <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0' }}>
+                    Generate a secure 6-digit access code for your trusted guardian (family member or supervisor).
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={handleGenerateGuardianCode}
+                    style={{
+                      background: 'linear-gradient(135deg, #00ff88, #00e5b0)',
+                      color: '#010c09',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '8px 16px',
+                      fontWeight: 700,
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    + Generate 6-Digit Code
+                  </button>
+                  {guardianCode && (
+                    <button
+                      type="button"
+                      onClick={handleRevokeGuardianCode}
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.15)',
+                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        color: '#ef4444',
+                        borderRadius: '8px',
+                        padding: '8px 16px',
+                        fontWeight: 600,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Revoke Code
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {guardianCode && (
+                <div
+                  style={{
+                    background: 'rgba(0, 255, 136, 0.05)',
+                    border: '1px dashed #00ff88',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '12px',
+                  }}
+                >
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                      Active Guardian Code
+                    </span>
+                    <div style={{ fontSize: '32px', fontWeight: 800, letterSpacing: '8px', color: '#00ff88', fontFamily: 'monospace' }}>
+                      {guardianCode}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#94a3b8', textAlign: 'right' }}>
+                    <div>Expires at: <strong style={{ color: '#e8fff5' }}>{guardianExpiry}</strong></div>
+                    <div style={{ color: '#00ff88', fontSize: '12px', marginTop: '4px' }}>Ready to share with guardian</div>
+                  </div>
+                </div>
+              )}
+
+              {codeMsg && !guardianCode && (
+                <div style={{ fontSize: '13px', color: '#00ff88' }}>{codeMsg}</div>
+              )}
+            </section>
+          )}
 
           {/* ── Quick actions ── */}
           <section aria-label="Quick actions" className={styles.quickSection}>
@@ -240,8 +455,8 @@ export default function Dashboard() {
               <div className={styles.activityEmptyIcon}>✅</div>
               <h3 className={styles.activityEmptyTitle}>No Suspicious Activity Detected</h3>
               <p className={styles.activityEmptyDesc}>
-                Your digital environment has been quiet. KAVACH will alert you instantly
-                if any suspicious activity is detected.
+                Your digital environment is monitored by KAVACH. You will be alerted instantly
+                if any scam attempts or malicious activities are detected.
               </p>
             </div>
           </section>

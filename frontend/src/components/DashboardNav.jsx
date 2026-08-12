@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './DashboardNav.module.css';
 
 const navItems = [
@@ -15,12 +15,16 @@ const navItems = [
 /**
  * DashboardNav – top navigation bar for the dashboard
  */
-export default function DashboardNav() {
+export default function DashboardNav({ role = 'user' }) {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('dashboard');
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const currentRole = role || localStorage.getItem('kavach_role') || 'user';
+
   const handleLogout = () => {
+    localStorage.removeItem('kavach_token');
+    localStorage.removeItem('kavach_role');
     localStorage.removeItem('kavach_logged_in');
     navigate('/login');
   };
@@ -55,9 +59,9 @@ export default function DashboardNav() {
 
         {/* Right side */}
         <div className={styles.right}>
-          <div className={styles.statusBadge} title="Security status: Protected">
+          <div className={styles.statusBadge} title={`Logged in as ${currentRole.toUpperCase()}`}>
             <span className={styles.statusDot} />
-            Protected
+            {currentRole.toUpperCase()}
           </div>
           <button
             className={styles.logoutBtn}

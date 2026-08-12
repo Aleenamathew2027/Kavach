@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../services/api';
 import styles from './Register.module.css';
-
-const API_URL = 'http://127.0.0.1:8000/users/register';
 
 /* ── Password strength helper ── */
 function getPasswordStrength(pwd) {
@@ -86,10 +85,14 @@ export default function Register() {
   /* ── Validation ── */
   const validate = () => {
     const errs = {};
-    if (!form.full_name.trim())
+    const nameTrimmed = form.full_name.trim();
+    if (!nameTrimmed) {
       errs.full_name = 'Full name is required.';
-    else if (form.full_name.trim().length < 2)
+    } else if (nameTrimmed.length < 2) {
       errs.full_name = 'Name must be at least 2 characters.';
+    } else if (!/^[A-Za-z\s]+$/.test(nameTrimmed)) {
+      errs.full_name = 'Name must contain only letters and spaces (no numbers or symbols like @, #, $).';
+    }
 
     if (!form.email.trim())
       errs.email = 'Email address is required.';
@@ -124,36 +127,17 @@ export default function Register() {
     setApiError('');
 
     try {
-      const response = await fetch(API_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          full_name: form.full_name.trim(),
-          email:     form.email.trim().toLowerCase(),
-          password:  form.password,
-        }),
+      await api.register({
+        full_name: form.full_name.trim(),
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
       });
 
-      if (response.ok) {
-        setSuccess(true);
-        setTimeout(() => navigate('/login'), 2500);
-      } else {
-        let msg = 'Registration failed. Please try again.';
-        try {
-          const data = await response.json();
-          if (typeof data.detail === 'string')       msg = data.detail;
-          else if (Array.isArray(data.detail))       msg = data.detail.map((d) => d.msg).join(', ');
-        } catch { /* ignore */ }
-        showError(msg, false);
-      }
+      setSuccess(true);
+      setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      const isNetwork = err instanceof TypeError || err.message?.includes('fetch');
-      showError(
-        isNetwork
-          ? 'Backend server is not running or unreachable.'
-          : 'An unexpected error occurred. Please try again.',
-        isNetwork
-      );
+      const isNetwork = err.isNetwork || err.status === 0;
+      showError(err.message || 'Registration failed. Please try again.', isNetwork);
     } finally {
       setLoading(false);
     }

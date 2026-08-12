@@ -1,0 +1,267 @@
+/* LinkChecker.module.css — Editorial Design */
+
+.page {
+  min-height: 100vh;
+  background: #faf8f5;
+  color: #1a1a1a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 32px 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  width: 100%;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pageTitle {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-size: clamp(32px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #1a3325;
+  text-transform: uppercase;
+}
+
+.pageSubtitle {
+  font-size: 15px;
+  color: #4a5d4e;
+}
+
+.scannerCard {
+  background: #ffffff;
+  border: 1px solid #ebe7df;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #555555;
+  text-transform: uppercase;
+}
+
+.urlInput {
+  width: 100%;
+  background: #faf8f5;
+  border: 1px solid #dcd7cd;
+  color: #1a1a1a;
+  font-size: 15px;
+  padding: 14px 18px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.urlInput:focus {
+  border-color: #1a3325;
+  background: #ffffff;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.primaryBtn {
+  background: #1a3325;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 13px 28px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.primaryBtn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clearBtn {
+  background: transparent;
+  border: 1px solid #dcd7cd;
+  color: #666666;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 12px 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+
+.clearBtn:hover {
+  background: #f4f1ea;
+  color: #1a1a1a;
+}
+
+.errorBanner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* ── RESULT SECTION ── */
+.resultSection {
+  background: #ffffff;
+  border: 1px solid #ebe7df;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f2ede4;
+  padding-bottom: 20px;
+}
+
+.scoreGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.riskBadge {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  text-transform: uppercase;
+}
+
+.badgeHigh {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
+.badgeSuspicious {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.badgeSafe {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.scoreNumber {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #1a3325;
+}
+
+.scoreLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #737373;
+  text-transform: uppercase;
+}
+
+.urlDisplay {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a3325;
+  background: #faf8f5;
+  padding: 10px 14px;
+  border: 1px solid #ebe7df;
+  word-break: break-all;
+  margin-top: 6px;
+}
+
+.indicatorsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.indicatorPill {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  background: #f4f1ea;
+  color: #1a3325;
+  border: 1px solid #e5dfd5;
+}
+
+.reasonsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.reasonItem {
+  font-size: 14px;
+  color: #333333;
+  line-height: 1.5;
+}
+
+.actionBox {
+  background: #fbfaf8;
+  border-left: 4px solid #1a3325;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.actionBoxTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #1a3325;
+  text-transform: uppercase;
+}
+
+.actionBoxText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  .main { padding: 32px 20px 60px; }
+  .resultHeader { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .actionRow { flex-direction: column; align-items: stretch; }
+}

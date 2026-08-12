@@ -1,18 +1,23 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.dashboard import router as dashboard_router
+from app.api.guardian import router as guardian_router
+from app.api.security import router as security_router
 from app.api.user import router as user_router
-from app.database.base import Base
-from app.database.connection import engine
-import app.models.user  # registers User model with Base
+from app.database.init_db import init_db
 
-# Automatically create tables on startup
-Base.metadata.create_all(bind=engine)
+# Initialize database schema and ensure predefined admin account on startup
+init_db()
 
-app = FastAPI(title="Kavach API")
+app = FastAPI(
+    title="Kavach API",
+    description="KAVACH AI Digital Guardian Backend API with Role-Based Access Control (Admin, User, Guardian)",
+    version="1.0.0"
+)
 
-# ── CORS ──────────────────────────────────────────────────────────────────────
-# Allow the Vite dev server (http://127.0.0.1:5173 and http://localhost:5173) to call the API.
+# ── CORS Middleware ────────────────────────────────────────────────────────────
+# Allows Vite frontend (localhost:5173 / 127.0.0.1:5173) to communicate with API.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -28,11 +33,15 @@ app.add_middleware(
 # ──────────────────────────────────────────────────────────────────────────────
 
 
-@app.get("/")
+@app.get("/", tags=["General"])
 def home():
     return {
         "message": "Welcome to Kavach API"
     }
 
 
-app.include_router(user_router)
+# Include Routers
+app.include_router(user_router)
+app.include_router(guardian_router)
+app.include_router(dashboard_router)
+app.include_router(security_router)

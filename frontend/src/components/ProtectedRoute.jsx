@@ -1,15 +1,27 @@
 import { Navigate } from 'react-router-dom';
+import { getToken, getRole } from '../services/api';
 
 /**
- * ProtectedRoute – wraps a route that requires authentication.
- * If the user is not logged in (no kavach_logged_in in localStorage),
- * they are redirected to /login.
+ * ProtectedRoute – wraps routes requiring authentication.
+ * Redirects unauthenticated visitors to /login.
+ * Redirects users with mismatched roles to their authorized dashboard.
  */
-export default function ProtectedRoute({ children }) {
-  const isLoggedIn = localStorage.getItem('kavach_logged_in') === 'true';
+export default function ProtectedRoute({ children, allowedRoles }) {
+  const token = getToken();
+  const role = getRole();
 
-  if (!isLoggedIn) {
+  if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    if (role === 'admin') {
+      return <Navigate to="/admin/dashboard" replace />;
+    }
+    if (role === 'guardian') {
+      return <Navigate to="/guardian/dashboard" replace />;
+    }
+    return <Navigate to="/user/dashboard" replace />;
   }
 
   return children;

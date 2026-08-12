@@ -1,153 +1,134 @@
-import { useState } from "react";
-import "./App.css";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
 
-function App() {
-  const [page, setPage] = useState("home");
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import UserDashboard from './pages/UserDashboard';
+import UserProfile from './pages/UserProfile';
+import UserSecurity from './pages/UserSecurity';
+import UserAlerts from './pages/UserAlerts';
+import MessageScanner from './pages/MessageScanner';
+import LinkChecker from './pages/LinkChecker';
+import DocumentChecker from './pages/DocumentChecker';
+import AdminDashboard from './pages/AdminDashboard';
+import GuardianDashboard from './pages/GuardianDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import { getRole } from './services/api';
 
-  if (page === "login") {
-    return (
-      <div className="auth-page">
-        <div className="auth-card">
-          <h1>KAVACH</h1>
-          <h2>Welcome Back</h2>
-          <p>Login to your Kavach account</p>
-
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-
-          <button>Login</button>
-
-          <p>
-            Don't have an account?{" "}
-            <span onClick={() => setPage("register")}>
-              Register
-            </span>
-          </p>
-
-          <button
-            className="back-button"
-            onClick={() => setPage("home")}
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (page === "register") {
-    return (
-      <div className="auth-page">
-        <div className="auth-card">
-          <h1>KAVACH</h1>
-          <h2>Create Account</h2>
-          <p>Join Kavach and stay protected</p>
-
-          <input type="text" placeholder="Full Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <input type="password" placeholder="Confirm Password" />
-
-          <button>Register</button>
-
-          <p>
-            Already have an account?{" "}
-            <span onClick={() => setPage("login")}>
-              Login
-            </span>
-          </p>
-
-          <button
-            className="back-button"
-            onClick={() => setPage("home")}
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="landing-page">
-      <nav>
-        <div className="logo">KAVACH</div>
-
-        <div className="nav-buttons">
-          <button
-            className="login-btn"
-            onClick={() => setPage("login")}
-          >
-            Login
-          </button>
-
-          <button
-            onClick={() => setPage("register")}
-          >
-            Register
-          </button>
-        </div>
-      </nav>
-
-      <main className="hero">
-        <div className="hero-text">
-          <p className="tag">AI-POWERED DIGITAL SECURITY</p>
-
-          <h1>
-            Your Digital World.
-            <br />
-            <span>Protected by Kavach.</span>
-          </h1>
-
-          <p className="description">
-            Kavach is an AI-powered security guardian designed
-            to protect you from digital scams, phishing,
-            deepfake voices, suspicious messages and fraudulent
-            activities.
-          </p>
-
-          <div className="hero-buttons">
-            <button onClick={() => setPage("register")}>
-              Get Started
-            </button>
-
-            <button
-              className="outline-btn"
-              onClick={() => setPage("login")}
-            >
-              Login
-            </button>
-          </div>
-        </div>
-
-        <div className="shield">
-          🛡️
-        </div>
-      </main>
-
-      <section className="features">
-        <div>
-          <h3>🎙️ Voice Protection</h3>
-          <p>Detect suspicious and AI-generated voice interactions.</p>
-        </div>
-
-        <div>
-          <h3>💬 Message Security</h3>
-          <p>Identify phishing and suspicious messages.</p>
-        </div>
-
-        <div>
-          <h3>💳 Payment Protection</h3>
-          <p>Analyze risky payment requests before you act.</p>
-        </div>
-
-        <div>
-          <h3>📄 Document Security</h3>
-          <p>Detect suspicious documents and fraudulent content.</p>
-        </div>
-      </section>
-    </div>
-  );
+/**
+ * DynamicDashboardRedirect – routes /dashboard to the user's specific role dashboard
+ */
+function DynamicDashboardRedirect() {
+  const role = getRole();
+  if (role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+  if (role === 'guardian') return <Navigate to="/guardian/dashboard" replace />;
+  return <Navigate to="/user/dashboard" replace />;
 }
 
-export default App;
+/**
+ * App – root router for KAVACH
+ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* User Role Protected Routes */}
+        <Route
+          path="/user/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/messages"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <MessageScanner />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/link-checker"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <LinkChecker />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/document-checker"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <DocumentChecker />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/security"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserSecurity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/alerts"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserAlerts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Role Protected Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Guardian Role Protected Routes */}
+        <Route
+          path="/guardian/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Dynamic Fallback Route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DynamicDashboardRedirect />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all redirect to Landing */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
