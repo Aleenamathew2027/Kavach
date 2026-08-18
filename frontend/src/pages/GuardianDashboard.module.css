@@ -1,380 +1,644 @@
-/* GuardianDashboard.module.css — Warm Editorial & Family Safety Theme */
+/* GuardianDashboard.module.css — Engineering Platform Design */
 
 .page {
   min-height: 100vh;
-  background: #faf8f5;
-  color: #1c1917;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  display: flex;
-  flex-direction: column;
+  background: #060a17;
+  color: #f1f5f9;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* ── HEADER ── */
-.header {
-  background: #ffffff;
-  border-bottom: 1px solid #ebe5dc;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.headerContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logoArea {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logoText {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #1c1917;
-  text-transform: uppercase;
-}
-
-.guardianTag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 2px 8px;
-  background: #f2ede4;
-  color: #78716c;
-  border-radius: 2px;
-}
-
-.headerRight {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.liveIndicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #166534;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  padding: 4px 10px;
-}
-
-.indicatorDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #16a34a;
-}
-
-.logoutBtn {
-  background: transparent;
-  border: 1px solid #d6d3d1;
-  color: #57534e;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 6px 14px;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-family: inherit;
-  transition: all 0.15s ease;
-}
-
-.logoutBtn:hover {
-  background: #1c1917;
-  color: #ffffff;
-  border-color: #1c1917;
-}
-
-/* ── MAIN CONTAINER ── */
 .main {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 48px 32px 80px;
+  padding: 40px 32px 80px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
-  width: 100%;
+  gap: 36px;
 }
 
-/* ── HERO SECTION ── */
+/* ── HERO BANNER ── */
 .heroSection {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  border-bottom: 1px solid #1c2541;
+  padding-bottom: 32px;
+}
+
+.sectionPill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #48e5c2;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: inline-block;
 }
 
 .heroHeading {
-  font-family: 'Space Grotesk', -apple-system, sans-serif;
-  font-size: clamp(38px, 4.5vw, 54px);
-  font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -1.5px;
-  color: #1c1917;
-  text-transform: uppercase;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  color: #ffffff;
 }
 
 .heroSubtitle {
-  font-size: 16px;
-  color: #78716c;
+  font-size: 14.5px;
+  color: #8da9c4;
+  margin-top: 10px;
+  max-width: 540px;
 }
 
-/* ── DUAL HERO CARDS: PROTECTED PERSON & SAFETY STATUS ── */
-.dualCards {
-  display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 32px;
-}
-
-/* Protected Person Card */
-.protectedPersonCard {
-  background: #ffffff;
-  border: 1px solid #ebe5dc;
-  padding: 36px 32px;
+.quickNavCards {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.cardHeaderLabel {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #a8a29e;
-  text-transform: uppercase;
-}
-
-.personInfo {
-  display: flex;
-  align-items: center;
   gap: 16px;
 }
 
-.personAvatar {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: #f2ede4;
-  color: #1c1917;
+.quickCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  padding: 16px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: inherit;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 700;
-  border: 1px solid #e7e5e4;
+  gap: 14px;
+  transition: all 0.2s ease;
 }
 
-.personName {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: #1c1917;
+.quickCard:hover {
+  border-color: #48e5c2;
+  transform: translateY(-2px);
 }
 
-.personRole {
-  font-size: 12px;
-  color: #78716c;
-  margin-top: 2px;
+.quickIcon {
+  font-size: 24px;
 }
 
-.cardFooterInfo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 18px;
-  border-top: 1px solid #f5f5f4;
-  font-size: 12px;
-  color: #78716c;
-}
-
-/* Safety Status Card */
-.safetyStatusCard {
-  background: #166534;
+.quickCard strong {
+  display: block;
+  font-size: 13px;
   color: #ffffff;
-  padding: 36px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid #166534;
 }
 
-.safetyStatusLabel {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #bbf7d0;
-  text-transform: uppercase;
+.quickCard p {
+  font-size: 11.5px;
+  color: #8da9c4;
+  margin: 2px 0 0;
 }
 
-.safetyMain {
-  margin: 18px 0;
-}
-
-.safetyTitle {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.safetySub {
-  font-size: 15px;
-  color: #dcfce7;
-  margin-top: 6px;
-  line-height: 1.5;
-}
-
-.safetyFooter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 12px;
-  color: #bbf7d0;
-}
-
-/* ── RECENT ALERTS SECTION ── */
-.alertsSection {
-  background: #ffffff;
-  border: 1px solid #ebe5dc;
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
+/* ── DUAL HERO PANELS ── */
+.dualGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
-.sectionHeader {
+.userCard, .statusPanel {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 30px;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid #f5f5f4;
-  padding-bottom: 14px;
+  gap: 24px;
 }
 
-.sectionTitle {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardCategory {
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 2px;
-  color: #1c1917;
+  letter-spacing: 1.5px;
+  color: #8da9c4;
   text-transform: uppercase;
 }
 
-.alertList {
-  display: flex;
-  flex-direction: column;
+.protectStatusPill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(72, 229, 194, 0.1);
+  color: #48e5c2;
+  border: 1px solid rgba(72, 229, 194, 0.3);
 }
 
-.alertRow {
+.userInfoRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid #fafaf9;
+  gap: 18px;
 }
 
-.alertRow:last-child {
-  border-bottom: none;
+.userAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #1c2541;
+  color: #48e5c2;
+  border: 2px solid rgba(72, 229, 194, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
 }
 
-.alertLeft {
+.userName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.userEmail {
+  font-size: 13px;
+  color: #8da9c4;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: #060a17;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #1c2541;
+}
+
+.metaItem {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.alertEvent {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1c1917;
+.metaLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #8da9c4;
 }
 
-.alertTime {
+.metaVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.metaValSafe {
+  font-size: 13px;
+  font-weight: 800;
+  color: #48e5c2;
+}
+
+.metaValWarn {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ef4444;
+}
+
+.cardFooter {
+  border-top: 1px solid #1c2541;
+  padding-top: 16px;
+}
+
+.cardLink {
   font-size: 12px;
-  color: #78716c;
+  font-weight: 700;
+  color: #48e5c2;
+  text-decoration: none;
+  letter-spacing: 0.5px;
 }
 
-.alertBadge {
+.cardLink:hover {
+  text-decoration: underline;
+}
+
+/* Status Panel */
+.livePulseTag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #48e5c2;
+  letter-spacing: 1px;
+}
+
+.statusHero {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.statusIndicatorCircle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #48e5c2;
+  box-shadow: 0 0 16px rgba(72, 229, 194, 0.6);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.statusHeadline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.statusDesc {
+  font-size: 13px;
+  color: #8da9c4;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.protectionModulesRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modBadge {
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 10px;
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  padding: 4px 10px;
+  background: #1c2541;
+  color: #cbd5e1;
+  border-radius: 4px;
+  border: 1px solid #3a506b;
 }
 
-/* ── EMERGENCY & HELP SECTION ── */
-.emergencyCard {
-  background: #f5f2eb;
-  border: 1px solid #ebe5dc;
-  padding: 32px 36px;
+/* ── METRICS GRID ── */
+.metricsSection {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.subtext {
+  font-size: 12px;
+  color: #8da9c4;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.metricCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metricLabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #8da9c4;
+}
+
+.metricNum {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.metricSub {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* ── ALERTS SECTION ── */
+.alertsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.viewAllLink {
+  font-size: 12px;
+  font-weight: 700;
+  color: #48e5c2;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.emptyAlerts {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 6px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #8da9c4;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alertRow {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 6px;
+  padding: 20px 24px;
+}
+
+.alertTopLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alertTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.badgeHigh {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 2px;
+}
+
+.badgeMed {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 2px;
+}
+
+.alertAction {
+  display: block;
+  font-size: 13px;
+  color: #38bdf8;
+  margin-top: 8px;
+}
+
+.alertTimestamp {
+  display: block;
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+/* ── EMERGENCY CARD ── */
+.emergencyCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.emergencyBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #f59e0b;
+  text-transform: uppercase;
 }
 
 .emergencyTitle {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: 2px;
-  color: #1c1917;
-  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: 4px;
 }
 
-.emergencyText {
-  font-size: 13.5px;
-  color: #57534e;
-  line-height: 1.6;
-}
-
-.stepGrid {
+.stepsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 8px;
+  gap: 20px;
 }
 
-.stepBlock {
-  background: #ffffff;
-  border: 1px solid #ebe5dc;
-  padding: 18px 20px;
+.stepBox {
+  background: #060a17;
+  border: 1px solid #1c2541;
+  border-radius: 6px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 12.5px;
-  color: #44403c;
-  line-height: 1.5;
+  gap: 8px;
 }
 
-.stepNum {
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #166534;
+.stepCount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: #48e5c2;
+}
+
+.stepBox strong {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.stepBox p {
+  font-size: 12.5px;
+  color: #8da9c4;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── HIGH RISK POPUP MODAL ── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 10, 23, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modalCard {
+  background: #0f172a;
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: modalPop 0.25s ease-out;
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modalWarningIcon {
+  font-size: 36px;
+  color: #ef4444;
+}
+
+.modalBadge {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ef4444;
   text-transform: uppercase;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .dualCards { grid-template-columns: 1fr; }
-  .stepGrid { grid-template-columns: 1fr; }
+.modalTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 6px 0 0;
+}
+
+.modalSub {
+  font-size: 13.5px;
+  color: #cbd5e1;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.modalDetailsBox {
+  background: #060a17;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.modalLabel {
+  color: #94a3b8;
+}
+
+.modalVal {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.modalHighVal {
+  color: #ef4444;
+  font-weight: 800;
+  background: rgba(239, 68, 68, 0.15);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.modalAdvice {
+  font-size: 13px;
+  color: #38bdf8;
+  line-height: 1.5;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid #38bdf8;
+  margin: 0;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+}
+
+.modalViewBtn {
+  flex: 2;
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.modalViewBtn:hover {
+  background: #dc2626;
+}
+
+.modalDismissBtn {
+  flex: 1;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modalDismissBtn:hover {
+  color: #ffffff;
+  border-color: #64748b;
+}
+
+@media (max-width: 1024px) {
+  .dualGrid { grid-template-columns: 1fr; }
+  .metricsGrid { grid-template-columns: repeat(2, 1fr); }
+  .stepsGrid { grid-template-columns: 1fr; }
+  .heroSection { flex-direction: column; align-items: flex-start; }
 }

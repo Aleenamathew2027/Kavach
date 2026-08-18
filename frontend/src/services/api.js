@@ -73,6 +73,7 @@ export const api = {
   // Authentication
   register: (body) => request('/users/register', { method: 'POST', body: JSON.stringify(body) }),
   login: (body) => request('/users/login', { method: 'POST', body: JSON.stringify(body) }),
+  googleLogin: (body) => request('/users/google-login', { method: 'POST', body: JSON.stringify(body) }),
   verifyGuardianCode: (body) => request('/guardian/verify-code', { method: 'POST', body: JSON.stringify(body) }),
 
   // User details & profile management
@@ -88,11 +89,18 @@ export const api = {
   markAlertRead: (id) => request(`/security/alerts/${id}/read`, { method: 'PATCH' }),
   getSecuritySummary: () => request('/security/summary'),
 
-  // Role Dashboards
+  // Role Dashboards & Management
   getUserDashboard: () => request('/user/dashboard'),
   getAdminDashboard: () => request('/admin/dashboard'),
   getAdminUsers: () => request('/admin/users'),
+  getAdminSecurityEvents: () => request('/admin/security-events'),
+  getAdminGuardians: () => request('/admin/guardians'),
+  getAdminReports: () => request('/admin/reports'),
+  getAdminActivity: () => request('/admin/activity'),
   getGuardianDashboard: () => request('/guardian/dashboard'),
+  getGuardianAlerts: () => request('/guardian/alerts'),
+  markGuardianAlertRead: (id) => request(`/guardian/alerts/${id}/read`, { method: 'PATCH' }),
+  getGuardianActivity: () => request('/guardian/activity'),
 
   // Guardian Code Management (User role)
   generateGuardianCode: () => request('/guardian/generate-code', { method: 'POST' }),

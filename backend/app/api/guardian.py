@@ -251,3 +251,94 @@ def guardian_dashboard(
         ],
         "authorized_until": authorized_until
     }
+
+
+@router.get(
+    "/alerts",
+    summary="Get all security alerts for the guarded user (Guardian only)"
+)
+def get_guardian_alerts(
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    payload = auth_ctx["payload"]
+    user_id = int(payload["sub"])
+
+    alerts = db.query(SecurityAlert).filter(
+        SecurityAlert.user_id == user_id
+    ).order_by(SecurityAlert.created_at.desc()).all()
+
+    res = []
+    for a in alerts:
+        type_label = "Suspicious Message" if "message" in a.alert_type else ("Suspicious Link" if "link" in a.alert_type else "Suspicious Document")
+        res.append({
+            "id": a.id,
+            "alert_type": a.alert_type,
+            "threat_type": type_label,
+            "title": a.title,
+            "message": a.message,
+            "severity": a.severity,
+            "is_read": a.is_read,
+            "time": a.created_at.isoformat(),
+            "created_at": a.created_at.isoformat(),
+            "recommended_action": "Verify with the user and advise them not to click links, share OTPs, or approve payments."
+        })
+    return res
+
+
+@router.patch(
+    "/alerts/{alert_id}/read",
+    summary="Mark guarded user's alert as read by Guardian"
+)
+def mark_guardian_alert_read(
+    alert_id: int,
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    payload = auth_ctx["payload"]
+    user_id = int(payload["sub"])
+
+    alert = db.query(SecurityAlert).filter(
+        SecurityAlert.id == alert_id,
+        SecurityAlert.user_id == user_id
+    ).first()
+
+    if not alert:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Alert not found"
+        )
+
+    alert.is_read = True
+    db.commit()
+    return {"message": "Alert marked as read", "id": alert_id}
+
+
+@router.get(
+    "/activity",
+    summary="Get privacy-safe security activity log for guarded user (Guardian only)"
+)
+def get_guardian_activity(
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    payload = auth_ctx["payload"]
+    user_id = int(payload["sub"])
+
+    scans = db.query(SecurityScan).filter(
+        SecurityScan.user_id == user_id
+    ).order_by(SecurityScan.created_at.desc()).limit(30).all()
+
+    items = []
+    for s in scans:
+        items.append({
+            "id": f"scan-{s.id}",
+            "type": s.scan_type,
+            "event": f"{s.scan_type.capitalize()} Safety Check",
+            "risk_level": s.risk_level,
+            "risk_score": s.risk_score,
+            "summary": s.result_summary,
+            "time": s.created_at.isoformat() if s.created_at else None,
+        })
+    return items
+

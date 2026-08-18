@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 import styles from './Register.module.css';
 
 /* ── Password strength helper ── */
@@ -410,6 +411,18 @@ export default function Register() {
               )}
             </button>
           </form>
+
+          {/* Google Sign-Up */}
+          <div className={styles.dividerRow}>
+            <span className={styles.dividerLine} />
+            <span className={styles.dividerText}>OR</span>
+            <span className={styles.dividerLine} />
+          </div>
+
+          <GoogleSignInButton
+            onError={(msg) => showError(msg)}
+            buttonText="Continue with Google"
+          />
 
           <p className={styles.loginPrompt}>
             Already have an account?{' '}

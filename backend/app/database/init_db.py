@@ -10,20 +10,32 @@ import app.models.guardian
 import app.models.security_scan
 import app.models.security_alert
 from app.models.user import User
-from app.utils.security import hash_password
+from app.utils.security import hash_password, verify_password
 
 load_dotenv()
 
 
 def init_db():
     """Initialize database tables, ensure schema migrations, and sync predefined admin account."""
-    # 1. Apply column addition if not exists (for existing database)
+    # 1. Apply column additions and constraints idempotently
     with engine.begin() as conn:
         conn.execute(
             text("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user' NOT NULL;")
         )
+        conn.execute(
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(50) DEFAULT 'local' NOT NULL;")
+        )
+        conn.execute(
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255);")
+        )
+        conn.execute(
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500);")
+        )
+        conn.execute(
+            text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
+        )
 
-    # 2. Create any missing tables (e.g. guardian_access)
+    # 2. Create any missing tables (e.g. guardian_access, security_scans, security_alerts)
     Base.metadata.create_all(bind=engine)
 
     # 3. Ensure predefined Administrator account is created/synced
@@ -39,7 +51,8 @@ def init_db():
                 full_name="Administrator",
                 email=admin_email,
                 password=hash_password(admin_password),
-                role="admin"
+                role="admin",
+                auth_provider="local"
             )
             db.add(new_admin)
             db.commit()
@@ -50,7 +63,7 @@ def init_db():
             if admin_user.role != "admin":
                 admin_user.role = "admin"
                 updated = True
-            if not admin_user.password.startswith(("$2b$", "$2a$", "$2y$", "$argon2")) or not verify_password(admin_password, admin_user.password):
+            if not admin_user.password or not admin_user.password.startswith(("$2b$", "$2a$", "$2y$", "$argon2")) or not verify_password(admin_password, admin_user.password):
                 admin_user.password = hash_password(admin_password)
                 updated = True
             if updated:

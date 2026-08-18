@@ -40,6 +40,8 @@ class UserResponse(BaseModel):
     full_name: str
     email: EmailStr
     role: str
+    auth_provider: Optional[str] = "local"
+    avatar_url: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -72,10 +74,15 @@ class UserChangePassword(BaseModel):
         return v
 
 
+class GoogleLoginRequest(BaseModel):
+    credential: str = Field(..., min_length=10, description="Google OAuth / OpenID Connect ID Token (JWT)")
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
     role: str
+    user: Optional[UserResponse] = None
 
 
 class UserRegisterResponse(BaseModel):

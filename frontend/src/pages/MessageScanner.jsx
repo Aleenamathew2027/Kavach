@@ -102,13 +102,84 @@ export default function MessageScanner() {
                 </span>
               </div>
               <div className={styles.scoreGroup}>
-                <span className={styles.scoreLabel}>RISK SCORE</span>
+                <span className={styles.scoreLabel}>COMBINED RISK SCORE</span>
                 <span className={styles.scoreNumber}>{result.risk_score}/100</span>
               </div>
             </div>
 
+            {/* ── AI / ML PREDICTION CARD ── */}
+            {(result.prediction || result.ml_prediction) && (() => {
+              const pred = result.prediction || result.ml_prediction;
+              const rawConf = result.confidence ?? result.ml_confidence ?? 0;
+              const confDisplay = rawConf > 1 ? rawConf.toFixed(1) : (rawConf * 100).toFixed(1);
+              const rawScam = result.scam_probability ?? 0;
+              const scamDisplay = rawScam > 1 ? rawScam.toFixed(1) : (rawScam * 100).toFixed(1);
+              const rawSafe = result.safe_probability ?? 0;
+              const safeDisplay = rawSafe > 1 ? rawSafe.toFixed(1) : (rawSafe * 100).toFixed(1);
+              const scamWidth = rawScam > 1 ? rawScam : rawScam * 100;
+              const safeWidth = rawSafe > 1 ? rawSafe : rawSafe * 100;
+
+              return (
+                <div className={styles.mlCard}>
+                  <div className={styles.mlHeader}>
+                    <span className={styles.mlTag}>
+                      🤖 Machine Learning Analysis
+                    </span>
+                    <span className={styles.mlModelName}>
+                      Model: {result.model || 'Logistic Regression'} (Baseline SMS Classifier)
+                    </span>
+                  </div>
+
+                  <div className={styles.mlMetricsGrid}>
+                    <div className={styles.mlMetricBox}>
+                      <span className={styles.mlMetricLabel}>ML Verdict</span>
+                      <span
+                        className={styles.mlMetricValue}
+                        style={{ color: pred === 'SCAM' ? '#dc2626' : '#16a34a' }}
+                      >
+                        {pred}
+                      </span>
+                    </div>
+                    <div className={styles.mlMetricBox}>
+                      <span className={styles.mlMetricLabel}>ML Confidence</span>
+                      <span className={styles.mlMetricValue}>
+                        {confDisplay}%
+                      </span>
+                    </div>
+                    <div className={styles.mlMetricBox}>
+                      <span className={styles.mlMetricLabel}>Scam Probability</span>
+                      <span className={styles.mlMetricValue}>
+                        {scamDisplay}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.mlProbContainer}>
+                    <div className={styles.mlProbHeader}>
+                      <span>Safe Probability: {safeDisplay}%</span>
+                      <span>Scam Probability: {scamDisplay}%</span>
+                    </div>
+                    <div className={styles.mlProbTrack}>
+                      <div
+                        className={styles.mlProbFillSafe}
+                        style={{ width: `${safeWidth}%` }}
+                      />
+                      <div
+                        className={styles.mlProbFillScam}
+                        style={{ width: `${scamWidth}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.modelScopeNote}>
+                    * Trained on the SMS Spam Collection benchmark dataset. Combined with heuristic pattern checks for layered cyber-defense.
+                  </div>
+                </div>
+              );
+            })()}
+
             <div>
-              <span className={styles.scoreLabel}>DETECTION RESULT</span>
+              <span className={styles.scoreLabel}>DETECTION SUMMARY</span>
               <p className={styles.summaryText} style={{ marginTop: '6px' }}>
                 {result.summary}
               </p>
@@ -129,7 +200,7 @@ export default function MessageScanner() {
 
             {result.reasons && result.reasons.length > 0 && (
               <div>
-                <span className={styles.scoreLabel}>SECURITY REASONS</span>
+                <span className={styles.scoreLabel}>SECURITY REASONS & SIGNALS</span>
                 <ul className={styles.reasonsList} style={{ marginTop: '8px' }}>
                   {result.reasons.map((r, i) => (
                     <li key={i} className={styles.reasonItem}>{r}</li>

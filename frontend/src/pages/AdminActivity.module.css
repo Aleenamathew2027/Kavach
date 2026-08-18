@@ -1,0 +1,194 @@
+/* AdminActivity.module.css */
+
+.page {
+  min-height: 100vh;
+  background: #090d13;
+  color: #f0f6fc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.backLink {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00e5ff;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.sectionPill {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #00e5ff;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.header {
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 24px;
+}
+
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: #f0f6fc;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 13.5px;
+  color: #8b949e;
+  margin-top: 6px;
+}
+
+.timelinePanel {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 4px;
+  padding: 32px;
+}
+
+.emptyState {
+  padding: 60px;
+  text-align: center;
+  color: #8b949e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.emptyState h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #f0f6fc;
+  margin: 0;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.timelineDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.timelineCard {
+  flex-grow: 1;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.typeBadge {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #00e5ff;
+  text-transform: uppercase;
+}
+
+.eventTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #f0f6fc;
+  margin: 0;
+}
+
+.badgeHigh {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ff7b72;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 2px;
+}
+
+.badgeMed {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #d29922;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 2px;
+}
+
+.badgeSafe {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #3fb950;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 2px;
+}
+
+.eventDetail {
+  font-size: 13px;
+  color: #c9d1d9;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.timestamp {
+  font-size: 11px;
+  color: #6e7681;
+  border-top: 1px solid #21262d;
+  padding-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .cardHeader { flex-direction: column; align-items: flex-start; gap: 6px; }
+}

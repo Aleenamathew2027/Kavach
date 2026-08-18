@@ -10,12 +10,24 @@ class MessageAnalyzeRequest(BaseModel):
 class MessageAnalyzeResponse(BaseModel):
     risk_level: str
     risk_score: int
-    detected_indicators: List[str]
-    reasons: List[str]
-    recommended_action: str
-    summary: str
+    detected_indicators: List[str] = []
+    rule_flags: List[str] = []
+    reasons: List[str] = []
+    recommended_action: str = ""
+    summary: str = ""
+    message: Optional[str] = None
     scan_id: Optional[int] = None
     alert_created: bool = False
+    # ML Model Fields
+    classification: Optional[str] = None
+    prediction: Optional[str] = None
+    confidence: Optional[float] = None
+    ml_prediction: Optional[str] = None
+    ml_confidence: Optional[float] = None
+    scam_probability: Optional[float] = None
+    safe_probability: Optional[float] = None
+    model: Optional[str] = None
+    model_scope: Optional[str] = None
 
 
 class LinkAnalyzeRequest(BaseModel):

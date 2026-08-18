@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
+// Public Pages
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+
+// User Role Pages
 import UserDashboard from './pages/UserDashboard';
 import UserProfile from './pages/UserProfile';
 import UserSecurity from './pages/UserSecurity';
@@ -11,8 +14,24 @@ import UserAlerts from './pages/UserAlerts';
 import MessageScanner from './pages/MessageScanner';
 import LinkChecker from './pages/LinkChecker';
 import DocumentChecker from './pages/DocumentChecker';
+
+// Admin Role Pages
 import AdminDashboard from './pages/AdminDashboard';
+import AdminUsers from './pages/AdminUsers';
+import AdminSecurityEvents from './pages/AdminSecurityEvents';
+import AdminGuardians from './pages/AdminGuardians';
+import AdminReports from './pages/AdminReports';
+import AdminActivity from './pages/AdminActivity';
+import AdminSettings from './pages/AdminSettings';
+
+// Guardian Role Pages
 import GuardianDashboard from './pages/GuardianDashboard';
+import GuardianProtectedUser from './pages/GuardianProtectedUser';
+import GuardianSecurity from './pages/GuardianSecurity';
+import GuardianAlerts from './pages/GuardianAlerts';
+import GuardianActivity from './pages/GuardianActivity';
+import GuardianSettings from './pages/GuardianSettings';
+
 import ProtectedRoute from './components/ProtectedRoute';
 import { getRole } from './services/api';
 
@@ -27,23 +46,31 @@ function DynamicDashboardRedirect() {
 }
 
 /**
- * App – root router for KAVACH
+ * App – root router for KAVACH with strict role-based route isolation
  */
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
+        {/* ── Public Routes ── */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* User Role Protected Routes */}
+        {/* ── User Role Protected Routes ── */}
         <Route
           path="/user/dashboard"
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/security"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserSecurity />
             </ProtectedRoute>
           }
         />
@@ -72,14 +99,6 @@ export default function App() {
           }
         />
         <Route
-          path="/user/security"
-          element={
-            <ProtectedRoute allowedRoles={['user']}>
-              <UserSecurity />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/user/alerts"
           element={
             <ProtectedRoute allowedRoles={['user']}>
@@ -96,7 +115,7 @@ export default function App() {
           }
         />
 
-        {/* Admin Role Protected Routes */}
+        {/* ── Admin Role Protected Routes ── */}
         <Route
           path="/admin/dashboard"
           element={
@@ -105,8 +124,56 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/security-events"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminSecurityEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/guardians"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminGuardians />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminReports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/activity"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminActivity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminSettings />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Guardian Role Protected Routes */}
+        {/* ── Guardian Role Protected Routes ── */}
         <Route
           path="/guardian/dashboard"
           element={
@@ -115,8 +182,48 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/guardian/protected-user"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianProtectedUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/security"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianSecurity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/alerts"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianAlerts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/activity"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianActivity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/settings"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianSettings />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Dynamic Fallback Route */}
+        {/* ── Dynamic Fallback Route ── */}
         <Route
           path="/dashboard"
           element={

@@ -1,0 +1,64 @@
+{
+  "model_name": "Logistic Regression",
+  "framework": "scikit-learn",
+  "vectorizer": "TfidfVectorizer",
+  "vocabulary_size": 5000,
+  "ngram_range": [
+    1,
+    2
+  ],
+  "classes": [
+    "SAFE",
+    "SCAM"
+  ],
+  "benchmark_metrics": {
+    "Logistic Regression": {
+      "accuracy": 0.9901256732495511,
+      "precision": 0.9726027397260274,
+      "recall": 0.9530201342281879,
+      "f1": 0.9627118644067797,
+      "confusion_matrix": [
+        [
+          961,
+          4
+        ],
+        [
+          7,
+          142
+        ]
+      ]
+    },
+    "Multinomial Naive Bayes": {
+      "accuracy": 0.9892280071813285,
+      "precision": 0.9858156028368794,
+      "recall": 0.9328859060402684,
+      "f1": 0.9586206896551724,
+      "confusion_matrix": [
+        [
+          963,
+          2
+        ],
+        [
+          10,
+          139
+        ]
+      ]
+    },
+    "Linear SVM (Calibrated)": {
+      "accuracy": 0.9901256732495511,
+      "precision": 0.9791666666666666,
+      "recall": 0.9463087248322147,
+      "f1": 0.962457337883959,
+      "confusion_matrix": [
+        [
+          962,
+          3
+        ],
+        [
+          8,
+          141
+        ]
+      ]
+    }
+  }
+}

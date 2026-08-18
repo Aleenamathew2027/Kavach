@@ -1,0 +1,204 @@
+/* GuardianSecurity.module.css */
+
+.page {
+  min-height: 100vh;
+  background: #060a17;
+  color: #f1f5f9;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.backLink {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #48e5c2;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.sectionPill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #48e5c2;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #8da9c4;
+  margin-top: 8px;
+}
+
+.statusPanel {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statusTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusLabel {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8da9c4;
+}
+
+.statusTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 4px 0 0;
+}
+
+.badgeSuccess {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(72, 229, 194, 0.15);
+  color: #48e5c2;
+  border: 1px solid rgba(72, 229, 194, 0.3);
+}
+
+.badgeDanger {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.statusDesc {
+  font-size: 13.5px;
+  color: #8da9c4;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modulesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.moduleCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modTag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #48e5c2;
+}
+
+.modStatus {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  background: #1c2541;
+  color: #48e5c2;
+  border-radius: 2px;
+}
+
+.modStatusSoon {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  background: #1c2541;
+  color: #94a3b8;
+  border-radius: 2px;
+}
+
+.modTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modDesc {
+  font-size: 13px;
+  color: #8da9c4;
+  line-height: 1.5;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #1c2541;
+  padding-top: 14px;
+}
+
+.metricLabel {
+  font-size: 12.5px;
+  color: #8da9c4;
+}
+
+.metricVal {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.metricValMuted {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .modulesGrid { grid-template-columns: 1fr; }
+}

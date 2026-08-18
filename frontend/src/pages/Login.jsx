@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api, setAuth, getToken, getRole } from '../services/api';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 import styles from './Login.module.css';
 
 export default function Login() {
@@ -324,6 +325,22 @@ export default function Login() {
               )}
             </button>
           </form>
+
+          {/* Google Sign-In (for normal user account login) */}
+          {mode === 'account' && (
+            <>
+              <div className={styles.dividerRow}>
+                <span className={styles.dividerLine} />
+                <span className={styles.dividerText}>OR</span>
+                <span className={styles.dividerLine} />
+              </div>
+
+              <GoogleSignInButton
+                onError={(msg) => setError(msg)}
+                buttonText="Continue with Google"
+              />
+            </>
+          )}
 
           <p className={styles.registerPrompt}>
             Don't have an account?{' '}

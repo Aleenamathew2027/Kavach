@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.user import User
 from app.schemas.user_schema import (
+    GoogleLoginRequest,
     Token,
     UserChangePassword,
     UserCreate,
@@ -12,6 +13,7 @@ from app.schemas.user_schema import (
     UserResponse,
     UserUpdate,
 )
+from app.services.google_auth_service import verify_google_token
 from app.utils.security import (
     create_access_token,
     get_current_user,
@@ -124,6 +126,124 @@ def login(
         "access_token": access_token,
         "token_type": "bearer",
         "role": user.role,
+        "user": user,
+    }
+
+
+@router.post(
+    "/google-login",
+    response_model=Token,
+    summary="Authenticate or register standard user via verified Google ID Token"
+)
+def google_login(
+    body: GoogleLoginRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Authenticates a user via verified Google OAuth ID token.
+    - If Google account already exists: logs the user in.
+    - If Google email exists as a normal user: links the Google identity safely.
+    - If account does not exist: registers a new KAVACH USER account (role='user').
+    - If email belongs to an Admin: rejects Google login to preserve admin password authentication.
+    - Issues standard KAVACH JWT access token.
+    """
+    # 1. Verify Google identity token with Google official services
+    try:
+        google_info = verify_google_token(body.credential)
+    except ValueError as val_err:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(val_err),
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Failed to verify Google authentication token.",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    google_id = google_info["google_id"]
+    email = google_info["email"]
+    name = google_info["name"]
+    picture = google_info.get("picture")
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@kavach.com").lower().strip()
+
+    # 2. Check if user already exists by google_id
+    user = db.query(User).filter(User.google_id == google_id).first()
+
+    if user:
+        # Check if existing user is admin
+        if user.role == "admin" or user.email == admin_email:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Administrator accounts must authenticate using the secure Administrator credentials."
+            )
+        # Update avatar/name if changed
+        if picture and not user.avatar_url:
+            user.avatar_url = picture
+            db.commit()
+    else:
+        # 3. Check if user already exists by verified email
+        user_by_email = db.query(User).filter(User.email == email).first()
+
+        if user_by_email:
+            if user_by_email.role == "admin" or email == admin_email:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Administrator accounts must authenticate using the secure Administrator credentials."
+                )
+
+            # Link Google identity to existing user account safely
+            user_by_email.google_id = google_id
+            user_by_email.auth_provider = "google"
+            if picture and not user_by_email.avatar_url:
+                user_by_email.avatar_url = picture
+            db.commit()
+            db.refresh(user_by_email)
+            user = user_by_email
+        else:
+            # 4. Create a new standard KAVACH USER account
+            # Disallow creating admin accounts via Google
+            if email == admin_email:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Administrator accounts must authenticate using the secure Administrator credentials."
+                )
+
+            user = User(
+                full_name=name,
+                email=email,
+                password=None,
+                role="user",  # Strict: New Google accounts ALWAYS receive role="user"
+                auth_provider="google",
+                google_id=google_id,
+                avatar_url=picture,
+            )
+            try:
+                db.add(user)
+                db.commit()
+                db.refresh(user)
+            except Exception:
+                db.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Failed to create user account from Google profile."
+                )
+
+    # 5. Issue the standard KAVACH JWT access token
+    access_token = create_access_token(
+        data={
+            "sub": str(user.id),
+            "role": user.role,
+        }
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "role": user.role,
+        "user": user,
     }
 
 

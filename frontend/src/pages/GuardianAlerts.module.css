@@ -1,0 +1,270 @@
+/* GuardianAlerts.module.css */
+
+.page {
+  min-height: 100vh;
+  background: #060a17;
+  color: #f1f5f9;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.backLink {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #48e5c2;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.sectionPill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #48e5c2;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  border-bottom: 1px solid #1c2541;
+  padding-bottom: 24px;
+}
+
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #8da9c4;
+  margin-top: 8px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 8px;
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.filterBtn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #8da9c4;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filterBtn:hover {
+  color: #ffffff;
+}
+
+.filterBtnActive {
+  background: #1c2541;
+  color: #48e5c2;
+}
+
+.alertsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyState {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 60px 24px;
+  text-align: center;
+  color: #8da9c4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.emptyState h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.alertCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.alertCardHigh {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: #0f1429;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.threatTypeArea {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.threatBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #48e5c2;
+  text-transform: uppercase;
+}
+
+.alertTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.badgesArea {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badgeHigh {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 2px;
+}
+
+.badgeMed {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 2px;
+}
+
+.badgeUnread {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 4px 8px;
+  background: #38bdf8;
+  color: #0c4a6e;
+  border-radius: 2px;
+}
+
+.actionBox {
+  background: #060a17;
+  border: 1px solid #1c2541;
+  border-left: 3px solid #38bdf8;
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.actionLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #38bdf8;
+}
+
+.actionText {
+  font-size: 13.5px;
+  color: #e2e8f0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #1c2541;
+  padding-top: 14px;
+}
+
+.timeText {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.markReadBtn {
+  background: transparent;
+  border: 1px solid #3a506b;
+  color: #cbd5e1;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.markReadBtn:hover {
+  background: #1c2541;
+  color: #48e5c2;
+  border-color: #48e5c2;
+}
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; align-items: flex-start; }
+  .cardHeader { flex-direction: column; }
+}
