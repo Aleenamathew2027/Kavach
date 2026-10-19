@@ -1,0 +1,573 @@
+/* ============================================================
+   UserLayout.module.css — Unified Luxury Royal Blue & Quicksand Theme
+   Shared across all KAVACH User application pages
+   ============================================================ */
+
+:root {
+  --kavach-royal-blue: #112250;
+  --kavach-sapphire:   #3C507D;
+  --kavach-quicksand:  #E0C58F;
+  --kavach-swan-wing:  #F5F0E9;
+  --kavach-shellstone: #D9CBC2;
+}
+
+/* ── SHELL CONTAINER ── */
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  background: var(--kavach-royal-blue);
+  background-image: 
+    radial-gradient(circle at 85% 12%, rgba(60, 80, 125, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 10% 75%, rgba(224, 197, 143, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(17, 34, 80, 1) 0%, #0c1738 100%);
+  color: var(--kavach-swan-wing);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── PERSISTENT SIDEBAR NAVIGATION (DESKTOP) ── */
+.sidebar {
+  width: 275px;
+  background: #0d1a3e;
+  border-right: 1px solid rgba(217, 203, 194, 0.12);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+  z-index: 90;
+  transition: all 0.25s ease;
+}
+
+.sidebarHeader {
+  padding: 26px 22px 20px;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.brandLogo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--kavach-swan-wing);
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.brandDot {
+  color: var(--kavach-quicksand);
+  font-size: 24px;
+  line-height: 0;
+}
+
+.brandTagline {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--kavach-quicksand);
+  opacity: 0.9;
+}
+
+/* User Card in Sidebar */
+.userBadgeCard {
+  margin: 14px 16px 6px;
+  padding: 10px 14px;
+  background: rgba(60, 80, 125, 0.25);
+  border: 1px solid rgba(217, 203, 194, 0.12);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userAvatarMini {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--kavach-sapphire);
+  border: 1px solid var(--kavach-quicksand);
+  color: var(--kavach-swan-wing);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+
+.userBadgeInfo {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.userBadgeName {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--kavach-swan-wing);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.userBadgeRole {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--kavach-quicksand);
+}
+
+/* Nav Menu Links */
+.sidebarNav {
+  flex: 1;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.navSectionLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--kavach-shellstone);
+  opacity: 0.6;
+  text-transform: uppercase;
+  padding: 12px 12px 4px;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--kavach-shellstone);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.18s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebarLink:hover {
+  background: rgba(60, 80, 125, 0.3);
+  color: var(--kavach-swan-wing);
+}
+
+.sidebarLinkActive {
+  background: rgba(60, 80, 125, 0.55);
+  color: var(--kavach-quicksand);
+  font-weight: 700;
+  border-left-color: var(--kavach-quicksand);
+}
+
+.navIcon {
+  font-size: 13px;
+  opacity: 0.85;
+  width: 18px;
+  text-align: center;
+}
+
+/* Group Accordion (Security Section) */
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--kavach-shellstone);
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  text-transform: uppercase;
+  transition: all 0.18s ease;
+}
+
+.groupHeader:hover {
+  background: rgba(60, 80, 125, 0.25);
+  color: var(--kavach-swan-wing);
+}
+
+.groupHeaderActive {
+  color: var(--kavach-quicksand);
+}
+
+.groupLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.groupChevron {
+  font-size: 10px;
+  color: var(--kavach-shellstone);
+  transition: transform 0.2s ease;
+}
+
+.groupChevronOpen {
+  transform: rotate(90deg);
+  color: var(--kavach-quicksand);
+}
+
+.subMenuList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 20px;
+  margin-top: 2px;
+  border-left: 1px solid rgba(217, 203, 194, 0.12);
+  margin-left: 18px;
+}
+
+.subMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--kavach-shellstone);
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: all 0.18s ease;
+}
+
+.subMenuItem:hover {
+  color: var(--kavach-swan-wing);
+  background: rgba(60, 80, 125, 0.25);
+}
+
+.subMenuItemActive {
+  color: var(--kavach-quicksand);
+  font-weight: 700;
+  background: rgba(60, 80, 125, 0.45);
+}
+
+/* Sidebar Footer */
+.sidebarFooter {
+  padding: 16px 18px;
+  border-top: 1px solid rgba(217, 203, 194, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(13, 26, 62, 0.6);
+}
+
+.systemStatusPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--kavach-shellstone);
+  letter-spacing: 0.5px;
+}
+
+.statusLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.sidebarLogoutBtn {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid rgba(60, 80, 125, 0.8);
+  color: var(--kavach-shellstone);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.sidebarLogoutBtn:hover {
+  background: var(--kavach-quicksand);
+  color: var(--kavach-royal-blue);
+  border-color: var(--kavach-quicksand);
+}
+
+/* ── MOBILE TOP BAR (< 1080px) ── */
+.mobileTopBar {
+  display: none;
+  background: #0d1a3e;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.15);
+  padding: 14px 20px;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.mobileMenuBtn {
+  background: rgba(60, 80, 125, 0.4);
+  border: 1px solid rgba(217, 203, 194, 0.2);
+  color: var(--kavach-swan-wing);
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mobileDrawerOverlay {
+  display: none;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(13, 26, 62, 0.98);
+  backdrop-filter: blur(8px);
+  z-index: 99;
+  flex-direction: column;
+  padding: 24px 20px;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.mobileDrawerOpen {
+  display: flex;
+}
+
+.mobileDrawerLink {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--kavach-shellstone);
+  text-decoration: none;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.1);
+}
+
+.mobileDrawerLinkActive {
+  color: var(--kavach-quicksand);
+}
+
+/* ── MAIN CONTENT CANVAS ── */
+.mainCanvas {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Header Surface */
+.topHeader {
+  background: rgba(17, 34, 80, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(217, 203, 194, 0.12);
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 80;
+}
+
+.headerGreeting {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.greetingTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--kavach-swan-wing);
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.greetingSub {
+  font-size: 11.5px;
+  color: var(--kavach-shellstone);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.headerAlertBtn {
+  background: rgba(60, 80, 125, 0.35);
+  border: 1px solid rgba(217, 203, 194, 0.2);
+  color: var(--kavach-swan-wing);
+  padding: 7px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.headerAlertBtn:hover {
+  background: rgba(60, 80, 125, 0.6);
+  border-color: var(--kavach-quicksand);
+  color: var(--kavach-quicksand);
+}
+
+.alertCountBadge {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 10px;
+}
+
+.headerAiTriggerBtn {
+  background: var(--kavach-quicksand);
+  color: var(--kavach-royal-blue);
+  border: none;
+  padding: 7px 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.headerAiTriggerBtn:hover {
+  background: #ecd9b3;
+  transform: translateY(-1px);
+}
+
+/* ── PAGE CONTENT WRAPPER ── */
+.contentArea {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 36px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── CONSISTENT PAGE HEADER (ITEM 11) ── */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.12);
+  padding-bottom: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pageEyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--kavach-quicksand);
+}
+
+.pageTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--kavach-swan-wing);
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.pageSubtitle {
+  font-size: 13.5px;
+  color: var(--kavach-shellstone);
+  max-width: 680px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ── SHARED CARD STYLING ── */
+.cardSurface {
+  background: rgba(26, 46, 94, 0.4);
+  border: 1px solid rgba(217, 203, 194, 0.14);
+  border-radius: 6px;
+  padding: 28px 30px;
+  box-shadow: 0 4px 24px rgba(17, 34, 80, 0.25);
+}
+
+/* ── RESPONSIVE DESIGN ── */
+@media (max-width: 1080px) {
+  .sidebar {
+    display: none;
+  }
+  .mobileTopBar {
+    display: flex;
+  }
+  .topHeader {
+    padding: 14px 20px;
+  }
+  .contentArea {
+    padding: 24px 20px 60px;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

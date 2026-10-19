@@ -1,22 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { api } from '../services/api';
-import UserNav from '../components/UserNav';
+import UserLayout from '../components/UserLayout';
 import styles from './DocumentChecker.module.css';
 
 export default function DocumentChecker() {
-  const [userName, setUserName] = useState('');
   const [file, setFile] = useState(null);
   const [statusText, setStatusText] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    api.getMe()
-      .then((data) => setUserName(data.full_name))
-      .catch(() => null);
-  }, []);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -91,17 +84,12 @@ export default function DocumentChecker() {
   };
 
   return (
-    <div className={styles.page}>
-      <UserNav userName={userName} />
-
-      <main className={styles.main}>
-        <div className={styles.headerSection}>
-          <h1 className={styles.pageTitle}>DOCUMENT &amp; IMAGE SCAM SCANNER</h1>
-          <p className={styles.pageSubtitle}>
-            Multi-engine security scanner combining OCR text extraction, ML message scam detection, hybrid URL link inspection, and embedded QR code analysis.
-          </p>
-        </div>
-
+    <UserLayout
+      eyebrow="MULTI-MODAL SENTINEL"
+      title="DOCUMENT & IMAGE SCAM SCANNER"
+      subtitle="Multi-engine scanner combining OCR text extraction, ML message scam detection, link inspection, and embedded QR code analysis."
+    >
+      <div className={styles.scannerWrapper}>
         {error && <div className={styles.errorBanner}>⚠ {error}</div>}
 
         {/* ── UPLOAD AREA ── */}
@@ -334,7 +322,7 @@ export default function DocumentChecker() {
             )}
           </section>
         )}
-      </main>
-    </div>
+      </div>
+    </UserLayout>
   );
 }

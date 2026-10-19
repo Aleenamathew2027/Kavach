@@ -1,20 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { api } from '../services/api';
-import UserNav from '../components/UserNav';
+import UserLayout from '../components/UserLayout';
 import styles from './MessageScanner.module.css';
 
 export default function MessageScanner() {
-  const [userName, setUserName] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    api.getMe()
-      .then((data) => setUserName(data.full_name))
-      .catch(() => null);
-  }, []);
 
   const handleAnalyze = async (e) => {
     e.preventDefault();
@@ -45,16 +38,12 @@ export default function MessageScanner() {
   };
 
   return (
-    <div className={styles.page}>
-      <UserNav userName={userName} />
-
-      <main className={styles.main}>
-        <div className={styles.headerSection}>
-          <h1 className={styles.pageTitle}>MESSAGE SCAM DETECTOR</h1>
-          <p className={styles.pageSubtitle}>
-            Check suspicious SMS, WhatsApp messages, emails, or urgent requests before you respond or share information.
-          </p>
-        </div>
+    <UserLayout
+      eyebrow="COMMUNICATION SENTINEL"
+      title="MESSAGE SCAM DETECTOR"
+      subtitle="Analyze suspicious SMS, WhatsApp messages, emails, or payment demands before responding or sharing credentials."
+    >
+      <div className={styles.scannerWrapper}>
 
         {error && <div className={styles.errorBanner}>⚠ {error}</div>}
 
@@ -221,7 +210,7 @@ export default function MessageScanner() {
             )}
           </section>
         )}
-      </main>
-    </div>
+      </div>
+    </UserLayout>
   );
 }

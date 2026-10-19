@@ -14,6 +14,8 @@ import UserAlerts from './pages/UserAlerts';
 import MessageScanner from './pages/MessageScanner';
 import LinkChecker from './pages/LinkChecker';
 import DocumentChecker from './pages/DocumentChecker';
+import UserGuardian from './pages/UserGuardian';
+import UserReports from './pages/UserReports';
 
 // Admin Role Pages
 import AdminDashboard from './pages/AdminDashboard';
@@ -112,6 +114,22 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <AIAssistant />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/guardian"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserGuardian />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/reports"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserReports />
             </ProtectedRoute>
           }
         />

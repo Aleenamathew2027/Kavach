@@ -1,53 +1,159 @@
-import { useState, useEffect } from 'react';
-import { api } from '../services/api';
-import UserNav from '../components/UserNav';
-import styles from './UserDashboard.module.css';
+import { Link } from 'react-router-dom';
+import UserLayout from '../components/UserLayout';
 
 export default function UserSecurity() {
-  const [userName, setUserName] = useState('');
-
-  useEffect(() => {
-    api.getMe().then((d) => setUserName(d.full_name)).catch(() => null);
-  }, []);
-
   const securityModules = [
-    { title: 'Scam Message & SMS Filter', desc: 'Analyzes incoming messages and SMS for fraudulent patterns, deceptive links, and social engineering attempts.', status: 'ACTIVE' },
-    { title: 'Deepfake Voice Firewall', desc: 'Real-time frequency and biometric analysis detecting synthetic audio impersonation in live voice calls.', status: 'ACTIVE' },
-    { title: 'Malicious URL & Domain Scanner', desc: 'Validates URLs against zero-day phishing databases and cryptographic certificate spoofing.', status: 'ACTIVE' },
-    { title: 'Payment & UPI Transaction Sentry', desc: 'Monitors fraudulent QR codes, unverified payment gateway prompts, and deceptive bank requests.', status: 'ACTIVE' },
+    {
+      icon: '💬',
+      title: 'Scam Message & SMS Filter',
+      desc: 'Real-time NLP and heuristic classifier inspecting SMS, WhatsApp, and email communications for social engineering, urgency triggers, and payment coercion.',
+      status: 'ACTIVE',
+      link: '/user/messages',
+      linkText: 'Open Message Scanner →',
+    },
+    {
+      icon: '🌐',
+      title: 'Malicious URL & Zero-Day Sentry',
+      desc: 'Layered hybrid detection engine evaluating 20+ static URL structural indicators and trained Random Forest model against zero-day phishing campaigns.',
+      status: 'ACTIVE',
+      link: '/user/link-checker',
+      linkText: 'Open Link Checker →',
+    },
+    {
+      icon: '📑',
+      title: 'Document & QR Threat Sentinel',
+      desc: 'Multi-engine scanner executing OCR text extraction, embedded QR code payload decoding, and link correlation across PDFs, DOCXs, and images.',
+      status: 'ACTIVE',
+      link: '/user/document-checker',
+      linkText: 'Open Document Scanner →',
+    },
+    {
+      icon: '🛡️',
+      title: 'Deepfake & Payment Fraud Firewall',
+      desc: 'Continuous threat heuristics detecting synthetic voice impersonation, deceptive UPI payment handles, and urgent unauthorized fund requests.',
+      status: 'ACTIVE',
+      link: '/user/assistant',
+      linkText: 'Consult AI Assistant →',
+    },
   ];
 
   return (
-    <div className={styles.page}>
-      <UserNav userName={userName} />
-
-      <main className={styles.main}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h1 className={styles.heroHeading} style={{ fontSize: '38px' }}>
-            ACTIVE SECURITY SHIELDS
-          </h1>
-          <p className={styles.heroSub}>
-            KAVACH security engine operates across four dedicated protection layers to ensure total digital safety.
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
-          {securityModules.map((mod) => (
-            <div key={mod.title} style={{ background: '#ffffff', border: '1px solid #ebe7df', padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <h3 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '18px', fontWeight: 800, color: '#1a3325' }}>{mod.title}</h3>
-                  <span className={styles.statusPill}>{mod.status}</span>
+    <UserLayout
+      eyebrow="DEFENSE ARCHITECTURE"
+      title="ACTIVE SECURITY SENTINELS"
+      subtitle="KAVACH security engine operates four synchronized protection sentinels to ensure comprehensive personal and family safety."
+    >
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+          gap: '24px',
+          width: '100%',
+        }}
+      >
+        {securityModules.map((mod) => (
+          <div
+            key={mod.title}
+            style={{
+              background: 'rgba(26, 46, 94, 0.45)',
+              border: '1px solid rgba(217, 203, 194, 0.15)',
+              borderRadius: '6px',
+              padding: '28px 30px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+              backdropFilter: 'blur(8px)',
+              boxShadow: '0 10px 30px rgba(10, 20, 50, 0.3)',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '14px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>{mod.icon}</span>
+                  <h3
+                    style={{
+                      fontFamily: 'Space Grotesk, sans-serif',
+                      fontSize: '17px',
+                      fontWeight: 800,
+                      color: 'var(--kavach-swan-wing)',
+                      margin: 0,
+                    }}
+                  >
+                    {mod.title}
+                  </h3>
                 </div>
-                <p style={{ fontSize: '14px', color: '#4a5d4e', lineHeight: 1.6 }}>{mod.desc}</p>
+                <span
+                  style={{
+                    background: 'rgba(34, 197, 94, 0.18)',
+                    color: '#86efac',
+                    border: '1px solid #22c55e',
+                    fontSize: '10px',
+                    fontWeight: 800,
+                    letterSpacing: '1px',
+                    padding: '3px 8px',
+                    borderRadius: '3px',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {mod.status}
+                </span>
               </div>
-              <div style={{ fontSize: '11px', color: '#737373', textTransform: 'uppercase', letterSpacing: '1px', borderTop: '1px solid #f5f2eb', paddingTop: '14px' }}>
-                Protection Engine: Active 24/7
-              </div>
+              <p
+                style={{
+                  fontSize: '13.5px',
+                  color: 'var(--kavach-shellstone)',
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                {mod.desc}
+              </p>
             </div>
-          ))}
-        </div>
-      </main>
-    </div>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderTop: '1px solid rgba(217, 203, 194, 0.1)',
+                paddingTop: '16px',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '10.5px',
+                  color: 'var(--kavach-quicksand)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  fontWeight: 700,
+                }}
+              >
+                Telemetry: Continuous 24/7
+              </span>
+              <Link
+                to={mod.link}
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--kavach-quicksand)',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                {mod.linkText}
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+    </UserLayout>
   );
 }

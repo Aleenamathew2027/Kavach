@@ -1,56 +1,42 @@
-/* DocumentChecker.module.css — Editorial Design */
+/* ============================================================
+   DocumentChecker.module.css — Luxury Royal Blue & Quicksand Theme
+   Part of the KAVACH Detection Suite
+   ============================================================ */
 
-.page {
-  min-height: 100vh;
-  background: #faf8f5;
-  color: #1a1a1a;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+.scannerWrapper {
   display: flex;
   flex-direction: column;
-}
-
-.main {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 48px 32px 88px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
+  gap: 28px;
   width: 100%;
 }
 
-.headerSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.errorBanner {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 4px;
 }
 
-.pageTitle {
-  font-family: 'Space Grotesk', -apple-system, sans-serif;
-  font-size: clamp(32px, 4vw, 42px);
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: #1a3325;
-  text-transform: uppercase;
-}
-
-.pageSubtitle {
-  font-size: 15px;
-  color: #4a5d4e;
-}
-
+/* ── UPLOAD CARD ── */
 .uploadCard {
-  background: #ffffff;
-  border: 1px solid #ebe7df;
-  padding: 36px;
+  background: rgba(26, 46, 94, 0.45);
+  border: 1px solid rgba(217, 203, 194, 0.15);
+  border-radius: 6px;
+  padding: 28px 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(10, 20, 50, 0.3);
 }
 
 .dropZone {
-  border: 2px dashed #1a3325;
-  background: #faf8f5;
+  border: 2px dashed rgba(224, 197, 143, 0.4);
+  background: rgba(17, 34, 80, 0.45);
+  border-radius: 6px;
   padding: 48px 24px;
   display: flex;
   flex-direction: column;
@@ -58,33 +44,35 @@
   justify-content: center;
   gap: 14px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   text-align: center;
 }
 
 .dropZone:hover {
-  background: #f4f1ea;
+  border-color: var(--kavach-quicksand);
+  background: rgba(17, 34, 80, 0.7);
 }
 
 .dropIcon {
-  font-size: 32px;
-  color: #1a3325;
+  font-size: 36px;
+  color: var(--kavach-quicksand);
 }
 
 .dropText {
   font-size: 15px;
   font-weight: 600;
-  color: #1a3325;
+  color: var(--kavach-swan-wing);
 }
 
 .dropSub {
-  font-size: 12.5px;
-  color: #737373;
+  font-size: 12px;
+  color: var(--kavach-shellstone);
 }
 
 .fileSelectedBadge {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: rgba(60, 80, 125, 0.35);
+  border: 1px solid rgba(217, 203, 194, 0.2);
+  border-radius: 4px;
   padding: 12px 18px;
   display: flex;
   align-items: center;
@@ -95,12 +83,12 @@
 .fileName {
   font-size: 14px;
   font-weight: 700;
-  color: #166534;
+  color: var(--kavach-quicksand);
 }
 
 .fileSize {
   font-size: 12px;
-  color: #737373;
+  color: var(--kavach-shellstone);
 }
 
 .actionRow {
@@ -111,21 +99,23 @@
 }
 
 .primaryBtn {
-  background: #1a3325;
-  color: #ffffff;
+  background: var(--kavach-quicksand);
+  color: var(--kavach-royal-blue);
   border: none;
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
   padding: 13px 28px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: inherit;
-  transition: opacity 0.15s ease;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .primaryBtn:hover:not(:disabled) {
-  opacity: 0.88;
+  background: #ecd9b3;
+  transform: translateY(-1px);
 }
 
 .primaryBtn:disabled {
@@ -134,36 +124,29 @@
 }
 
 .clearBtn {
-  background: transparent;
-  border: 1px solid #dcd7cd;
-  color: #666666;
+  background: rgba(60, 80, 125, 0.3);
+  border: 1px solid rgba(217, 203, 194, 0.2);
+  color: var(--kavach-shellstone);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 1px;
   padding: 12px 20px;
+  border-radius: 4px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 .clearBtn:hover {
-  background: #f4f1ea;
-  color: #1a1a1a;
-}
-
-.errorBanner {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-  padding: 14px 18px;
-  font-size: 13.5px;
-  font-weight: 600;
+  background: rgba(60, 80, 125, 0.5);
+  color: var(--kavach-swan-wing);
 }
 
 .statusMessage {
   font-size: 13px;
   font-weight: 600;
-  color: #1a3325;
+  color: var(--kavach-quicksand);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -171,34 +154,37 @@
 
 /* ── RESULT SECTION ── */
 .resultSection {
-  background: #ffffff;
-  border: 1px solid #ebe7df;
-  padding: 36px;
+  background: rgba(26, 46, 94, 0.5);
+  border: 1px solid rgba(217, 203, 194, 0.18);
+  border-radius: 6px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
+  backdrop-filter: blur(8px);
 }
 
 .resultHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #f2ede4;
-  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.12);
+  padding-bottom: 18px;
 }
 
 .scoreGroup {
   display: flex;
   align-items: baseline;
-  gap: 16px;
+  gap: 14px;
 }
 
 .riskBadge {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding: 6px 14px;
+  border-radius: 4px;
   text-transform: uppercase;
 }
 
@@ -207,45 +193,46 @@
   font-size: 11px;
   font-weight: 700;
   padding: 3px 8px;
+  border-radius: 3px;
   text-transform: uppercase;
 }
 
 .badgeHigh {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #f87171;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
 }
 
 .badgeSuspicious {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fcd34d;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid #f59e0b;
+  color: #fcd34d;
 }
 
 .badgeSafe {
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #86efac;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid #22c55e;
+  color: #86efac;
 }
 
 .badgeUnknown {
-  background: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid #d1d5db;
+  background: rgba(148, 163, 184, 0.18);
+  border: 1px solid #94a3b8;
+  color: #cbd5e1;
 }
 
 .scoreNumber {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 32px;
   font-weight: 800;
-  color: #1a3325;
+  color: var(--kavach-quicksand);
 }
 
 .scoreLabel {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  color: #737373;
+  color: var(--kavach-shellstone);
   text-transform: uppercase;
 }
 
@@ -257,8 +244,9 @@
 }
 
 .engineCard {
-  background: #faf8f5;
-  border: 1px solid #ebe7df;
+  background: rgba(17, 34, 80, 0.65);
+  border: 1px solid rgba(217, 203, 194, 0.15);
+  border-radius: 4px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -266,10 +254,10 @@
 }
 
 .engineLabel {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.2px;
-  color: #737373;
+  color: var(--kavach-shellstone);
   text-transform: uppercase;
 }
 
@@ -277,19 +265,20 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 24px;
   font-weight: 800;
-  color: #1a3325;
+  color: var(--kavach-quicksand);
 }
 
 .engineSub {
   font-size: 12px;
-  color: #555555;
+  color: var(--kavach-swan-wing);
   font-weight: 500;
 }
 
 /* OCR Info Meta Box */
 .ocrInfoBox {
-  background: #fbfaf8;
-  border: 1px solid #ebe7df;
+  background: rgba(17, 34, 80, 0.5);
+  border: 1px solid rgba(217, 203, 194, 0.12);
+  border-radius: 4px;
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
@@ -301,16 +290,17 @@
   flex-wrap: wrap;
   gap: 20px;
   font-size: 13px;
-  color: #333333;
+  color: var(--kavach-shellstone);
 }
 
 .previewBox {
-  background: #faf8f5;
-  border: 1px solid #ebe7df;
+  background: rgba(17, 34, 80, 0.7);
+  border: 1px solid rgba(217, 203, 194, 0.15);
+  border-radius: 4px;
   padding: 16px;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.6;
-  color: #333333;
+  color: var(--kavach-swan-wing);
   font-family: monospace;
   max-height: 140px;
   overflow-y: auto;
@@ -326,8 +316,9 @@
 }
 
 .urlCard {
-  background: #faf8f5;
-  border: 1px solid #ebe7df;
+  background: rgba(17, 34, 80, 0.6);
+  border: 1px solid rgba(217, 203, 194, 0.12);
+  border-radius: 4px;
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
@@ -345,13 +336,13 @@
   font-family: monospace;
   font-size: 13px;
   font-weight: 600;
-  color: #1a3325;
+  color: var(--kavach-quicksand);
   word-break: break-all;
 }
 
 .urlReasons {
-  font-size: 12.5px;
-  color: #666666;
+  font-size: 12px;
+  color: var(--kavach-shellstone);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -367,8 +358,9 @@
 }
 
 .qrCard {
-  background: #faf8f5;
-  border: 1px solid #ebe7df;
+  background: rgba(17, 34, 80, 0.6);
+  border: 1px solid rgba(217, 203, 194, 0.12);
+  border-radius: 4px;
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
@@ -383,13 +375,13 @@
 }
 
 .qrTypeBadge {
-  font-size: 12.5px;
-  color: #333333;
+  font-size: 12px;
+  color: var(--kavach-shellstone);
 }
 
 .qrPayloadPreview {
   font-size: 13px;
-  color: #1a1a1a;
+  color: var(--kavach-swan-wing);
   margin-top: 2px;
   word-break: break-all;
 }
@@ -405,53 +397,56 @@
   font-size: 11.5px;
   font-weight: 600;
   padding: 4px 12px;
-  background: #f4f1ea;
-  color: #1a3325;
-  border: 1px solid #e5dfd5;
+  background: rgba(60, 80, 125, 0.35);
+  color: var(--kavach-quicksand);
+  border: 1px solid rgba(217, 203, 194, 0.18);
+  border-radius: 3px;
 }
 
 .reasonsList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   padding-left: 20px;
 }
 
 .reasonItem {
-  font-size: 14px;
-  color: #333333;
+  font-size: 13.5px;
+  color: var(--kavach-shellstone);
   line-height: 1.5;
 }
 
 .actionBox {
-  background: #fbfaf8;
-  border-left: 4px solid #1a3325;
-  padding: 18px 22px;
+  background: rgba(60, 80, 125, 0.28);
+  border-left: 3px solid var(--kavach-quicksand);
+  border-radius: 0 4px 4px 0;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .actionBoxTitle {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  color: #1a3325;
+  color: var(--kavach-quicksand);
   text-transform: uppercase;
 }
 
 .actionBoxText {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--kavach-swan-wing);
 }
 
 .unscannableWarningBox {
-  background: #fffbe8;
-  border: 1px solid #faca15;
-  color: #723b13;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fcd34d;
   padding: 14px 18px;
-  font-size: 14px;
+  border-radius: 4px;
+  font-size: 13.5px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -459,8 +454,16 @@
 }
 
 @media (max-width: 768px) {
-  .main { padding: 32px 20px 60px; }
-  .resultHeader { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .actionRow { flex-direction: column; align-items: stretch; }
-  .engineGrid { grid-template-columns: 1fr; }
+  .resultHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .actionRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .engineGrid {
+    grid-template-columns: 1fr;
+  }
 }

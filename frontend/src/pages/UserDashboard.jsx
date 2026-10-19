@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api, getToken, clearAuth } from '../services/api';
+import UserLayout from '../components/UserLayout';
 import styles from './UserDashboard.module.css';
 
 export default function UserDashboard() {
@@ -162,215 +163,8 @@ export default function UserDashboard() {
   const userName = userProfile?.full_name || 'Kavach Citizen';
 
   return (
-    <div className={styles.dashboardLayout}>
-      {/* ── DESKTOP SIDEBAR NAVIGATION (#112250) ── */}
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <Link to="/user/dashboard" className={styles.brandLogo}>
-            KAVACH<span className={styles.brandDot}>.</span>
-          </Link>
-          <span className={styles.brandTagline}>AI CYBER GUARDIAN</span>
-        </div>
-
-        {/* User Badge in Sidebar */}
-        <div className={styles.userBadgeCard}>
-          <div className={styles.userAvatarMini}>{getInitials(userName)}</div>
-          <div className={styles.userBadgeInfo}>
-            <span className={styles.userBadgeName}>{userName}</span>
-            <span className={styles.userBadgeRole}>SECURE CITIZEN</span>
-          </div>
-        </div>
-
-        {/* Sidebar Nav Items */}
-        <nav className={styles.sidebarNav} aria-label="Sidebar Navigation">
-          <span className={styles.navSectionLabel}>NAVIGATION</span>
-          <Link
-            to="/user/dashboard"
-            className={`${styles.sidebarLink} ${styles.sidebarLinkActive}`}
-          >
-            <span className={styles.navIcon}>❖</span>
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/user/messages" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>⌕</span>
-            <span>Scan &amp; Check</span>
-          </Link>
-          <Link to="/user/alerts" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>🔔</span>
-            <span>Alerts</span>
-          </Link>
-          <Link to="/user/assistant" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>🛡️</span>
-            <span>AI Assistant</span>
-          </Link>
-          <a href="#guardian-section" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>👥</span>
-            <span>Guardian</span>
-          </a>
-          <a href="#reports-section" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>📄</span>
-            <span>Incident Reports</span>
-          </a>
-          <Link to="/user/security" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>🔒</span>
-            <span>Security Center</span>
-          </Link>
-          <Link to="/user/profile" className={styles.sidebarLink}>
-            <span className={styles.navIcon}>⚙</span>
-            <span>Settings</span>
-          </Link>
-        </nav>
-
-        {/* Sidebar Bottom Telemetry & Logout */}
-        <div className={styles.sidebarFooter}>
-          <div className={styles.systemStatusPill}>
-            <span className={styles.statusLiveDot} />
-            <span>Shield Active • 24/7</span>
-          </div>
-          <button
-            type="button"
-            className={styles.sidebarLogoutBtn}
-            onClick={handleLogout}
-          >
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {/* ── MOBILE TOP BAR (< 1080px) ── */}
-      <div className={styles.mobileTopBar}>
-        <Link to="/user/dashboard" className={styles.brandLogo} style={{ fontSize: '18px' }}>
-          KAVACH<span className={styles.brandDot}>.</span>
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Link to="/user/alerts" className={styles.headerAlertBtn} style={{ padding: '6px 10px' }}>
-            🔔
-            {unreadAlertsCount > 0 && (
-              <span className={styles.alertCountBadge}>{unreadAlertsCount}</span>
-            )}
-          </Link>
-          <button
-            type="button"
-            className={styles.mobileMenuBtn}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation"
-          >
-            {mobileMenuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-      </div>
-
-      {/* ── MOBILE DRAWER OVERLAY ── */}
-      <div
-        className={`${styles.mobileDrawerOverlay} ${
-          mobileMenuOpen ? styles.mobileDrawerOpen : ''
-        }`}
-      >
-        <Link
-          to="/user/dashboard"
-          className={`${styles.mobileDrawerLink} ${styles.mobileDrawerLinkActive}`}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Dashboard
-        </Link>
-        <Link
-          to="/user/messages"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Scan &amp; Check
-        </Link>
-        <Link
-          to="/user/alerts"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Alerts {unreadAlertsCount > 0 ? `(${unreadAlertsCount})` : ''}
-        </Link>
-        <Link
-          to="/user/assistant"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          AI Assistant
-        </Link>
-        <a
-          href="#guardian-section"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Guardian Access
-        </a>
-        <a
-          href="#reports-section"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Incident Reports
-        </a>
-        <Link
-          to="/user/security"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Security Center
-        </Link>
-        <Link
-          to="/user/profile"
-          className={styles.mobileDrawerLink}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Settings
-        </Link>
-        <button
-          type="button"
-          className={styles.sidebarLogoutBtn}
-          style={{ marginTop: '16px' }}
-          onClick={handleLogout}
-        >
-          Sign Out ({userName})
-        </button>
-      </div>
-
-      {/* ── MAIN CONTENT CANVAS ── */}
-      <div className={styles.mainContent}>
-        {/* Top Header Surface */}
-        <header className={styles.topHeader}>
-          <div className={styles.headerGreeting}>
-            <h1 className={styles.greetingTitle}>
-              Welcome back, {userName}
-            </h1>
-            <p className={styles.greetingSub}>
-              System Shield Active • Continuous Threat Telemetry &amp; Detection
-            </p>
-          </div>
-
-          <div className={styles.headerActions}>
-            <Link to="/user/alerts" className={styles.headerAlertBtn} title="View Alerts">
-              <span>🔔</span>
-              <span>Alerts</span>
-              {unreadAlertsCount > 0 && (
-                <span className={styles.alertCountBadge}>{unreadAlertsCount}</span>
-              )}
-            </Link>
-
-            <a href="#guardian-section" className={styles.headerCodeBtn}>
-              + Guardian Code
-            </a>
-
-            <Link
-              to="/user/profile"
-              className={styles.userAvatarMini}
-              style={{ width: '38px', height: '38px', textDecoration: 'none' }}
-              title="View Profile Settings"
-            >
-              {getInitials(userName)}
-            </Link>
-          </div>
-        </header>
-
-        {/* Dashboard Scrollable Body */}
-        <main className={styles.dashboardBody}>
+    <UserLayout hidePageHeader={true}>
+      <div className={styles.dashboardBody} style={{ padding: '0 0 40px' }}>
           {/* ── HERO GRID: SECURITY SCORE & THREAT BREAKDOWN ── */}
           <section className={styles.heroGrid}>
             {/* Main Security Score Card */}
@@ -810,10 +604,15 @@ export default function UserDashboard() {
           {/* ── TRUSTED GUARDIAN ACCESS PANEL ── */}
           <section id="guardian-section" className={styles.guardianPanel}>
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                TRUSTED <span className={styles.sectionTitleAccent}>GUARDIAN ACCESS</span>
-              </h2>
-              <span className={styles.sectionSubtitle}>Family safety network</span>
+              <div>
+                <h2 className={styles.sectionTitle}>
+                  TRUSTED <span className={styles.sectionTitleAccent}>GUARDIAN ACCESS</span>
+                </h2>
+                <span className={styles.sectionSubtitle}>Family safety network</span>
+              </div>
+              <Link to="/user/guardian" style={{ fontSize: '11.5px', color: 'var(--kavach-quicksand)', textDecoration: 'none', fontWeight: 700 }}>
+                Manage Guardian Access →
+              </Link>
             </div>
 
             <p className={styles.guardianIntro}>
@@ -872,12 +671,17 @@ export default function UserDashboard() {
           {/* ── CYBER INCIDENT REPORTS SECTION ── */}
           <section id="reports-section" className={styles.reportsSection}>
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                CYBER INCIDENT <span className={styles.sectionTitleAccent}>REPORTS</span>
-              </h2>
-              <span className={styles.sectionSubtitle}>
-                Auto-generated documentation drafts for high-risk threats
-              </span>
+              <div>
+                <h2 className={styles.sectionTitle}>
+                  CYBER INCIDENT <span className={styles.sectionTitleAccent}>REPORTS</span>
+                </h2>
+                <span className={styles.sectionSubtitle}>
+                  Auto-generated documentation drafts for high-risk threats
+                </span>
+              </div>
+              <Link to="/user/reports" style={{ fontSize: '11.5px', color: 'var(--kavach-quicksand)', textDecoration: 'none', fontWeight: 700 }}>
+                View All Incident Reports →
+              </Link>
             </div>
 
             {recentReports.length === 0 ? (
@@ -933,8 +737,7 @@ export default function UserDashboard() {
               </div>
             )}
           </section>
-        </main>
       </div>
-    </div>
+    </UserLayout>
   );
 }

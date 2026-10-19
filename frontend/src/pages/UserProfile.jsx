@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { api, clearAuth } from '../services/api';
-import UserNav from '../components/UserNav';
+import UserLayout from '../components/UserLayout';
 import styles from './UserProfile.module.css';
 
 const NAME_REGEX = /^[a-zA-Z\s.'-]+$/;
@@ -9,7 +9,6 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function UserProfile() {
   const navigate = useNavigate();
-
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bannerMsg, setBannerMsg] = useState({ text: '', type: '' });
@@ -140,23 +139,12 @@ export default function UserProfile() {
   };
 
   return (
-    <div className={styles.page}>
-      <UserNav userName={userProfile?.full_name || 'Kavach User'} />
-
-      {/* ── MAIN CONTENT ── */}
-      <main className={styles.main}>
-        <div>
-          <Link to="/user/dashboard" className={styles.backLink}>
-            ← Back to Dashboard
-          </Link>
-        </div>
-
-        <div className={styles.headerSection}>
-          <h1 className={styles.pageTitle}>MY PROFILE</h1>
-          <p className={styles.pageSubtitle}>
-            Manage your personal credentials, digital identity, and security preferences.
-          </p>
-        </div>
+    <UserLayout
+      eyebrow="ACCOUNT SECURITY"
+      title="MY PROFILE & PREFERENCES"
+      subtitle="Manage your personal credentials, digital identity, and platform security settings."
+    >
+      <div className={styles.profileWrapper}>
 
         {bannerMsg.text && (
           <div className={bannerMsg.type === 'success' ? styles.bannerSuccess : styles.bannerError}>
@@ -229,7 +217,7 @@ export default function UserProfile() {
             </button>
           </div>
         </section>
-      </main>
+      </div>
 
       {/* ── EDIT PROFILE MODAL ── */}
       {editOpen && (
@@ -344,6 +332,6 @@ export default function UserProfile() {
           </div>
         </div>
       )}
-    </div>
+    </UserLayout>
   );
 }

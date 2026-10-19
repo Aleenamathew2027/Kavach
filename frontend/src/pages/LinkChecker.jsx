@@ -1,21 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { api } from '../services/api';
-import UserNav from '../components/UserNav';
+import UserLayout from '../components/UserLayout';
 import styles from './LinkChecker.module.css';
 
 export default function LinkChecker() {
-  const [userName, setUserName] = useState('');
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    api.getMe()
-      .then((data) => setUserName(data.full_name))
-      .catch(() => null);
-  }, []);
 
   const handleCheck = async (targetUrl = null) => {
     const inputUrl = typeof targetUrl === 'string' ? targetUrl : url;
@@ -70,17 +63,12 @@ export default function LinkChecker() {
   };
 
   return (
-    <div className={styles.page}>
-      <UserNav userName={userName} />
-
-      <main className={styles.main}>
-        <div className={styles.headerSection}>
-          <h1 className={styles.pageTitle}>LINK SECURITY CHECKER</h1>
-          <p className={styles.pageSubtitle}>
-            Check a suspicious URL before opening it. KAVACH evaluates URLs using a layered Hybrid Engine combining 20+ static threat heuristics and a trained Machine Learning model.
-          </p>
-        </div>
-
+    <UserLayout
+      eyebrow="ZERO-DAY SENTRY"
+      title="LINK SECURITY CHECKER"
+      subtitle="Analyze suspicious URLs before opening them. Multi-layered inspection combining 20+ static heuristics and trained ML."
+    >
+      <div className={styles.scannerWrapper}>
         {error && <div className={styles.errorBanner}>⚠ {error}</div>}
 
         {/* ── SCANNER INPUT ── */}
@@ -264,7 +252,7 @@ export default function LinkChecker() {
             )}
           </section>
         )}
-      </main>
-    </div>
+      </div>
+    </UserLayout>
   );
 }

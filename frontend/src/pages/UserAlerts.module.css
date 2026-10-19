@@ -1,51 +1,36 @@
-/* UserAlerts.module.css — Editorial Design */
+/* ============================================================
+   UserAlerts.module.css — Luxury Royal Blue & Quicksand Theme
+   Part of the KAVACH Monitoring Suite
+   ============================================================ */
 
-.page {
-  min-height: 100vh;
-  background: #faf8f5;
-  color: #1a1a1a;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+.alertsWrapper {
   display: flex;
   flex-direction: column;
-}
-
-.main {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 48px 32px 88px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
+  gap: 28px;
   width: 100%;
 }
 
-.headerSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.pageTitle {
-  font-family: 'Space Grotesk', -apple-system, sans-serif;
-  font-size: clamp(32px, 4vw, 42px);
+.activeAlertsBadge {
+  background: rgba(224, 197, 143, 0.15);
+  border: 1px solid var(--kavach-quicksand);
+  color: var(--kavach-quicksand);
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: -1px;
-  color: #1a3325;
-  text-transform: uppercase;
-}
-
-.pageSubtitle {
-  font-size: 15px;
-  color: #4a5d4e;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 4px;
 }
 
 .alertsCard {
-  background: #ffffff;
-  border: 1px solid #ebe7df;
-  padding: 36px;
+  background: rgba(26, 46, 94, 0.45);
+  border: 1px solid rgba(217, 203, 194, 0.15);
+  border-radius: 6px;
+  padding: 28px 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(10, 20, 50, 0.3);
 }
 
 .alertsList {
@@ -58,8 +43,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-  padding: 24px 0;
-  border-bottom: 1px solid #f5f2eb;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.1);
 }
 
 .alertItem:last-child {
@@ -76,31 +61,34 @@
 .alertTitleRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .alertTitle {
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--kavach-swan-wing);
 }
 
 .unreadDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #dc2626;
+  background: var(--kavach-quicksand);
+  box-shadow: 0 0 8px var(--kavach-quicksand);
+  flex-shrink: 0;
 }
 
 .alertMessage {
-  font-size: 14px;
-  color: #4a5d4e;
+  font-size: 13.5px;
+  color: var(--kavach-shellstone);
   line-height: 1.5;
 }
 
 .alertTime {
-  font-size: 11.5px;
-  color: #737373;
+  font-size: 11px;
+  color: var(--kavach-shellstone);
+  opacity: 0.75;
 }
 
 .alertMeta {
@@ -112,68 +100,76 @@
 
 .severityBadge {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 1px;
   padding: 4px 10px;
+  border-radius: 3px;
   text-transform: uppercase;
 }
 
 .severityHigh {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #f87171;
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border: 1px solid #ef4444;
 }
 
 .severityMedium {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fcd34d;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
+  border: 1px solid #f59e0b;
 }
 
 .severityLow {
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #86efac;
+  background: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+  border: 1px solid #22c55e;
 }
 
 .markReadBtn {
-  background: transparent;
-  border: 1px solid #dcd7cd;
-  color: #555555;
-  font-size: 11px;
+  background: rgba(60, 80, 125, 0.3);
+  border: 1px solid rgba(217, 203, 194, 0.2);
+  color: var(--kavach-shellstone);
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 1px;
   padding: 5px 12px;
+  border-radius: 3px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 .markReadBtn:hover {
-  background: #f4f1ea;
-  color: #1a1a1a;
+  background: rgba(60, 80, 125, 0.5);
+  color: var(--kavach-swan-wing);
 }
 
 .emptyState {
-  padding: 48px 24px;
+  padding: 56px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  color: #737373;
+  color: var(--kavach-shellstone);
 }
 
 .emptyTitle {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: #1a3325;
+  color: var(--kavach-swan-wing);
 }
 
 @media (max-width: 768px) {
-  .main { padding: 32px 20px 60px; }
-  .alertItem { flex-direction: column; align-items: flex-start; }
-  .alertMeta { align-items: flex-start; flex-direction: row; }
+  .alertItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .alertMeta {
+    align-items: flex-start;
+    flex-direction: row;
+  }
 }

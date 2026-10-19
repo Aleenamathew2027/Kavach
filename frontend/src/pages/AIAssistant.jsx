@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { api, getRole } from '../services/api';
-import UserNav from '../components/UserNav';
 import GuardianNav from '../components/GuardianNav';
+import UserLayout from '../components/UserLayout';
 import styles from './AIAssistant.module.css';
 
 /**
@@ -248,49 +248,8 @@ export default function AIAssistant({ role: propRole }) {
     return 'KAVACH Defense Engine';
   };
 
-  return (
-    <div className={`${styles.page} ${isGuardian ? styles.themeGuardian : styles.themeUser}`}>
-      {/* Dynamic Navigation */}
-      {isGuardian ? (
-        <GuardianNav
-          guardianName="Authorized Guardian"
-          protectedUserName={guardedUserName || 'Protected User'}
-        />
-      ) : (
-        <UserNav userName={userName || 'Kavach User'} />
-      )}
-
-      <main className={styles.main}>
-        {/* Header Bar */}
-        <div className={styles.headerBar}>
-          <div className={styles.headerLeft}>
-            <div className={styles.badgePill}>
-              <span className={styles.onlineDot} />
-              <span>AI DIGITAL DEFENSE ASSISTANT</span>
-            </div>
-            <h1 className={styles.title}>KAVACH AI ASSISTANT</h1>
-            <p className={styles.subtitle}>
-              {isGuardian
-                ? `Assisting Guardian mode with threat intelligence and cybersecurity guidance for ${guardedUserName || 'protected user'}.`
-                : '24/7 intelligent assistance for cybersecurity defense, scam identification, KAVACH features, and general questions.'}
-            </p>
-          </div>
-
-          <div className={styles.headerActions}>
-            <button
-              className={styles.clearBtn}
-              onClick={handleClearChat}
-              disabled={messages.length === 0 || isLoading}
-              title="Clear conversation history"
-            >
-              <span>↺</span>
-              <span>Reset Chat</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Chat Card Container */}
-        <div className={styles.chatContainer}>
+  const chatContent = (
+    <div className={styles.chatContainer}>
           <div className={styles.messagesArea}>
             {/* Empty State / Welcome Screen */}
             {messages.length === 0 && (
@@ -428,7 +387,67 @@ export default function AIAssistant({ role: propRole }) {
             <span>Press <strong>Enter</strong> to send, <strong>Shift + Enter</strong> for a new line</span>
             <span>Zero-exposure privacy protected</span>
           </div>
+    </div>
+  );
+
+  if (!isGuardian) {
+    return (
+      <UserLayout
+        eyebrow="AI CYBER INTELLIGENCE"
+        title="KAVACH AI ASSISTANT"
+        subtitle="24/7 intelligent assistance for cybersecurity defense, scam identification, KAVACH features, and general inquiries."
+        headerAction={
+          <button
+            className={styles.clearBtn}
+            onClick={handleClearChat}
+            disabled={messages.length === 0 || isLoading}
+            title="Clear conversation history"
+          >
+            <span>↺</span>
+            <span>Reset Chat</span>
+          </button>
+        }
+      >
+        <div className={`${styles.page} ${styles.themeUser}`} style={{ minHeight: 'auto', background: 'transparent', padding: 0 }}>
+          {chatContent}
         </div>
+      </UserLayout>
+    );
+  }
+
+  return (
+    <div className={`${styles.page} ${styles.themeGuardian}`}>
+      <GuardianNav
+        guardianName="Authorized Guardian"
+        protectedUserName={guardedUserName || 'Protected User'}
+      />
+      <main className={styles.main}>
+        <div className={styles.headerBar}>
+          <div className={styles.headerLeft}>
+            <div className={styles.badgePill}>
+              <span className={styles.onlineDot} />
+              <span>AI DIGITAL DEFENSE ASSISTANT</span>
+            </div>
+            <h1 className={styles.title}>KAVACH AI ASSISTANT</h1>
+            <p className={styles.subtitle}>
+              Assisting Guardian mode with threat intelligence and cybersecurity guidance for {guardedUserName || 'protected user'}.
+            </p>
+          </div>
+
+          <div className={styles.headerActions}>
+            <button
+              className={styles.clearBtn}
+              onClick={handleClearChat}
+              disabled={messages.length === 0 || isLoading}
+              title="Clear conversation history"
+            >
+              <span>↺</span>
+              <span>Reset Chat</span>
+            </button>
+          </div>
+        </div>
+
+        {chatContent}
       </main>
     </div>
   );

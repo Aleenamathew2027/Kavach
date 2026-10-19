@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import UserNav from '../components/UserNav';
+import UserLayout from '../components/UserLayout';
 import styles from './UserAlerts.module.css';
 
 export default function UserAlerts() {
-  const [userName, setUserName] = useState('');
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadAlerts = async () => {
     setLoading(true);
     try {
-      const [profile, alertData] = await Promise.all([
-        api.getMe().catch(() => null),
-        api.getSecurityAlerts().catch(() => []),
-      ]);
-      if (profile) setUserName(profile.full_name);
+      const alertData = await api.getSecurityAlerts().catch(() => []);
       if (alertData) setAlerts(alertData);
     } catch (err) {
       console.error('Failed to load alerts:', err);
@@ -45,18 +40,22 @@ export default function UserAlerts() {
     return styles.severityLow;
   };
 
+  const unreadCount = alerts.filter((a) => !a.is_read).length;
+
   return (
-    <div className={styles.page}>
-      <UserNav userName={userName} />
-
-      <main className={styles.main}>
-        <div className={styles.headerSection}>
-          <h1 className={styles.pageTitle}>SECURITY ALERTS &amp; LOGS</h1>
-          <p className={styles.pageSubtitle}>
-            Review real-time incident alerts and security detections across your messages, links, and documents.
-          </p>
-        </div>
-
+    <UserLayout
+      eyebrow="SYSTEM TELEMETRY"
+      title="SECURITY ALERTS & LOGS"
+      subtitle="Review real-time incident alerts and security detections across your messages, links, and documents."
+      headerAction={
+        unreadCount > 0 ? (
+          <span className={styles.activeAlertsBadge}>
+            {unreadCount} UNREAD {unreadCount === 1 ? 'ALERT' : 'ALERTS'}
+          </span>
+        ) : null
+      }
+    >
+      <div className={styles.alertsWrapper}>
         <section className={styles.alertsCard}>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '32px', color: '#737373' }}>
@@ -108,7 +107,7 @@ export default function UserAlerts() {
             </div>
           )}
         </section>
-      </main>
-    </div>
+      </div>
+    </UserLayout>
   );
 }
