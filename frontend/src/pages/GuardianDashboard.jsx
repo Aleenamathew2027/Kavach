@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { api } from '../services/api';
+import { api, getToken } from '../services/api';
 import GuardianNav from '../components/GuardianNav';
 import styles from './GuardianDashboard.module.css';
 
@@ -18,6 +18,28 @@ export default function GuardianDashboard() {
       return [];
     }
   });
+
+  // Incident Reports state
+  const [reports, setReports] = useState([]);
+  const [reportsLoading, setReportsLoading] = useState(true);
+  const [reportsError, setReportsError] = useState(null);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [reportDetailLoading, setReportDetailLoading] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
+
+  const loadReports = useCallback(async () => {
+    setReportsLoading(true);
+    setReportsError(null);
+    try {
+      const data = await api.getGuardianReports();
+      setReports(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error loading guardian reports:', err);
+      setReportsError('Unable to load cyber incident reports. Please try again.');
+    } finally {
+      setReportsLoading(false);
+    }
+  }, []);
 
   const loadData = async () => {
     try {
@@ -42,8 +64,12 @@ export default function GuardianDashboard() {
 
   useEffect(() => {
     loadData();
-    // Safe periodic polling every 12 seconds for new security incidents
-    const interval = setInterval(loadData, 12000);
+    loadReports();
+    // Safe periodic polling every 12 seconds for new security incidents and reports
+    const interval = setInterval(() => {
+      loadData();
+      loadReports();
+    }, 12000);
     return () => clearInterval(interval);
   }, [dismissedAlertIds]);
 
@@ -53,6 +79,57 @@ export default function GuardianDashboard() {
     sessionStorage.setItem('kavach_guardian_dismissed_alerts', JSON.stringify(updated));
     setHighRiskPopupAlert(null);
   };
+
+  const handleViewReport = async (reportId) => {
+    setReportDetailLoading(true);
+    try {
+      const detail = await api.getGuardianReportDetail(reportId);
+      setSelectedReport(detail);
+    } catch (err) {
+      console.error('Error fetching report detail:', err);
+      alert('Unable to load report details. Please try again.');
+    } finally {
+      setReportDetailLoading(false);
+    }
+  };
+
+  const handleDownloadPdf = async (reportId) => {
+    setDownloadingId(reportId);
+    try {
+      const token = getToken();
+      const url = api.downloadGuardianReportPdf(reportId);
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error('Download failed');
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `KAVACH_Guardian_Report_${reportId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('PDF download error:', err);
+      alert('Unable to download the report. Please try again.');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  const getIncidentTypeLabel = (type) => {
+    const labels = {
+      SCAM_MESSAGE: 'Scam Message',
+      PHISHING_LINK: 'Phishing Link',
+      SUSPICIOUS_DOCUMENT: 'Suspicious Document',
+      SUSPICIOUS_QR: 'QR Code Threat',
+      MULTI_SIGNAL_SCAM: 'Multi-Signal Scam',
+    };
+    return labels[type] || type;
+  };
+
 
   const protectedName = guardianData?.guarded_user?.full_name || 'Protected User';
   const protectedEmail = guardianData?.guarded_user?.email || '—';
@@ -316,6 +393,114 @@ export default function GuardianDashboard() {
           )}
         </section>
 
+        {/* ── CYBER INCIDENT REPORTS SECTION ── */}
+        <section className={styles.reportsSection}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2 className={styles.sectionTitle}>CYBER INCIDENT REPORTS</h2>
+              <span className={styles.subtext}>
+                Automatically generated when KAVACH detects a high-risk security incident
+              </span>
+            </div>
+            <button
+              className={styles.refreshBtn}
+              onClick={loadReports}
+              disabled={reportsLoading}
+            >
+              {reportsLoading ? '↻ Loading…' : '↻ Refresh'}
+            </button>
+          </div>
+
+          {reportsLoading ? (
+            <div className={styles.reportSkeletonList}>
+              {[1, 2].map((i) => (
+                <div key={i} className={styles.reportSkeleton} />
+              ))}
+            </div>
+          ) : reportsError ? (
+            <div className={styles.reportsError}>
+              <span>⚠</span>
+              <p>{reportsError}</p>
+              <button className={styles.retryBtn} onClick={loadReports}>Try Again</button>
+            </div>
+          ) : reports.length === 0 ? (
+            <div className={styles.reportsEmpty}>
+              <span style={{ fontSize: '28px' }}>🛡️</span>
+              <strong>No Cyber Incident Reports Available</strong>
+              <p>Reports are automatically generated when KAVACH detects a high-risk security incident.</p>
+            </div>
+          ) : (
+            <div className={styles.reportList}>
+              {reports.map((rep) => (
+                <div key={rep.report_id} className={styles.reportCard}>
+                  <div className={styles.reportCardHeader}>
+                    <div className={styles.reportCardLeft}>
+                      <span className={styles.reportId}>{rep.report_id}</span>
+                      <span className={styles.reportIdLabel}>REPORT ID</span>
+                    </div>
+                    <span className={styles.reportRiskBadge}>
+                      HIGH RISK
+                    </span>
+                  </div>
+
+                  <div className={styles.reportCardBody}>
+                    <div className={styles.reportMeta}>
+                      <div className={styles.reportMetaItem}>
+                        <span className={styles.reportMetaLabel}>INCIDENT TYPE</span>
+                        <span className={styles.reportMetaVal}>
+                          {getIncidentTypeLabel(rep.incident_type)}
+                        </span>
+                      </div>
+                      <div className={styles.reportMetaItem}>
+                        <span className={styles.reportMetaLabel}>RISK SCORE</span>
+                        <span className={styles.reportMetaVal}>{rep.risk_score}/100</span>
+                      </div>
+                      <div className={styles.reportMetaItem}>
+                        <span className={styles.reportMetaLabel}>DETECTED</span>
+                        <span className={styles.reportMetaVal}>
+                          {new Date(rep.detected_at).toLocaleString([], {
+                            month: 'short', day: 'numeric', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
+                      <div className={styles.reportMetaItem}>
+                        <span className={styles.reportMetaLabel}>STATUS</span>
+                        <span className={styles.reportStatusPill}>{rep.status}</span>
+                      </div>
+                    </div>
+
+                    <p className={styles.reportSummary}>
+                      {rep.summary?.substring(0, 180)}{rep.summary?.length > 180 ? '…' : ''}
+                    </p>
+                  </div>
+
+                  <div className={styles.reportDisclaimer}>
+                    ℹ This is a documentation draft generated by KAVACH and is not an official complaint filing.
+                  </div>
+
+                  <div className={styles.reportCardActions}>
+                    <button
+                      className={styles.reportViewBtn}
+                      onClick={() => handleViewReport(rep.report_id)}
+                      disabled={reportDetailLoading}
+                    >
+                      {reportDetailLoading ? 'Loading…' : 'View Report'}
+                    </button>
+                    <button
+                      className={styles.reportDownloadBtn}
+                      onClick={() => handleDownloadPdf(rep.report_id)}
+                      disabled={downloadingId === rep.report_id}
+                    >
+                      {downloadingId === rep.report_id ? '⟳ Downloading…' : '⬇ Download PDF'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* ── EMERGENCY ACTIONS GUIDANCE ── */}
         <section className={styles.emergencyCard}>
           <div className={styles.emergencyHeader}>
@@ -342,6 +527,107 @@ export default function GuardianDashboard() {
           </div>
         </section>
       </main>
+
+      {/* ── REPORT DETAIL MODAL ── */}
+      {selectedReport && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedReport(null)}>
+          <div
+            className={styles.reportModal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.reportModalHeader}>
+              <div>
+                <span className={styles.reportModalBadge}>CYBER SECURITY INCIDENT REPORT</span>
+                <h2 className={styles.reportModalTitle}>{selectedReport.title}</h2>
+              </div>
+              <button
+                className={styles.reportModalClose}
+                onClick={() => setSelectedReport(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.reportModalGrid}>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Report ID</span>
+                <span className={styles.reportModalVal}>{selectedReport.report_id}</span>
+              </div>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Incident Type</span>
+                <span className={styles.reportModalVal}>
+                  {getIncidentTypeLabel(selectedReport.incident_type)}
+                </span>
+              </div>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Risk Level</span>
+                <span className={styles.modalHighVal}>{selectedReport.risk_level}</span>
+              </div>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Risk Score</span>
+                <span className={styles.reportModalVal}>{selectedReport.risk_score}/100</span>
+              </div>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Detection Time</span>
+                <span className={styles.reportModalVal}>
+                  {new Date(selectedReport.detected_at).toLocaleString()}
+                </span>
+              </div>
+              <div className={styles.reportModalItem}>
+                <span className={styles.reportModalLabel}>Status</span>
+                <span className={styles.reportStatusPill}>{selectedReport.status}</span>
+              </div>
+            </div>
+
+            <div className={styles.reportModalSection}>
+              <span className={styles.reportModalSectionTitle}>Incident Summary</span>
+              <p className={styles.reportModalText}>{selectedReport.summary}</p>
+            </div>
+
+            {selectedReport.sanitized_evidence?.detected_indicators?.length > 0 && (
+              <div className={styles.reportModalSection}>
+                <span className={styles.reportModalSectionTitle}>Detected Threat Indicators</span>
+                <ul className={styles.indicatorList}>
+                  {selectedReport.sanitized_evidence.detected_indicators.slice(0, 6).map((ind, i) => (
+                    <li key={i} className={styles.indicatorItem}>⚠ {ind}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className={styles.reportModalSection}>
+              <span className={styles.reportModalSectionTitle}>Recommended Safety Actions</span>
+              <div className={styles.reportSafetyBox}>
+                <p>1. Do NOT click links, QR codes, or respond to this incident.</p>
+                <p>2. Contact {protectedName} immediately to verify they have not made any payments or shared OTPs.</p>
+                <p>3. Use this report as a reference when filing an official complaint with law enforcement if needed.</p>
+              </div>
+            </div>
+
+            <div className={styles.reportModalDisclaimer}>
+              ℹ This report is a documentation draft generated by KAVACH and is not an official complaint filing with any law-enforcement authority.
+            </div>
+
+            <div className={styles.reportModalActions}>
+              <button
+                className={styles.reportDownloadBtn}
+                onClick={() => {
+                  handleDownloadPdf(selectedReport.report_id);
+                  setSelectedReport(null);
+                }}
+              >
+                ⬇ Download Privacy-Sanitized PDF
+              </button>
+              <button
+                className={styles.modalDismissBtn}
+                onClick={() => setSelectedReport(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

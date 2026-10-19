@@ -28,7 +28,7 @@ router = APIRouter(
 @router.post(
     "/generate-code",
     response_model=GuardianCodeGenerateResponse,
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     summary="Generate a 6-digit guardian access code (User only)"
 )
 def generate_code(
@@ -341,4 +341,97 @@ def get_guardian_activity(
             "time": s.created_at.isoformat() if s.created_at else None,
         })
     return items
+
+
+from app.services.incident_report_service import generate_pdf_for_report, get_incident_report_by_id
+from app.models.incident_report import IncidentReport
+from app.schemas.incident_report_schema import IncidentReportResponse
+from fastapi import Response
+from typing import List
+
+@router.get(
+    "/reports",
+    response_model=List[IncidentReportResponse],
+    summary="List privacy-safe incident report summaries for the guarded user (Guardian only)"
+)
+def list_guardian_reports(
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns all incident reports belonging to the Guardian's linked user.
+    Authorization is enforced via the Guardian JWT (sub = guarded user_id).
+    Does NOT return raw evidence — only safe summary fields.
+    """
+    payload = auth_ctx["payload"]
+    guarded_user_id = int(payload["sub"])
+
+    reports = db.query(IncidentReport).filter(
+        IncidentReport.user_id == guarded_user_id
+    ).order_by(IncidentReport.created_at.desc()).all()
+
+    return reports
+
+
+@router.get(
+    "/reports/{report_id}",
+    response_model=IncidentReportResponse,
+    summary="Get a specific incident report summary for the guarded user (Guardian only)"
+)
+def get_guardian_report_detail(
+    report_id: str,
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns a single incident report for the guarded user.
+    Guardian can only access reports belonging to their linked user.
+    """
+    payload = auth_ctx["payload"]
+    guarded_user_id = int(payload["sub"])
+
+    report = get_incident_report_by_id(
+        db=db,
+        report_id=report_id,
+        requesting_user_id=guarded_user_id,
+        role="guardian"
+    )
+    if not report:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Incident report not found or access denied."
+        )
+    return report
+
+
+@router.get(
+    "/reports/{report_id}/download",
+    summary="Download privacy-sanitized incident report draft for guarded user (Guardian only)"
+)
+def download_guardian_report_pdf(
+    report_id: str,
+    auth_ctx: dict = Depends(require_role(["guardian"])),
+    db: Session = Depends(get_db)
+):
+    payload = auth_ctx["payload"]
+    guarded_user_id = int(payload["sub"])
+    try:
+        pdf_bytes = generate_pdf_for_report(
+            db=db,
+            report_id=report_id,
+            requesting_user_id=guarded_user_id,
+            role="guardian"
+        )
+        filename = f"KAVACH_Guardian_Report_{report_id}.pdf"
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except ValueError as val_err:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(val_err)
+        )
+
 

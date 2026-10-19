@@ -16,9 +16,33 @@ from app.models.user import User
 
 load_dotenv()
 
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "kavach_default_secret_key_please_set_in_env")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+
+ALLOWED_JWT_ALGORITHMS = ["HS256", "HS384", "HS512"]
+
+def validate_security_config(env: Optional[str] = None, secret: Optional[str] = None, algo: Optional[str] = None):
+    """
+    Validates JWT and security configuration for production readiness while maintaining local development flexibility.
+    """
+    target_env = env if env is not None else os.getenv("ENVIRONMENT", "development").lower()
+    target_secret = secret if secret is not None else os.getenv("JWT_SECRET_KEY", "")
+    target_algo = algo if algo is not None else os.getenv("JWT_ALGORITHM", "HS256")
+
+    if target_algo not in ALLOWED_JWT_ALGORITHMS:
+        raise ValueError(f"Unsafe JWT algorithm '{target_algo}'. Allowed algorithms: {ALLOWED_JWT_ALGORITHMS}")
+
+    if target_env == "production":
+        default_secret_fallback = "kavach_default_secret_key_please_set_in_env"
+        if not target_secret or target_secret == default_secret_fallback or len(target_secret) < 32:
+            raise ValueError(
+                "Production mode requires a strong custom JWT_SECRET_KEY with at least 32 characters set in environment."
+            )
+
+# Execute validation on import
+validate_security_config(ENVIRONMENT, JWT_SECRET_KEY, JWT_ALGORITHM)
 
 # Password hashing with bcrypt
 pwd_context = PasswordHash((BcryptHasher(),))
@@ -64,7 +88,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 def decode_access_token(token: str) -> Dict[str, Any]:
-    """Decode and validate a JWT access token."""
+    """Decode and validate a JWT access token against allowed algorithms and expiration."""
+    if JWT_ALGORITHM not in ALLOWED_JWT_ALGORITHMS:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid JWT algorithm configuration",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
         return payload

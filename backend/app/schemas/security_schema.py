@@ -18,6 +18,9 @@ class MessageAnalyzeResponse(BaseModel):
     message: Optional[str] = None
     scan_id: Optional[int] = None
     alert_created: bool = False
+    report_generated: bool = False
+    report_id: Optional[str] = None
+    incident_type: Optional[str] = None
     # ML Model Fields
     classification: Optional[str] = None
     prediction: Optional[str] = None
@@ -36,14 +39,34 @@ class LinkAnalyzeRequest(BaseModel):
 
 class LinkAnalyzeResponse(BaseModel):
     url: str
+    verdict: str
     risk_level: str
     risk_score: int
-    detected_indicators: List[str]
-    reasons: List[str]
-    recommended_action: str
-    summary: str
+    analysis_type: str = "Hybrid URL Security Engine (Heuristic + ML)"
+    confidence: float = 90.0
+
+    # Layered Engine Details
+    heuristic_score: int = 0
+    ml_verdict: Optional[str] = None
+    ml_confidence: Optional[float] = None
+    ml_phishing_probability: Optional[float] = None
+    ml_safe_probability: Optional[float] = None
+    model: Optional[str] = None
+    model_scope: Optional[str] = None
+
+    indicators: List[str] = []
+    detected_indicators: List[str] = []
+    reasons: List[str] = []
+    recommendation: str = ""
+    recommended_action: str = ""
+    summary: str = ""
     scan_id: Optional[int] = None
     alert_created: bool = False
+    report_generated: bool = False
+    report_id: Optional[str] = None
+    incident_type: Optional[str] = None
+
+
 
 
 class DocumentAnalyzeResponse(BaseModel):
@@ -58,6 +81,15 @@ class DocumentAnalyzeResponse(BaseModel):
     summary: str
     scan_id: Optional[int] = None
     alert_created: bool = False
+    report_generated: bool = False
+    report_id: Optional[str] = None
+    incident_type: Optional[str] = None
+    # Extended Multi-Engine Analysis Fields
+    ocr_info: Optional[Dict[str, Any]] = None
+    text_analysis: Optional[Dict[str, Any]] = None
+    url_analysis: Optional[Dict[str, Any]] = None
+    qr_analysis: Optional[Dict[str, Any]] = None
+    threat_breakdown: Optional[Dict[str, Any]] = None
 
 
 class SecurityAlertResponse(BaseModel):

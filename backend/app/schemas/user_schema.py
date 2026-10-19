@@ -7,6 +7,7 @@ NAME_REGEX = re.compile(r"^[a-zA-Z\s.'-]+$")
 CODE_REGEX = re.compile(r"^\d{6}$")
 
 
+
 class UserCreate(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=100, description="Full name of the user")
     email: EmailStr = Field(..., description="Valid email address")

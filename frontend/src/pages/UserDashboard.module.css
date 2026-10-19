@@ -466,4 +466,108 @@
   .statsGrid { grid-template-columns: 1fr; }
   .navContainer { padding: 0 20px; }
   .main { padding: 32px 20px 60px; }
+  .reportNotifActions { flex-direction: column; }
+}
+
+/* ── CYBER INCIDENT REPORT NOTIFICATION CARDS (User Dashboard) ── */
+.reportNotifCard {
+  background: #ffffff;
+  border: 1px solid #fca5a5;
+  border-left: 4px solid #dc2626;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reportNotifHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.reportNotifBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #dc2626;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.reportNotifId {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a3325;
+  letter-spacing: 1px;
+}
+
+.reportNotifType {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.reportNotifSummary {
+  font-size: 13px;
+  color: #4a5d4e;
+  line-height: 1.55;
+  margin: 0;
+  font-style: italic;
+}
+
+.reportNotifActions {
+  display: flex;
+  gap: 10px;
+}
+
+.reportNotifViewBtn {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a3325;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid #1a3325;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  display: inline-block;
+}
+
+.reportNotifViewBtn:hover {
+  background: #1a3325;
+  color: #ffffff;
+}
+
+.reportNotifDownloadBtn {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #dc2626;
+  border: none;
+  padding: 8px 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.reportNotifDownloadBtn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.reportNotifDownloadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

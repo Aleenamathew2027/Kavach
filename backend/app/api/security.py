@@ -22,6 +22,7 @@ from app.ai.message_detector import predict_message_scam
 from app.services.document_scanner import analyze_document_content
 from app.services.link_scanner import analyze_link_url
 from app.services.message_scanner import analyze_message_text
+from app.services.incident_report_service import create_incident_report_from_scan
 from app.utils.security import get_db, require_role
 
 router = APIRouter(
@@ -111,6 +112,11 @@ def analyze_message(
     db.refresh(scan)
 
     alert_created = False
+    alert = None
+    report_generated = False
+    report_id = None
+    incident_type = None
+
     if final_risk_level == "HIGH RISK":
         indicator_str = ", ".join(detected_indicators[:2]) if detected_indicators else f"{model_name} Scam Prediction"
         alert = SecurityAlert(
@@ -123,7 +129,26 @@ def analyze_message(
         )
         db.add(alert)
         db.commit()
+        db.refresh(alert)
         alert_created = True
+
+        try:
+            inc_report = create_incident_report_from_scan(
+                db=db,
+                user_id=user.id,
+                scan_id=scan.id,
+                custom_title="Cyber Security Incident Report: Scam Message Threat"
+            )
+            if alert:
+                inc_report.security_alert_id = alert.id
+                db.commit()
+
+            report_generated = True
+            report_id = inc_report.report_id
+            incident_type = inc_report.incident_type
+        except Exception as rep_err:
+            logger.error(f"Failed to automatically generate incident report for message scan #{scan.id}: {rep_err}")
+            report_generated = False
 
     return {
         "risk_level": final_risk_level,
@@ -137,6 +162,9 @@ def analyze_message(
         "message": summary,
         "scan_id": scan.id,
         "alert_created": alert_created,
+        "report_generated": report_generated,
+        "report_id": report_id,
+        "incident_type": incident_type,
         # ML Details
         "prediction": ml_pred,
         "confidence": round(confidence * 100, 1),
@@ -168,9 +196,9 @@ def analyze_link(
         user_id=user.id,
         scan_type="link",
         input_reference=ref,
-        risk_level=result["risk_level"],
+        risk_level=result["verdict"],  # "SAFE", "SUSPICIOUS", or "HIGH RISK"
         risk_score=result["risk_score"],
-        detected_indicators=result["detected_indicators"],
+        detected_indicators=result["indicators"],
         result_summary=result["summary"],
     )
     db.add(scan)
@@ -178,8 +206,13 @@ def analyze_link(
     db.refresh(scan)
 
     alert_created = False
-    if result["risk_level"] == "HIGH RISK":
-        indicator_str = ", ".join(result["detected_indicators"][:2]) if result["detected_indicators"] else "Suspicious domain"
+    alert = None
+    report_generated = False
+    report_id = None
+    incident_type = None
+
+    if result["verdict"] == "HIGH RISK" or result["risk_score"] >= 60:
+        indicator_str = ", ".join(result["indicators"][:2]) if result["indicators"] else "Deceptive URL patterns"
         alert = SecurityAlert(
             user_id=user.id,
             alert_type="link_scam",
@@ -190,19 +223,58 @@ def analyze_link(
         )
         db.add(alert)
         db.commit()
+        db.refresh(alert)
         alert_created = True
+
+    if result["verdict"] == "HIGH RISK":
+        try:
+            inc_report = create_incident_report_from_scan(
+                db=db,
+                user_id=user.id,
+                scan_id=scan.id,
+                custom_title="Cyber Security Incident Report: Phishing Link Threat"
+            )
+            if alert:
+                inc_report.security_alert_id = alert.id
+                db.commit()
+
+            report_generated = True
+            report_id = inc_report.report_id
+            incident_type = inc_report.incident_type
+        except Exception as rep_err:
+            logger.error(f"Failed to automatically generate incident report for link scan #{scan.id}: {rep_err}")
+            report_generated = False
 
     return {
         "url": result["url"],
+        "verdict": result["verdict"],
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],
-        "detected_indicators": result["detected_indicators"],
-        "reasons": result["reasons"],
-        "recommended_action": result["recommended_action"],
+        "heuristic_score": result.get("heuristic_score", result["risk_score"]),
+        "analysis_type": result.get("analysis_type", "Hybrid URL Security Engine (Heuristic + ML)"),
+        "confidence": result.get("confidence", 90.0),
+        # ML Breakdown
+        "ml_verdict": result.get("ml_verdict", "SAFE"),
+        "ml_confidence": result.get("ml_confidence", 90.0),
+        "ml_phishing_probability": result.get("ml_phishing_probability", 0.0),
+        "ml_safe_probability": result.get("ml_safe_probability", 100.0),
+        "model": result.get("model", "Random Forest Classifier"),
+        "model_scope": result.get("model_scope", "ISCX Phishing Benchmark"),
+        # Indicators & Guidance
+        "indicators": result.get("indicators", []),
+        "detected_indicators": result.get("indicators", []),
+        "reasons": result.get("reasons", []),
+        "recommendation": result.get("recommendation", ""),
+        "recommended_action": result.get("recommendation", ""),
         "summary": result["summary"],
         "scan_id": scan.id,
         "alert_created": alert_created,
+        "report_generated": report_generated,
+        "report_id": report_id,
+        "incident_type": incident_type,
     }
+
+
 
 
 @router.post(
@@ -241,6 +313,11 @@ async def analyze_document(
     db.refresh(scan)
 
     alert_created = False
+    alert = None
+    report_generated = False
+    report_id = None
+    incident_type = None
+
     if result["risk_level"] == "HIGH RISK":
         indicator_str = ", ".join(result["detected_indicators"][:2]) if result["detected_indicators"] else "Fraudulent content"
         alert = SecurityAlert(
@@ -253,7 +330,33 @@ async def analyze_document(
         )
         db.add(alert)
         db.commit()
+        db.refresh(alert)
         alert_created = True
+
+        try:
+            if result.get("qr_analysis", {}).get("qr_found") and result.get("qr_analysis", {}).get("highest_risk_score", 0) >= 70:
+                doc_inc_type = "SUSPICIOUS_QR"
+            elif result.get("threat_breakdown", {}).get("text_risk_score", 0) >= 70 and result.get("threat_breakdown", {}).get("url_risk_score", 0) >= 70:
+                doc_inc_type = "MULTI_SIGNAL_SCAM"
+            else:
+                doc_inc_type = "SUSPICIOUS_DOCUMENT"
+
+            inc_report = create_incident_report_from_scan(
+                db=db,
+                user_id=user.id,
+                scan_id=scan.id,
+                custom_title=f"Cyber Security Incident Report: {doc_inc_type.replace('_', ' ').title()}"
+            )
+            if alert:
+                inc_report.security_alert_id = alert.id
+                db.commit()
+
+            report_generated = True
+            report_id = inc_report.report_id
+            incident_type = inc_report.incident_type
+        except Exception as rep_err:
+            logger.error(f"Failed to automatically generate incident report for document scan #{scan.id}: {rep_err}")
+            report_generated = False
 
     return {
         "filename": result["filename"],
@@ -267,6 +370,15 @@ async def analyze_document(
         "summary": result["summary"],
         "scan_id": scan.id,
         "alert_created": alert_created,
+        "report_generated": report_generated,
+        "report_id": report_id,
+        "incident_type": incident_type,
+        # Extended Analysis Fields
+        "ocr_info": result.get("ocr_info"),
+        "text_analysis": result.get("text_analysis"),
+        "url_analysis": result.get("url_analysis"),
+        "qr_analysis": result.get("qr_analysis"),
+        "threat_breakdown": result.get("threat_breakdown"),
     }
 
 

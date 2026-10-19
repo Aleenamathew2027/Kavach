@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '../services/api';
+import { api, getToken } from '../services/api';
 import UserNav from '../components/UserNav';
 import styles from './UserDashboard.module.css';
 
@@ -10,19 +10,24 @@ export default function UserDashboard() {
   const [guardianCode, setGuardianCode] = useState(null);
   const [guardianExpiry, setGuardianExpiry] = useState(null);
   const [codeMsg, setCodeMsg] = useState('');
+  const [codeError, setCodeError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [recentReports, setRecentReports] = useState([]);
+  const [downloadingId, setDownloadingId] = useState(null);
 
   useEffect(() => {
     async function loadData() {
       setLoading(true);
       try {
-        const [profile, summary] = await Promise.all([
+        const [profile, summary, reports] = await Promise.all([
           api.getMe().catch(() => null),
           api.getSecuritySummary().catch(() => null),
+          api.getUserReports().catch(() => []),
         ]);
         if (profile) setUserProfile(profile);
         if (summary) setSecuritySummary(summary);
+        if (Array.isArray(reports)) setRecentReports(reports.slice(0, 3));
       } catch (err) {
         console.error('Error loading user dashboard:', err);
       } finally {
@@ -35,24 +40,28 @@ export default function UserDashboard() {
   const handleGenerateCode = async () => {
     try {
       setCodeMsg('Generating code…');
+      setCodeError(false);
       const data = await api.generateGuardianCode();
       setGuardianCode(data.code);
       setGuardianExpiry(new Date(data.expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       setCodeMsg('Code active for 24 hours. Share this with your trusted guardian.');
     } catch (err) {
       console.error('Guardian generation error:', err);
+      setCodeError(true);
       setCodeMsg(err.message || 'Unable to generate your guardian access code. Please try again.');
     }
   };
 
   const handleRevokeCode = async () => {
     try {
+      setCodeError(false);
       await api.revokeGuardianCode();
       setGuardianCode(null);
       setGuardianExpiry(null);
       setCodeMsg('Guardian access code revoked.');
     } catch (err) {
       console.error('Guardian revoke error:', err);
+      setCodeError(true);
       setCodeMsg(err.message || 'Unable to revoke code. Please try again.');
     }
   };
@@ -62,6 +71,32 @@ export default function UserDashboard() {
     navigator.clipboard.writeText(guardianCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownloadUserPdf = async (reportId) => {
+    setDownloadingId(reportId);
+    try {
+      const token = getToken();
+      const url = api.downloadUserReportPdf(reportId);
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error('Download failed');
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `KAVACH_Incident_Report_${reportId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('PDF download error:', err);
+      alert('Unable to download the report. Please try again.');
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const isAttentionRequired = securitySummary && (securitySummary.threats_detected > 0 || securitySummary.active_threat_level === 'HIGH');
@@ -315,7 +350,7 @@ export default function UserDashboard() {
                   ⚠ Only share this code with someone you trust.
                 </div>
                 <div className={styles.buttonGroup}>
-                  <button className={styles.dangerBtn} onClick={handleRevokeCode}>
+                  <button type="button" className={styles.dangerBtn} onClick={handleRevokeCode}>
                     REVOKE CODE
                   </button>
                 </div>
@@ -323,17 +358,63 @@ export default function UserDashboard() {
             ) : (
               <div>
                 {codeMsg && (
-                  <p style={{ fontSize: '13px', color: '#15803d', marginBottom: '14px' }}>
+                  <p style={{ fontSize: '13px', color: codeError ? '#dc2626' : '#15803d', marginBottom: '14px' }}>
                     {codeMsg}
                   </p>
                 )}
-                <button className={styles.primaryBtn} onClick={handleGenerateCode}>
+                <button type="button" className={styles.primaryBtn} onClick={handleGenerateCode}>
                   GENERATE ACCESS CODE
                 </button>
               </div>
             )}
           </section>
         </div>
+
+        {/* ── CYBER INCIDENT REPORT NOTIFICATIONS ── */}
+        {recentReports.length > 0 && (
+          <section style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>CYBER INCIDENT REPORTS</h2>
+              <span style={{ fontSize: '12px', color: '#737373' }}>
+                Auto-generated for high-risk detections
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {recentReports.map((rep) => (
+                <div key={rep.report_id} className={styles.reportNotifCard}>
+                  <div className={styles.reportNotifHeader}>
+                    <div>
+                      <span className={styles.reportNotifBadge}>HIGH RISK INCIDENT DETECTED</span>
+                      <div className={styles.reportNotifId}>{rep.report_id}</div>
+                    </div>
+                    <span className={styles.reportNotifType}>
+                      {rep.incident_type?.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                  <p className={styles.reportNotifSummary}>
+                    A Cyber Security Incident Report / Complaint Draft has been automatically generated. This is a documentation draft and is not an official complaint filing.
+                  </p>
+                  <div className={styles.reportNotifActions}>
+                    <Link
+                      to={`/user/alerts`}
+                      className={styles.reportNotifViewBtn}
+                    >
+                      View Alerts →
+                    </Link>
+                    <button
+                      className={styles.reportNotifDownloadBtn}
+                      onClick={() => handleDownloadUserPdf(rep.report_id)}
+                      disabled={downloadingId === rep.report_id}
+                    >
+                      {downloadingId === rep.report_id ? '⟳ Downloading…' : '⬇ Download PDF'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

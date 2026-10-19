@@ -16,16 +16,25 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# ── CORS Middleware ────────────────────────────────────────────────────────────
-# Allows Vite frontend (localhost:5173 / 127.0.0.1:5173) to communicate with API.
+import os
+
+default_origins = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
+
+env_cors = os.getenv("CORS_ORIGINS", "")
+if env_cors:
+    extra_origins = [origin.strip() for origin in env_cors.split(",") if origin.strip()]
+    allowed_origins = list(dict.fromkeys(default_origins + extra_origins))
+else:
+    allowed_origins = default_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5173",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-        "http://localhost:3000",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,8 +49,33 @@ def home():
     }
 
 
+@app.get("/health", tags=["General"], summary="Safe System Health Check")
+def health_check():
+    """Returns system operational status and database connectivity safely without exposing secrets."""
+    db_status = "connected"
+    try:
+        from sqlalchemy import text
+        from app.database.connection import SessionLocal
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+    except Exception:
+        db_status = "degraded"
+
+    return {
+        "status": "healthy" if db_status == "connected" else "degraded",
+        "app_title": "Kavach API",
+        "version": "1.0.0",
+        "database": db_status,
+        "environment": os.getenv("ENVIRONMENT", "development").lower(),
+    }
+
+
+from app.api.incident_reports import router as incident_reports_router
+
 # Include Routers
 app.include_router(user_router)
 app.include_router(guardian_router)
 app.include_router(dashboard_router)
 app.include_router(security_router)
+app.include_router(incident_reports_router)

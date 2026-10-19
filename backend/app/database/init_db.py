@@ -9,6 +9,7 @@ import app.models.user
 import app.models.guardian
 import app.models.security_scan
 import app.models.security_alert
+import app.models.incident_report
 from app.models.user import User
 from app.utils.security import hash_password, verify_password
 

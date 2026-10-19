@@ -1,7 +1,9 @@
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE_URL) || 'http://127.0.0.1:8000';
 
 export function getToken() {
-  return localStorage.getItem('kavach_token');
+  const token = localStorage.getItem('kavach_token');
+  if (!token) return null;
+  return token.replace(/^"|"$/g, '').trim();
 }
 
 export function getRole() {
@@ -27,20 +29,40 @@ export function isAuthenticated() {
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const isFormData = options.body instanceof FormData;
+
+  let customHeaders = {};
+  if (options.headers instanceof Headers) {
+    options.headers.forEach((val, key) => {
+      customHeaders[key] = val;
+    });
+  } else if (options.headers && typeof options.headers === 'object') {
+    customHeaders = options.headers;
+  }
+
   const headers = {
     ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
-    ...(options.headers || {}),
+    ...customHeaders,
   };
 
   const token = getToken();
-  if (token && !headers.Authorization) {
-    headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const config = {
     ...options,
     headers,
   };
+
+  // For POST/PUT/PATCH with no body and Content-Type application/json, provide empty JSON object
+  if (
+    !isFormData &&
+    config.headers['Content-Type'] === 'application/json' &&
+    ['POST', 'PUT', 'PATCH'].includes((config.method || '').toUpperCase()) &&
+    config.body === undefined
+  ) {
+    config.body = JSON.stringify({});
+  }
 
   try {
     const response = await fetch(url, config);
@@ -105,4 +127,14 @@ export const api = {
   // Guardian Code Management (User role)
   generateGuardianCode: () => request('/guardian/generate-code', { method: 'POST' }),
   revokeGuardianCode: () => request('/guardian/revoke-code', { method: 'POST' }),
+
+  // User Incident Reports (User role)
+  getUserReports: () => request('/security/reports'),
+  getUserReportDetail: (reportId) => request(`/security/reports/${reportId}`),
+  downloadUserReportPdf: (reportId) => `${API_BASE}/security/reports/${reportId}/download`,
+
+  // Guardian Incident Reports (Guardian role)
+  getGuardianReports: () => request('/guardian/reports'),
+  getGuardianReportDetail: (reportId) => request(`/guardian/reports/${reportId}`),
+  downloadGuardianReportPdf: (reportId) => `${API_BASE}/guardian/reports/${reportId}/download`,
 };

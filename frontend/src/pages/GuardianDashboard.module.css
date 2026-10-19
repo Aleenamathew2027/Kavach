@@ -641,4 +641,472 @@
   .metricsGrid { grid-template-columns: repeat(2, 1fr); }
   .stepsGrid { grid-template-columns: 1fr; }
   .heroSection { flex-direction: column; align-items: flex-start; }
+  .reportMeta { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .main { padding: 24px 16px 60px; }
+  .reportMeta { grid-template-columns: 1fr; }
+  .reportCardActions { flex-direction: column; }
+  .reportModalGrid { grid-template-columns: 1fr; }
+}
+
+/* ── CYBER INCIDENT REPORTS SECTION ── */
+.reportsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.refreshBtn {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #8da9c4;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  border-color: #48e5c2;
+  color: #48e5c2;
+}
+
+.refreshBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Skeleton loading */
+.reportSkeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reportSkeleton {
+  background: linear-gradient(90deg, #0b132b 25%, #1c2541 50%, #0b132b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  height: 160px;
+  border-radius: 8px;
+  border: 1px solid #1c2541;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Error state */
+.reportsError {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 6px;
+  padding: 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #f87171;
+  font-size: 16px;
+}
+
+.reportsError p {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.retryBtn {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #f87171;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 4px;
+  transition: all 0.15s ease;
+}
+
+.retryBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Empty state */
+.reportsEmpty {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 6px;
+  padding: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #8da9c4;
+}
+
+.reportsEmpty strong {
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.reportsEmpty p {
+  font-size: 13px;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Report list and cards */
+.reportList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reportCard {
+  background: #0b132b;
+  border: 1px solid #1c2541;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.reportCard:hover {
+  border-color: #ef4444;
+}
+
+.reportCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  background: rgba(239, 68, 68, 0.06);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.reportCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reportId {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.reportIdLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.reportRiskBadge {
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 10px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.reportCardBody {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reportMeta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: #060a17;
+  padding: 14px;
+  border-radius: 4px;
+  border: 1px solid #1c2541;
+}
+
+.reportMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reportMetaLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.reportMetaVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.reportStatusPill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 2px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+.reportSummary {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.reportDisclaimer {
+  padding: 8px 22px;
+  font-size: 11px;
+  color: #475569;
+  background: rgba(15, 23, 42, 0.5);
+  border-top: 1px solid #1c2541;
+  font-style: italic;
+}
+
+.reportCardActions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid #1c2541;
+}
+
+.reportViewBtn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.reportViewBtn:hover:not(:disabled) {
+  border-color: #48e5c2;
+  color: #48e5c2;
+}
+
+.reportViewBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reportDownloadBtn {
+  flex: 1;
+  background: #ef4444;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  transition: background 0.15s ease;
+}
+
+.reportDownloadBtn:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.reportDownloadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── REPORT DETAIL MODAL ── */
+.reportModal {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 660px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: modalPop 0.2s ease-out;
+}
+
+.reportModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.reportModalBadge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ef4444;
+  text-transform: uppercase;
+}
+
+.reportModalTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 6px 0 0;
+}
+
+.reportModalClose {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.reportModalClose:hover {
+  border-color: #64748b;
+  color: #ffffff;
+}
+
+.reportModalGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: #060a17;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #1c2541;
+}
+
+.reportModalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reportModalLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.reportModalVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.reportModalSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reportModalSectionTitle {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8da9c4;
+  text-transform: uppercase;
+}
+
+.reportModalText {
+  font-size: 13.5px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.indicatorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.indicatorItem {
+  font-size: 12.5px;
+  color: #fbbf24;
+  padding: 6px 10px;
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 2px solid #f59e0b;
+  border-radius: 0 4px 4px 0;
+}
+
+.reportSafetyBox {
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reportSafetyBox p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.reportModalDisclaimer {
+  font-size: 11px;
+  color: #475569;
+  font-style: italic;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 4px;
+  border: 1px solid #1e293b;
+}
+
+.reportModalActions {
+  display: flex;
+  gap: 12px;
 }

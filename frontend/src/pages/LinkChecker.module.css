@@ -1,4 +1,4 @@
-/* LinkChecker.module.css — Editorial Design */
+/* LinkChecker.module.css — High-Security Editorial Design */
 
 .page {
   min-height: 100vh;
@@ -37,6 +37,7 @@
 .pageSubtitle {
   font-size: 15px;
   color: #4a5d4e;
+  line-height: 1.5;
 }
 
 .scannerCard {
@@ -45,7 +46,8 @@
   padding: 36px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
 }
 
 .inputLabel {
@@ -65,12 +67,73 @@
   padding: 14px 18px;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .urlInput:focus {
   border-color: #1a3325;
   background: #ffffff;
+}
+
+.sampleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #faf8f5;
+  border: 1px solid #ebe7df;
+}
+
+.sampleLabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #666666;
+}
+
+.sampleChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sampleChipSafe,
+.sampleChipSuspicious,
+.sampleChipHighRisk {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sampleChipSafe {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+.sampleChipSafe:hover {
+  background: #dcfce7;
+}
+
+.sampleChipSuspicious {
+  background: #fffbe6;
+  color: #92400e;
+  border-color: #fde68a;
+}
+.sampleChipSuspicious:hover {
+  background: #fef3c7;
+}
+
+.sampleChipHighRisk {
+  background: #fff1f2;
+  color: #991b1b;
+  border-color: #fecdd3;
+}
+.sampleChipHighRisk:hover {
+  background: #ffe4e6;
 }
 
 .actionRow {
@@ -87,7 +150,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  padding: 13px 28px;
+  padding: 14px 32px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: inherit;
@@ -110,7 +173,7 @@
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 1px;
-  padding: 12px 20px;
+  padding: 13px 22px;
   cursor: pointer;
   text-transform: uppercase;
   font-family: inherit;
@@ -130,37 +193,54 @@
   font-weight: 600;
 }
 
-/* ── RESULT SECTION ── */
-.resultSection {
+/* ── SCAN RESULT CARD ── */
+.resultCard {
   background: #ffffff;
-  border: 1px solid #ebe7df;
+  border: 2px solid #ebe7df;
   padding: 36px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.verdictHigh {
+  border-color: #f87171;
+  background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+}
+
+.verdictSuspicious {
+  border-color: #fcd34d;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbe6 100%);
+}
+
+.verdictSafe {
+  border-color: #86efac;
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
 }
 
 .resultHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #f2ede4;
+  border-bottom: 1px solid #e5dfd5;
   padding-bottom: 20px;
 }
 
-.scoreGroup {
+.verdictGroup {
   display: flex;
-  align-items: baseline;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .riskBadge {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   letter-spacing: 1.5px;
-  padding: 6px 14px;
+  padding: 6px 16px;
   text-transform: uppercase;
+  width: fit-content;
 }
 
 .badgeHigh {
@@ -176,16 +256,22 @@
 }
 
 .badgeSafe {
-  background: #f0fdf4;
+  background: #dcfce7;
   color: #166534;
   border: 1px solid #86efac;
 }
 
-.scoreNumber {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 32px;
-  font-weight: 800;
-  color: #1a3325;
+.analysisTypeBadge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666666;
+  letter-spacing: 0.5px;
+}
+
+.scoreGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .scoreLabel {
@@ -196,54 +282,233 @@
   text-transform: uppercase;
 }
 
+.scoreNumber {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #1a3325;
+}
+
+.scoreMax {
+  font-size: 16px;
+  color: #737373;
+  font-weight: 600;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #555555;
+  text-transform: uppercase;
+}
+
+.urlBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.urlHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copyBtn {
+  background: transparent;
+  border: none;
+  color: #1a3325;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.copyBtn:hover {
+  text-decoration: underline;
+}
+
 .urlDisplay {
   font-family: 'Space Grotesk', monospace;
   font-size: 15px;
   font-weight: 600;
   color: #1a3325;
   background: #faf8f5;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border: 1px solid #ebe7df;
   word-break: break-all;
-  margin-top: 6px;
+}
+
+/* ── LAYERED ENGINE BREAKDOWN GRID ── */
+.engineBreakdownGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.breakdownCard {
+  background: #ffffff;
+  border: 1px solid #e5dfd5;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.breakdownHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.breakdownTitle {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #1a3325;
+  text-transform: uppercase;
+}
+
+.breakdownScore {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a3325;
+  background: #faf8f5;
+  padding: 3px 8px;
+  border: 1px solid #ebe7df;
+}
+
+.breakdownSub {
+  font-size: 12px;
+  color: #666666;
+  margin: 0;
+}
+
+.mlBadge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a3325;
+  background: #f0fdf4;
+  padding: 3px 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.safeSubtext {
+  font-size: 12.5px;
+  color: #166534;
+  font-weight: 600;
+}
+
+.mlStatRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.mlStatBox {
+  background: #faf8f5;
+  border: 1px solid #ebe7df;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mlStatLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #737373;
+  text-transform: uppercase;
+}
+
+.mlPhishText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #991b1b;
+}
+
+.mlSafeText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #166534;
+}
+
+.mlStatVal {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.verdictSummaryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summaryText {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
 }
 
 .indicatorsList {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
 }
 
 .indicatorPill {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 4px 12px;
-  background: #f4f1ea;
-  color: #1a3325;
-  border: 1px solid #e5dfd5;
+  padding: 5px 12px;
+  background: #ffffff;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.reasonsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .reasonsList {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-left: 20px;
+  list-style: none;
+  padding: 0;
 }
 
 .reasonItem {
   font-size: 14px;
   color: #333333;
   line-height: 1.5;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.bulletIcon {
+  color: #1a3325;
+  font-weight: 800;
 }
 
 .actionBox {
-  background: #fbfaf8;
+  background: #ffffff;
   border-left: 4px solid #1a3325;
   padding: 18px 22px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .actionBoxTitle {
@@ -255,13 +520,26 @@
 }
 
 .actionBoxText {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.alertNoticeBanner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 14px 18px;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 @media (max-width: 768px) {
   .main { padding: 32px 20px 60px; }
   .resultHeader { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .scoreGroup { align-items: flex-start; }
   .actionRow { flex-direction: column; align-items: stretch; }
+  .engineBreakdownGrid { grid-template-columns: 1fr; }
+  .mlStatRow { grid-template-columns: 1fr; }
 }

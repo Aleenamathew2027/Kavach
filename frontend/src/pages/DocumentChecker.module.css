@@ -202,6 +202,14 @@
   text-transform: uppercase;
 }
 
+.riskBadgeSmall {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
 .badgeHigh {
   background: #fee2e2;
   color: #991b1b;
@@ -220,6 +228,12 @@
   border: 1px solid #86efac;
 }
 
+.badgeUnknown {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
 .scoreNumber {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 32px;
@@ -235,6 +249,61 @@
   text-transform: uppercase;
 }
 
+/* Sub-Engine Breakdown Cards */
+.engineGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.engineCard {
+  background: #faf8f5;
+  border: 1px solid #ebe7df;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.engineLabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #737373;
+  text-transform: uppercase;
+}
+
+.engineScore {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a3325;
+}
+
+.engineSub {
+  font-size: 12px;
+  color: #555555;
+  font-weight: 500;
+}
+
+/* OCR Info Meta Box */
+.ocrInfoBox {
+  background: #fbfaf8;
+  border: 1px solid #ebe7df;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ocrMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 13px;
+  color: #333333;
+}
+
 .previewBox {
   background: #faf8f5;
   border: 1px solid #ebe7df;
@@ -246,6 +315,83 @@
   max-height: 140px;
   overflow-y: auto;
   margin-top: 6px;
+}
+
+/* URL Cards */
+.urlList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.urlCard {
+  background: #faf8f5;
+  border: 1px solid #ebe7df;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.urlCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.urlText {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a3325;
+  word-break: break-all;
+}
+
+.urlReasons {
+  font-size: 12.5px;
+  color: #666666;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+/* QR Cards */
+.qrList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.qrCard {
+  background: #faf8f5;
+  border: 1px solid #ebe7df;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qrCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.qrTypeBadge {
+  font-size: 12.5px;
+  color: #333333;
+}
+
+.qrPayloadPreview {
+  font-size: 13px;
+  color: #1a1a1a;
+  margin-top: 2px;
+  word-break: break-all;
 }
 
 .indicatorsList {
@@ -300,8 +446,21 @@
   color: #1a1a1a;
 }
 
+.unscannableWarningBox {
+  background: #fffbe8;
+  border: 1px solid #faca15;
+  color: #723b13;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 @media (max-width: 768px) {
   .main { padding: 32px 20px 60px; }
   .resultHeader { flex-direction: column; align-items: flex-start; gap: 14px; }
   .actionRow { flex-direction: column; align-items: stretch; }
+  .engineGrid { grid-template-columns: 1fr; }
 }
