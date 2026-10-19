@@ -31,6 +31,7 @@ import GuardianSecurity from './pages/GuardianSecurity';
 import GuardianAlerts from './pages/GuardianAlerts';
 import GuardianActivity from './pages/GuardianActivity';
 import GuardianSettings from './pages/GuardianSettings';
+import AIAssistant from './pages/AIAssistant';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import { getRole } from './services/api';
@@ -103,6 +104,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <UserAlerts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/assistant"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <AIAssistant />
             </ProtectedRoute>
           }
         />
@@ -207,6 +216,14 @@ export default function App() {
           }
         />
         <Route
+          path="/guardian/assistant"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <AIAssistant />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/guardian/activity"
           element={
             <ProtectedRoute allowedRoles={['guardian']}>
@@ -219,6 +236,16 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['guardian']}>
               <GuardianSettings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ── Direct /assistant Shortcut (User & Guardian) ── */}
+        <Route
+          path="/assistant"
+          element={
+            <ProtectedRoute allowedRoles={['user', 'guardian']}>
+              <AIAssistant />
             </ProtectedRoute>
           }
         />

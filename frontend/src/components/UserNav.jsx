@@ -20,6 +20,7 @@ export default function UserNav({ userName = 'Kavach User' }) {
     { label: 'Link Checker', path: '/user/link-checker' },
     { label: 'Document Scanner', path: '/user/document-checker' },
     { label: 'Alerts', path: '/user/alerts' },
+    { label: 'AI Assistant', path: '/user/assistant' },
     { label: 'Profile', path: '/user/profile' },
   ];
 
@@ -28,7 +29,9 @@ export default function UserNav({ userName = 'Kavach User' }) {
       <div className={styles.navContainer}>
         {/* Brand */}
         <div className={styles.logoArea}>
-          <Link to="/user/dashboard" className={styles.logoText}>KAVACH</Link>
+          <Link to="/user/dashboard" className={styles.logoText}>
+            KAVACH<span className={styles.logoAccent}>.</span>
+          </Link>
           <span className={styles.roleBadge}>USER</span>
         </div>
 

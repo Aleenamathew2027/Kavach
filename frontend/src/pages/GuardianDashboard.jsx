@@ -234,6 +234,13 @@ export default function GuardianDashboard() {
                 <p>{alerts.length} active incident logs</p>
               </div>
             </Link>
+            <Link to="/guardian/assistant" className={styles.quickCard}>
+              <span className={styles.quickIcon}>🛡️</span>
+              <div>
+                <strong>AI Assistant</strong>
+                <p>Cyber guidance & threat chat</p>
+              </div>
+            </Link>
           </div>
         </section>
 

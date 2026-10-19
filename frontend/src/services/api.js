@@ -137,4 +137,7 @@ export const api = {
   getGuardianReports: () => request('/guardian/reports'),
   getGuardianReportDetail: (reportId) => request(`/guardian/reports/${reportId}`),
   downloadGuardianReportPdf: (reportId) => `${API_BASE}/guardian/reports/${reportId}/download`,
+
+  // KAVACH AI Assistant (User & Guardian)
+  chatWithAI: (body) => request('/ai/chat', { method: 'POST', body: JSON.stringify(body) }),
 };

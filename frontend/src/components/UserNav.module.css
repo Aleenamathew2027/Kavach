@@ -1,18 +1,31 @@
-/* UserNav.module.css — Editorial Design */
+/* ============================================================
+   UserNav.module.css — Luxury Royal Blue & Quicksand Palette
+   Palette: Royal Blue (#112250), Sapphire (#3C507D), Quicksand (#E0C58F),
+            Swan Wing (#F5F0E9), Shellstone (#D9CBC2)
+   ============================================================ */
+
+:root {
+  --kavach-royal-blue: #112250;
+  --kavach-sapphire: #3C507D;
+  --kavach-quicksand: #E0C58F;
+  --kavach-swan-wing: #F5F0E9;
+  --kavach-shellstone: #D9CBC2;
+}
 
 .topNav {
-  background: #ffffff;
-  border-bottom: 1px solid #ebe7df;
+  background: var(--kavach-royal-blue);
+  border-bottom: 1px solid rgba(217, 203, 194, 0.15);
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 4px 20px rgba(17, 34, 80, 0.4);
 }
 
 .navContainer {
-  max-width: 1280px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 0 32px;
-  height: 76px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,35 +35,43 @@
 .logoArea {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .logoText {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 800;
   letter-spacing: 3px;
-  color: #1a3325;
+  color: var(--kavach-swan-wing);
   text-transform: uppercase;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logoAccent {
+  color: var(--kavach-quicksand);
 }
 
 .roleBadge {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 1.5px;
   padding: 3px 8px;
-  background: #f2ede4;
-  color: #4a5d4e;
-  border-radius: 2px;
+  background: rgba(60, 80, 125, 0.55);
+  color: var(--kavach-quicksand);
+  border: 1px solid rgba(224, 197, 143, 0.3);
+  border-radius: 3px;
   text-transform: uppercase;
 }
 
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 24px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -58,25 +79,25 @@
 .navLink {
   background: none;
   border: none;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #666666;
+  letter-spacing: 0.75px;
+  color: var(--kavach-shellstone);
   cursor: pointer;
   padding: 10px 0;
   text-transform: uppercase;
-  transition: color 0.15s ease;
+  transition: all 0.2s ease;
   position: relative;
   font-family: inherit;
   text-decoration: none;
 }
 
 .navLink:hover {
-  color: #1a3325;
+  color: var(--kavach-swan-wing);
 }
 
 .navLinkActive {
-  color: #1a3325;
+  color: var(--kavach-quicksand);
   font-weight: 700;
 }
 
@@ -87,13 +108,14 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #1a3325;
+  background: var(--kavach-quicksand);
+  box-shadow: 0 0 8px rgba(224, 197, 143, 0.6);
 }
 
 .navRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   flex-shrink: 0;
 }
 
@@ -105,84 +127,93 @@
 }
 
 .userName {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
-  color: #1a3325;
+  color: var(--kavach-swan-wing);
 }
 
 .userRoleTag {
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #78716c;
+  color: var(--kavach-quicksand);
   text-transform: uppercase;
 }
 
 .logoutBtn {
   background: transparent;
-  border: 1px solid #dcd7cd;
-  color: #4a4a4a;
-  font-size: 11.5px;
+  border: 1px solid rgba(60, 80, 125, 0.8);
+  color: var(--kavach-shellstone);
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
   padding: 7px 16px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   text-transform: uppercase;
   font-family: inherit;
 }
 
 .logoutBtn:hover {
-  background: #1a3325;
-  color: #ffffff;
-  border-color: #1a3325;
+  background: var(--kavach-quicksand);
+  color: var(--kavach-royal-blue);
+  border-color: var(--kavach-quicksand);
 }
 
 .mobileMenuBtn {
   display: none;
-  background: none;
-  border: 1px solid #dcd7cd;
+  background: rgba(60, 80, 125, 0.4);
+  border: 1px solid rgba(217, 203, 194, 0.2);
   font-size: 16px;
-  padding: 6px 10px;
-  color: #1a3325;
+  padding: 6px 12px;
+  color: var(--kavach-swan-wing);
+  border-radius: 4px;
   cursor: pointer;
 }
 
 .mobileDrawer {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border-top: 1px solid #ebe7df;
+  background: #0d1a3e;
+  border-top: 1px solid rgba(217, 203, 194, 0.12);
   padding: 16px 24px 24px;
   gap: 12px;
 }
 
 .mobileNavLink {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
-  color: #4a5d4e;
+  color: var(--kavach-shellstone);
   text-decoration: none;
   text-transform: uppercase;
-  padding: 8px 0;
-  border-bottom: 1px solid #f5f2eb;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(217, 203, 194, 0.08);
+  transition: color 0.15s ease;
+}
+
+.mobileNavLink:hover {
+  color: var(--kavach-swan-wing);
 }
 
 .mobileNavLinkActive {
-  color: #1a3325;
+  color: var(--kavach-quicksand);
   font-weight: 800;
+  border-bottom-color: var(--kavach-quicksand);
 }
 
 .mobileLogoutArea {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .mobileLogoutBtn {
   width: 100%;
-  padding: 10px;
-  background: #1a3325;
-  color: #ffffff;
+  padding: 12px;
+  background: var(--kavach-quicksand);
+  color: var(--kavach-royal-blue);
   border: none;
-  font-weight: 700;
+  border-radius: 4px;
+  font-weight: 800;
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;

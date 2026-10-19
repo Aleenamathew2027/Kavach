@@ -18,6 +18,7 @@ export default function GuardianNav({ guardianName = 'Guardian', protectedUserNa
     { label: 'Protected User', path: '/guardian/protected-user' },
     { label: 'Security', path: '/guardian/security' },
     { label: 'Alerts', path: '/guardian/alerts' },
+    { label: 'AI Assistant', path: '/guardian/assistant' },
     { label: 'Activity', path: '/guardian/activity' },
     { label: 'Settings', path: '/guardian/settings' },
   ];
