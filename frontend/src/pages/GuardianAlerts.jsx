@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
-import GuardianNav from '../components/GuardianNav';
+import GuardianLayout from '../components/GuardianLayout';
 import styles from './GuardianAlerts.module.css';
 
 export default function GuardianAlerts() {
@@ -52,20 +52,10 @@ export default function GuardianAlerts() {
   });
 
   return (
-    <div className={styles.page}>
-      <GuardianNav
-        guardianName="Authorized Guardian"
-        protectedUserName={userProfile?.full_name || 'Protected User'}
-      />
-
-      <main className={styles.main}>
-        <div>
-          <Link to="/guardian/dashboard" className={styles.backLink}>
-            ← Back to Guardian Overview
-          </Link>
-        </div>
-
-        <div className={styles.header}>
+    <GuardianLayout>
+      <div className={styles.page}>
+        <main className={styles.main}>
+          <div className={styles.header}>
           <div>
             <span className={styles.sectionPill}>SECURITY LOGS</span>
             <h1 className={styles.title}>GUARDIAN SECURITY ALERTS</h1>
@@ -153,7 +143,8 @@ export default function GuardianAlerts() {
             </div>
           )}
         </section>
-      </main>
-    </div>
+        </main>
+      </div>
+    </GuardianLayout>
   );
 }

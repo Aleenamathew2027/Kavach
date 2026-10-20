@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api, getToken } from '../services/api';
-import GuardianNav from '../components/GuardianNav';
+import GuardianLayout from '../components/GuardianLayout';
 import styles from './GuardianDashboard.module.css';
 
 export default function GuardianDashboard() {
@@ -143,12 +143,7 @@ export default function GuardianDashboard() {
   const alerts = guardianData?.recent_alerts || [];
 
   return (
-    <div className={styles.page}>
-      <GuardianNav
-        guardianName="Authorized Guardian"
-        protectedUserName={protectedName}
-      />
-
+    <GuardianLayout>
       {/* ── HIGH-RISK POPUP MODAL (ITEM 8) ── */}
       {highRiskPopupAlert && (
         <div className={styles.modalOverlay}>
@@ -635,6 +630,6 @@ export default function GuardianDashboard() {
           </div>
         </div>
       )}
-    </div>
+    </GuardianLayout>
   );
 }

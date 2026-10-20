@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { api, getRole } from '../services/api';
-import GuardianNav from '../components/GuardianNav';
+import GuardianLayout from '../components/GuardianLayout';
 import UserLayout from '../components/UserLayout';
 import styles from './AIAssistant.module.css';
 
@@ -416,39 +416,37 @@ export default function AIAssistant({ role: propRole }) {
   }
 
   return (
-    <div className={`${styles.page} ${styles.themeGuardian}`}>
-      <GuardianNav
-        guardianName="Authorized Guardian"
-        protectedUserName={guardedUserName || 'Protected User'}
-      />
-      <main className={styles.main}>
-        <div className={styles.headerBar}>
-          <div className={styles.headerLeft}>
-            <div className={styles.badgePill}>
-              <span className={styles.onlineDot} />
-              <span>AI DIGITAL DEFENSE ASSISTANT</span>
+    <GuardianLayout>
+      <div className={`${styles.page} ${styles.themeGuardian}`} style={{ minHeight: 'auto', background: 'transparent' }}>
+        <main className={styles.main}>
+          <div className={styles.headerBar}>
+            <div className={styles.headerLeft}>
+              <div className={styles.badgePill}>
+                <span className={styles.onlineDot} />
+                <span>AI DIGITAL DEFENSE ASSISTANT</span>
+              </div>
+              <h1 className={styles.title}>KAVACH AI ASSISTANT</h1>
+              <p className={styles.subtitle}>
+                Assisting Guardian mode with threat intelligence and cybersecurity guidance for {guardedUserName || 'protected user'}.
+              </p>
             </div>
-            <h1 className={styles.title}>KAVACH AI ASSISTANT</h1>
-            <p className={styles.subtitle}>
-              Assisting Guardian mode with threat intelligence and cybersecurity guidance for {guardedUserName || 'protected user'}.
-            </p>
+
+            <div className={styles.headerActions}>
+              <button
+                className={styles.clearBtn}
+                onClick={handleClearChat}
+                disabled={messages.length === 0 || isLoading}
+                title="Clear conversation history"
+              >
+                <span>↺</span>
+                <span>Reset Chat</span>
+              </button>
+            </div>
           </div>
 
-          <div className={styles.headerActions}>
-            <button
-              className={styles.clearBtn}
-              onClick={handleClearChat}
-              disabled={messages.length === 0 || isLoading}
-              title="Clear conversation history"
-            >
-              <span>↺</span>
-              <span>Reset Chat</span>
-            </button>
-          </div>
-        </div>
-
-        {chatContent}
-      </main>
-    </div>
+          {chatContent}
+        </main>
+      </div>
+    </GuardianLayout>
   );
 }

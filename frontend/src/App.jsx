@@ -32,6 +32,7 @@ import GuardianProtectedUser from './pages/GuardianProtectedUser';
 import GuardianSecurity from './pages/GuardianSecurity';
 import GuardianAlerts from './pages/GuardianAlerts';
 import GuardianActivity from './pages/GuardianActivity';
+import GuardianReports from './pages/GuardianReports';
 import GuardianSettings from './pages/GuardianSettings';
 import AIAssistant from './pages/AIAssistant';
 
@@ -246,6 +247,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['guardian']}>
               <GuardianActivity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/reports"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianReports />
             </ProtectedRoute>
           }
         />

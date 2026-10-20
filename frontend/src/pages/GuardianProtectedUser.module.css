@@ -1,224 +1,231 @@
-/* GuardianProtectedUser.module.css */
+/* ============================================================
+   GuardianProtectedUser.module.css — Teal/Ivory Palette
+   ============================================================ */
 
 .page {
+  padding: 36px 40px;
   min-height: 100vh;
-  background: #060a17;
-  color: #f1f5f9;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--guardian-ivory, #F4F0E6);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 32px 80px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 0;
 }
 
-.backLink {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #48e5c2;
-  text-decoration: none;
-  letter-spacing: 0.5px;
-}
-
-.backLink:hover {
-  text-decoration: underline;
+.header {
+  margin-bottom: 28px;
 }
 
 .sectionPill {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: #48e5c2;
-  text-transform: uppercase;
-  margin-bottom: 6px;
   display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--guardian-teal, #0A7770);
+  background: rgba(10, 119, 112, 0.08);
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
 .title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 900;
-  color: #ffffff;
-  margin: 0;
+  letter-spacing: 1.5px;
+  color: var(--guardian-text-dark, #173A38);
+  text-transform: uppercase;
+  margin: 0 0 6px;
 }
 
 .subtitle {
-  font-size: 14px;
-  color: #8da9c4;
-  margin-top: 8px;
+  font-size: 13px;
+  color: var(--guardian-muted, #6F807B);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 480px;
 }
 
+/* ── PROFILE CARD ── */
 .profileCard {
-  background: #0b132b;
-  border: 1px solid #1c2541;
-  border-radius: 8px;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+  background: var(--guardian-white, #FAF9F5);
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
 }
 
 .avatarRow {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .avatar {
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #1c2541;
-  color: #48e5c2;
-  border: 2px solid rgba(72, 229, 194, 0.4);
+  background: var(--guardian-deep-teal, #005F5B);
+  color: var(--guardian-ivory, #F4F0E6);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  font-weight: 900;
+  font-size: 22px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
 .personName {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
-  color: #ffffff;
-  margin: 0;
+  color: var(--guardian-text-dark, #173A38);
+  margin: 0 0 2px;
 }
 
 .personEmail {
-  font-size: 13.5px;
-  color: #8da9c4;
+  font-size: 12px;
+  color: var(--guardian-muted, #6F807B);
 }
 
 .statusBadge {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #1c2541;
-  padding: 6px 14px;
-  border-radius: 4px;
+  margin-left: auto;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 1px;
-  color: #ffffff;
+  color: var(--guardian-teal, #0A7770);
+  padding: 6px 14px;
+  border: 1px solid rgba(10, 119, 112, 0.2);
+  border-radius: 20px;
 }
 
 .statusDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #48e5c2;
+  background: var(--guardian-teal, #0A7770);
+  box-shadow: 0 0 6px rgba(10, 119, 112, 0.5);
 }
 
 .fieldsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  background: #060a17;
-  padding: 24px;
-  border-radius: 6px;
-  border: 1px solid #1c2541;
+  gap: 14px;
 }
 
 .fieldBox {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 14px;
+  background: rgba(10, 119, 112, 0.03);
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 10px;
 }
 
 .fieldLabel {
-  font-size: 10.5px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 1px;
-  color: #8da9c4;
+  letter-spacing: 2px;
+  color: var(--guardian-muted, #6F807B);
+  text-transform: uppercase;
 }
 
 .fieldVal {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--guardian-text-dark, #173A38);
 }
 
 .fieldValSuccess {
-  font-size: 14.5px;
-  font-weight: 800;
-  color: #48e5c2;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--guardian-teal, #0A7770);
 }
 
 .fieldValDanger {
-  font-size: 14.5px;
-  font-weight: 800;
-  color: #ef4444;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c53030;
 }
 
+/* ── PRIVACY CARD ── */
 .privacyCard {
-  background: rgba(72, 229, 194, 0.05);
-  border: 1px solid rgba(72, 229, 194, 0.2);
-  border-radius: 8px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  background: rgba(10, 119, 112, 0.05);
+  border: 1px solid rgba(10, 119, 112, 0.15);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
 }
 
 .privacyHeader {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #48e5c2;
+  margin-bottom: 8px;
+}
+
+.privacyHeader strong {
+  font-size: 13px;
+  color: var(--guardian-text-dark, #173A38);
 }
 
 .privacyText {
-  font-size: 13px;
-  color: #8da9c4;
-  line-height: 1.5;
+  font-size: 12px;
+  color: var(--guardian-muted, #6F807B);
+  line-height: 1.6;
   margin: 0;
 }
 
+/* ── ACTION CARDS ── */
 .actionsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 14px;
 }
 
 .actionCard {
-  background: #0b132b;
-  border: 1px solid #1c2541;
-  border-radius: 6px;
-  padding: 24px;
+  background: var(--guardian-white, #FAF9F5);
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 12px;
+  padding: 20px;
   text-decoration: none;
-  color: inherit;
+  color: var(--guardian-text-dark, #173A38);
   transition: all 0.2s ease;
 }
 
 .actionCard:hover {
-  border-color: #48e5c2;
-  transform: translateY(-2px);
+  border-color: var(--guardian-teal, #0A7770);
+  box-shadow: 0 4px 16px rgba(0, 95, 91, 0.1);
+  transform: translateY(-1px);
 }
 
 .actionCard h3 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--guardian-teal, #0A7770);
+  margin: 0 0 6px;
 }
 
 .actionCard p {
-  font-size: 12.5px;
-  color: #8da9c4;
-  margin-top: 6px;
+  font-size: 12px;
+  color: var(--guardian-muted, #6F807B);
+  line-height: 1.5;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
+  .page { padding: 20px 16px; }
   .fieldsGrid { grid-template-columns: 1fr; }
   .actionsGrid { grid-template-columns: 1fr; }
-  .avatarRow { flex-direction: column; align-items: flex-start; }
+  .avatarRow { flex-direction: column; text-align: center; }
   .statusBadge { margin-left: 0; }
 }

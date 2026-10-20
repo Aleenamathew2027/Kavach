@@ -1,0 +1,385 @@
+/* ============================================================
+   GuardianLayout.module.css — Shared Guardian Sidebar Layout
+   Palette: Deep Teal (#005F5B), Teal (#0A7770), Dark Teal (#073F3D)
+            Ivory (#F4F0E6), Cream (#E8DFCF), White (#FAF9F5),
+            Sage (#AEBEAF), Text Dark (#173A38), Muted (#6F807B)
+   ============================================================ */
+
+:root {
+  --guardian-deep-teal: #005F5B;
+  --guardian-teal: #0A7770;
+  --guardian-dark-teal: #073F3D;
+  --guardian-ivory: #F4F0E6;
+  --guardian-cream: #E8DFCF;
+  --guardian-white: #FAF9F5;
+  --guardian-sage: #AEBEAF;
+  --guardian-text-dark: #173A38;
+  --guardian-muted: #6F807B;
+}
+
+/* ── ROOT LAYOUT ── */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--guardian-ivory);
+  font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
+  color: var(--guardian-text-dark);
+}
+
+/* ── SIDEBAR (FULL-HEIGHT FLEX COLUMN) ── */
+.sidebar {
+  width: 264px;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  background: var(--guardian-dark-teal);
+  z-index: 100;
+  border-right: 1px solid rgba(10, 119, 112, 0.2);
+}
+
+/* ── A. TOP / BRAND ── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(174, 190, 175, 0.12);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.brandIcon {
+  font-size: 26px;
+  line-height: 1;
+  color: var(--guardian-sage);
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--guardian-ivory);
+  text-transform: uppercase;
+}
+
+.brandRole {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--guardian-sage);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── B. NAVIGATION (FLEXIBLE SCROLLABLE CONTAINER) ── */
+.nav {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 6px;
+  box-sizing: border-box;
+  border-bottom: none;
+}
+
+/* Scrollbar styling for smooth scrolling inside nav */
+.nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: rgba(174, 190, 175, 0.2);
+  border-radius: 2px;
+}
+
+.navGroup {
+  padding: 8px 0 4px;
+}
+
+.navGroupLabel {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--guardian-muted);
+  padding: 0 22px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 22px;
+  text-decoration: none;
+  color: var(--guardian-sage);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border-radius: 0;
+  transition: all 0.18s ease;
+  position: relative;
+  margin: 1px 0;
+  box-sizing: border-box;
+}
+
+.navItem:hover {
+  color: var(--guardian-ivory);
+  background: rgba(10, 119, 112, 0.25);
+}
+
+.navItemActive {
+  color: var(--guardian-ivory) !important;
+  background: rgba(10, 119, 112, 0.35) !important;
+}
+
+.navIcon {
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.navLabel {
+  flex: 1;
+}
+
+.activeBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--guardian-sage);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── C. BOTTOM FIXED FOOTER AREA ── */
+.sidebarFooter {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 16px 20px 20px;
+  border-top: 1px solid rgba(174, 190, 175, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--guardian-dark-teal);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ── PROTECTED USER CARD ── */
+.protectedUserBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 119, 112, 0.2);
+  border: 1px solid rgba(174, 190, 175, 0.15);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.protectedUserIcon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.protectedUserInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.protectedUserLabel {
+  display: block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--guardian-sage);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.protectedUserName {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--guardian-ivory);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
+}
+
+/* ── LOGOUT BUTTON ── */
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid rgba(174, 190, 175, 0.2);
+  border-radius: 8px;
+  color: var(--guardian-sage);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+/* ── MAIN WRAPPER ── */
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--guardian-ivory);
+}
+
+.main {
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* ── MOBILE TOP BAR ── */
+.mobileTopBar {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--guardian-dark-teal);
+  border-bottom: 1px solid rgba(10, 119, 112, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: var(--guardian-ivory);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.mobileBrand {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--guardian-ivory);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── MOBILE SIDEBAR ── */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 63, 61, 0.6);
+  z-index: 200;
+}
+
+.mobileSidebar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  height: 100vh;
+  z-index: 210;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+}
+
+.mobileSidebarOpen {
+  transform: translateX(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mobileTopBar {
+    display: flex;
+  }
+
+  .mobileOverlay {
+    display: block;
+  }
+
+  .mobileSidebar {
+    display: block;
+  }
+
+  .mobileSidebar .sidebar {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+}
