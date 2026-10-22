@@ -33,26 +33,30 @@ load_dotenv()
 
 def init_db():
     """Initialize database tables, ensure schema migrations, and sync predefined admin account."""
-    # 1. Apply column additions and constraints idempotently
-    with engine.begin() as conn:
-        conn.execute(
-            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user' NOT NULL;")
-        )
-        conn.execute(
-            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(50) DEFAULT 'local' NOT NULL;")
-        )
-        conn.execute(
-            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255);")
-        )
-        conn.execute(
-            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500);")
-        )
-        conn.execute(
-            text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
-        )
-
-    # 2. Create any missing tables (e.g. guardian_access, security_scans, security_alerts)
+    # 1. Create any missing tables (e.g. users, guardian_access, security_scans, security_alerts, threat_locations)
     Base.metadata.create_all(bind=engine)
+
+    # 2. Apply column additions and constraints idempotently for existing legacy databases
+    try:
+        with engine.begin() as conn:
+            conn.execute(
+                text("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user' NOT NULL;")
+            )
+            conn.execute(
+                text("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(50) DEFAULT 'local' NOT NULL;")
+            )
+            conn.execute(
+                text("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255);")
+            )
+            conn.execute(
+                text("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500);")
+            )
+            conn.execute(
+                text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL;")
+            )
+    except Exception:
+        # Ignore errors if columns already exist or if dialect doesn't support ALTER
+        pass
 
     # 3. Ensure predefined Administrator account is created/synced
     admin_email = os.getenv("ADMIN_EMAIL", "admin@kavach.com").lower().strip()
