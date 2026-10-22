@@ -14,6 +14,7 @@ import UserAlerts from './pages/UserAlerts';
 import MessageScanner from './pages/MessageScanner';
 import LinkChecker from './pages/LinkChecker';
 import DocumentChecker from './pages/DocumentChecker';
+import QRScanner from './pages/QRScanner';
 import UserGuardian from './pages/UserGuardian';
 import UserReports from './pages/UserReports';
 
@@ -99,6 +100,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['user']}>
               <DocumentChecker />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/qr-scanner"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <QRScanner />
             </ProtectedRoute>
           }
         />

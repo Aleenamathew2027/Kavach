@@ -453,7 +453,7 @@ export default function UserDashboard() {
               </Link>
 
               {/* Card 4: QR Code */}
-              <Link to="/user/document-checker" className={styles.scannerCard}>
+              <Link to="/user/qr-scanner" className={styles.scannerCard}>
                 <div>
                   <div className={styles.scannerHeader}>
                     <div className={styles.scannerIconWrap}>📷</div>

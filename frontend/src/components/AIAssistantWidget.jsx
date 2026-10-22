@@ -141,7 +141,8 @@ export default function AIAssistantWidget() {
     const p = location.pathname;
     if (p.includes('/user/messages')) return { name: 'Message Scam Detector', type: 'message' };
     if (p.includes('/user/link-checker')) return { name: 'Link Safety Checker', type: 'link' };
-    if (p.includes('/user/document-checker')) return { name: 'Document & QR Scanner', type: 'document' };
+    if (p.includes('/user/document-checker')) return { name: 'Document Scanner', type: 'document' };
+    if (p.includes('/user/qr-scanner')) return { name: 'QR Code Threat Scanner', type: 'document' };
     if (p.includes('/user/alerts')) return { name: 'Security Alerts', type: 'alerts' };
     if (p.includes('/user/guardian')) return { name: 'Guardian Access', type: 'guardian' };
     if (p.includes('/user/reports')) return { name: 'Incident Reports', type: 'reports' };

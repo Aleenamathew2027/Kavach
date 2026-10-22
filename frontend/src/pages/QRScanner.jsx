@@ -1,0 +1,332 @@
+import { useState, useRef } from 'react';
+import { api } from '../services/api';
+import UserLayout from '../components/UserLayout';
+import ThreatInfrastructureMap from '../components/ThreatInfrastructureMap';
+import styles from './DocumentChecker.module.css';
+
+export default function QRScanner() {
+  const [file, setFile] = useState(null);
+  const [statusText, setStatusText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const selected = e.target.files[0];
+      if (selected.size > 10 * 1024 * 1024) {
+        setError('File is too large. Maximum size is 10MB.');
+        return;
+      }
+      setFile(selected);
+      setError('');
+      setResult(null);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const dropped = e.dataTransfer.files[0];
+      if (dropped.size > 10 * 1024 * 1024) {
+        setError('File is too large. Maximum size is 10MB.');
+        return;
+      }
+      setFile(dropped);
+      setError('');
+      setResult(null);
+    }
+  };
+
+  const handleScan = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      setError('Please select or upload a QR code image to analyze.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setResult(null);
+    setStatusText('Uploading QR code image…');
+
+    try {
+      setTimeout(() => {
+        if (loading) setStatusText('Detecting and decoding QR code payload…');
+      }, 400);
+
+      setTimeout(() => {
+        if (loading) setStatusText('Auditing destination URL and verifying payment schemes…');
+      }, 1000);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const data = await api.analyzeDocument(formData);
+      setResult(data);
+      setStatusText('Audit complete.');
+    } catch (err) {
+      console.error('QR scan error:', err);
+      setError(err.message || 'Failed to scan QR code.');
+      setStatusText('');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getBadgeClass = (riskLevel) => {
+    if (!riskLevel) return styles.badgeUnknown;
+    const lvl = riskLevel.toString().toUpperCase();
+    if (lvl === 'HIGH RISK' || lvl === 'HIGH_RISK') return styles.badgeHigh;
+    if (lvl === 'SUSPICIOUS') return styles.badgeSuspicious;
+    if (lvl === 'UNKNOWN' || lvl === 'OCR_UNAVAILABLE' || lvl === 'FAILED' || lvl === 'UNSCANNABLE') return styles.badgeUnknown;
+    return styles.badgeSafe;
+  };
+
+  return (
+    <UserLayout
+      eyebrow="MULTI-MODAL SENTINEL"
+      title="QR CODE SCAM DETECTOR"
+      subtitle="Decode and audit embedded QR codes, detect malicious links, and prevent fraudulent UPI debit collect requests."
+    >
+      <div className={styles.scannerWrapper}>
+        {error && <div className={styles.errorBanner}>⚠ {error}</div>}
+
+        {/* ── UPLOAD AREA ── */}
+        <section className={styles.uploadCard}>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".png,.jpg,.jpeg,.webp,.bmp,.pdf"
+            style={{ display: 'none' }}
+          />
+
+          {!file ? (
+            <div
+              className={styles.dropZone}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+            >
+              <div className={styles.dropIcon}>📷</div>
+              <div className={styles.dropText}>Drag &amp; drop your QR code image here, or click to browse</div>
+              <div className={styles.dropSub}>Supported formats: PNG, JPG, JPEG, WEBP, BMP, PDF (Max 10MB)</div>
+            </div>
+          ) : (
+            <div className={styles.fileSelectedBadge}>
+              <div>
+                <div className={styles.fileName}>{file.name}</div>
+                <div className={styles.fileSize}>{(file.size / 1024).toFixed(1)} KB • {file.type || 'Image'}</div>
+              </div>
+              <button
+                type="button"
+                className={styles.clearBtn}
+                style={{ padding: '6px 14px', fontSize: '11px' }}
+                onClick={() => {
+                  setFile(null);
+                  setResult(null);
+                  setStatusText('');
+                }}
+              >
+                REMOVE
+              </button>
+            </div>
+          )}
+
+          <div className={styles.actionRow}>
+            <button
+              type="button"
+              className={styles.primaryBtn}
+              onClick={handleScan}
+              disabled={!file || loading}
+            >
+              {loading ? 'AUDITING QR CODE…' : 'SCAN QR CODE'}
+            </button>
+
+            {statusText && <span className={styles.statusMessage}>{statusText}</span>}
+          </div>
+        </section>
+
+        {/* ── SCAN RESULT ── */}
+        {result && (
+          <section className={styles.resultSection}>
+            {/* Overall Header */}
+            <div className={styles.resultHeader}>
+              <div>
+                <span className={`${styles.riskBadge} ${getBadgeClass(result.risk_level)}`}>
+                  {result.risk_level}
+                </span>
+                <div style={{ fontSize: '12.5px', color: '#737373', marginTop: '8px', fontWeight: 600 }}>
+                  {result.filename} • {result.file_type} {result.scan_id ? `• Scan ID: #${result.scan_id}` : ''}
+                </div>
+              </div>
+              <div className={styles.scoreGroup}>
+                <span className={styles.scoreLabel}>OVERALL RISK SCORE</span>
+                <span className={styles.scoreNumber}>
+                  {result.risk_level === 'UNSCANNABLE' ? '--/100' : `${result.risk_score}/100`}
+                </span>
+              </div>
+            </div>
+
+            {/* Sub-Engine Breakdown Cards */}
+            {result.threat_breakdown && (
+              <div className={styles.engineGrid}>
+                <div className={styles.engineCard}>
+                  <div className={styles.engineLabel}>QR CODE RISK</div>
+                  <div className={styles.engineScore}>
+                    {result.risk_level === 'UNSCANNABLE' && (!result.qr_analysis || !result.qr_analysis.qr_found)
+                      ? '--/100'
+                      : `${result.threat_breakdown.qr_risk_score}/100`}
+                  </div>
+                  <div className={styles.engineSub}>{result.qr_analysis?.qr_count || 0} QR(s) Detected</div>
+                </div>
+
+                <div className={styles.engineCard}>
+                  <div className={styles.engineLabel}>DESTINATION URL RISK</div>
+                  <div className={styles.engineScore}>
+                    {result.risk_level === 'UNSCANNABLE' && (!result.url_analysis || result.url_analysis.url_count === 0)
+                      ? '--/100'
+                      : `${result.threat_breakdown.url_risk_score}/100`}
+                  </div>
+                  <div className={styles.engineSub}>{result.url_analysis?.url_count || 0} Link(s) Analyzed</div>
+                </div>
+
+                <div className={styles.engineCard}>
+                  <div className={styles.engineLabel}>TEXT ML RISK</div>
+                  <div className={styles.engineScore}>
+                    {result.text_analysis?.verdict === 'OCR_UNAVAILABLE' || result.text_analysis?.verdict === 'UNSCANNABLE'
+                      ? '--/100'
+                      : `${result.threat_breakdown.text_risk_score}/100`}
+                  </div>
+                  <div className={styles.engineSub}>
+                    {result.text_analysis?.verdict === 'OCR_UNAVAILABLE'
+                      ? 'OCR Unavailable'
+                      : result.text_analysis?.verdict === 'NO_TEXT_FOUND'
+                      ? 'No Text Found'
+                      : (result.text_analysis?.verdict || 'SAFE')}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <span className={styles.scoreLabel}>SUMMARY VERDICT</span>
+              <p style={{ fontSize: '15.5px', fontWeight: 600, color: '#1a1a1a', marginTop: '6px' }}>
+                {result.summary}
+              </p>
+            </div>
+
+            {/* QR Codes Section */}
+            {result.qr_analysis && result.qr_analysis.qr_found ? (
+              <div>
+                <span className={styles.scoreLabel}>DECODED QR CODE DETAILS ({result.qr_analysis.qr_count})</span>
+                <div className={styles.qrList}>
+                  {result.qr_analysis.qr_codes.map((qr, qidx) => (
+                    <div key={qidx} className={styles.qrCard}>
+                      <div className={styles.qrCardHeader}>
+                        <span className={styles.qrTypeBadge}>
+                          QR Payload Type: <strong>{qr.payload_type}</strong> {qr.page_number ? `(Page ${qr.page_number})` : ''}
+                        </span>
+                        <span className={`${styles.riskBadgeSmall} ${getBadgeClass(qr.risk_score >= 70 ? 'HIGH RISK' : qr.risk_score >= 40 ? 'SUSPICIOUS' : 'SAFE')}`}>
+                          Risk Score: {qr.risk_score}/100
+                        </span>
+                      </div>
+                      <div className={styles.qrPayloadPreview}>
+                        Decoded Payload: <code>{qr.payload}</code>
+                      </div>
+                      {qr.reasons && qr.reasons.length > 0 && (
+                        <div className={styles.urlReasons}>
+                          {qr.reasons.map((r, ri) => <div key={ri}>• {r}</div>)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div style={{ padding: '14px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#64748b', fontSize: '13px' }}>
+                ℹ No embedded QR codes were detected in this image.
+              </div>
+            )}
+
+            {/* Extracted URLs Table / Cards */}
+            {result.url_analysis && result.url_analysis.analyzed_urls && result.url_analysis.analyzed_urls.length > 0 && (
+              <div>
+                <span className={styles.scoreLabel}>EMBEDDED DESTINATION LINKS ({result.url_analysis.url_count})</span>
+                <div className={styles.urlList}>
+                  {result.url_analysis.analyzed_urls.map((uItem, idx) => (
+                    <div key={idx} className={styles.urlCard}>
+                      <div className={styles.urlCardHeader}>
+                        <span className={styles.urlText}>{uItem.url}</span>
+                        <span className={`${styles.riskBadgeSmall} ${getBadgeClass(uItem.verdict || uItem.risk_level)}`}>
+                          {uItem.verdict || uItem.risk_level} ({uItem.risk_score}/100)
+                        </span>
+                      </div>
+                      {uItem.reasons && uItem.reasons.length > 0 && (
+                        <div className={styles.urlReasons}>
+                          {uItem.reasons.map((r, ri) => <div key={ri}>• {r}</div>)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Detected Indicators */}
+            {result.detected_indicators && result.detected_indicators.length > 0 && (
+              <div>
+                <span className={styles.scoreLabel}>CONSOLIDATED THREAT INDICATORS</span>
+                <div className={styles.indicatorsList}>
+                  {result.detected_indicators.map((ind) => (
+                    <span key={ind} className={styles.indicatorPill}>
+                      • {ind}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Reasons List */}
+            {result.reasons && result.reasons.length > 0 && (
+              <div>
+                <span className={styles.scoreLabel}>SECURITY REASONS &amp; EXPLANATIONS</span>
+                <ul className={styles.reasonsList} style={{ marginTop: '8px' }}>
+                  {result.reasons.map((r, i) => (
+                    <li key={i} className={styles.reasonItem}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Unscannable Warning Banner */}
+            {(result.risk_level === 'UNSCANNABLE' || result.risk_level === 'UNKNOWN') && (
+              <div className={styles.unscannableWarningBox}>
+                ⚠ This file could not be fully analyzed. Do not trust it without verifying the source.
+              </div>
+            )}
+
+            {/* ── THREAT INFRASTRUCTURE GEOLOCATION MAP (PHASE 18B) ── */}
+            {(result.risk_level === 'HIGH RISK' || result.risk_level === 'HIGH_RISK') && result.scan_id && (
+              <ThreatInfrastructureMap scanId={result.scan_id} />
+            )}
+
+            {/* Recommended Guidance Box */}
+            <div className={styles.actionBox}>
+              <span className={styles.actionBoxTitle}>RECOMMENDED ACTION</span>
+              <span className={styles.actionBoxText}>{result.recommended_action}</span>
+            </div>
+
+            {result.alert_created && (
+              <div style={{ fontSize: '12px', color: '#991b1b', fontWeight: 600 }}>
+                🚨 High-risk QR threat logged to your Security Alerts and guardian feed.
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+    </UserLayout>
+  );
+}

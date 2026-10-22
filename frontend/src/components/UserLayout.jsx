@@ -25,6 +25,7 @@ export default function UserLayout({
     '/user/messages',
     '/user/link-checker',
     '/user/document-checker',
+    '/user/qr-scanner',
   ].some((r) => location.pathname.startsWith(r));
 
   const [securityMenuOpen, setSecurityMenuOpen] = useState(isSecurityRoute);
@@ -159,8 +160,10 @@ export default function UserLayout({
                 <span>• Document Scanner</span>
               </Link>
               <Link
-                to="/user/document-checker"
-                className={styles.subMenuItem}
+                to="/user/qr-scanner"
+                className={`${styles.subMenuItem} ${
+                  location.pathname === '/user/qr-scanner' ? styles.subMenuItemActive : ''
+                }`}
               >
                 <span>• QR Scanner</span>
               </Link>
@@ -311,6 +314,15 @@ export default function UserLayout({
           onClick={() => setMobileMenuOpen(false)}
         >
           Document Scanner
+        </Link>
+        <Link
+          to="/user/qr-scanner"
+          className={`${styles.mobileDrawerLink} ${
+            location.pathname === '/user/qr-scanner' ? styles.mobileDrawerLinkActive : ''
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          QR Scanner
         </Link>
         <Link
           to="/user/alerts"

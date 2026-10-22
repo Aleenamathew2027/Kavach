@@ -107,6 +107,7 @@ export const api = {
   analyzeMessage: (body) => request('/security/analyze-message', { method: 'POST', body: JSON.stringify(body) }),
   analyzeLink: (body) => request('/security/analyze-link', { method: 'POST', body: JSON.stringify(body) }),
   analyzeDocument: (formData) => request('/security/analyze-document', { method: 'POST', body: formData }),
+  analyzeQRCode: (formData) => request('/security/analyze-document', { method: 'POST', body: formData }),
   getSecurityAlerts: () => request('/security/alerts'),
   markAlertRead: (id) => request(`/security/alerts/${id}/read`, { method: 'PATCH' }),
   getSecuritySummary: () => request('/security/summary'),
