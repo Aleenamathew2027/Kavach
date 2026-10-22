@@ -1,4 +1,12 @@
 import os
+import sys
+from pathlib import Path
+
+# Ensure root backend directory is in sys.path when executed directly as a script
+backend_root = str(Path(__file__).resolve().parent.parent.parent)
+if backend_root not in sys.path:
+    sys.path.insert(0, backend_root)
+
 from dotenv import load_dotenv
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -10,6 +18,13 @@ import app.models.guardian
 import app.models.security_scan
 import app.models.security_alert
 import app.models.incident_report
+import app.models.ai_conversation
+import app.models.ai_message
+import app.models.user_feedback
+import app.models.security_action
+import app.models.security_preference
+import app.models.scan_feedback
+import app.models.threat_location
 from app.models.user import User
 from app.utils.security import hash_password, verify_password
 
@@ -83,3 +98,8 @@ def init_db():
         db.rollback()
     finally:
         db.close()
+
+
+if __name__ == "__main__":
+    init_db()
+    print("Database initialized successfully!")

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api, getToken } from '../services/api';
 import GuardianLayout from '../components/GuardianLayout';
+import ThreatInfrastructureMap from '../components/ThreatInfrastructureMap';
 import styles from './GuardianReports.module.css';
 
 const INCIDENT_LABELS = {
@@ -26,6 +27,7 @@ export default function GuardianReports() {
   const [selectedReport, setSelectedReport] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [downloadingId, setDownloadingId] = useState(null);
+  const [showGuardianMap, setShowGuardianMap] = useState(false);
 
   const loadReports = useCallback(async () => {
     setLoading(true);
@@ -280,6 +282,99 @@ export default function GuardianReports() {
                         </li>
                       ))}
                   </ul>
+                </div>
+              )}
+
+              {/* ── THREAT INFRASTRUCTURE LOCATION (PHASE 18C) ── */}
+              {selectedReport.threat_infrastructure?.available && (
+                <div className={styles.modalSection}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '8px',
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                    }}
+                  >
+                    <span className={styles.modalSectionTitle}>Threat Infrastructure Location</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowGuardianMap(!showGuardianMap)}
+                      style={{
+                        background: showGuardianMap ? 'rgba(0, 137, 123, 0.3)' : 'rgba(255, 255, 255, 0.08)',
+                        color: '#5eead4',
+                        border: '1px solid rgba(94, 234, 212, 0.3)',
+                        padding: '4px 10px',
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {showGuardianMap ? '▲ Hide Map' : '🗺 View on Interactive Map'}
+                    </button>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                      gap: '10px',
+                      background: 'rgba(6, 35, 38, 0.6)',
+                      border: '1px solid rgba(94, 234, 212, 0.2)',
+                      borderRadius: '6px',
+                      padding: '12px',
+                      fontSize: '12px',
+                    }}
+                  >
+                    <div>
+                      <span style={{ color: '#80cbc4', fontSize: '10px', textTransform: 'uppercase', display: 'block' }}>Location</span>
+                      <strong style={{ color: '#fcfbf7' }}>
+                        {[selectedReport.threat_infrastructure.city, selectedReport.threat_infrastructure.region, selectedReport.threat_infrastructure.country].filter(Boolean).join(', ') || 'N/A'}
+                      </strong>
+                    </div>
+                    <div>
+                      <span style={{ color: '#80cbc4', fontSize: '10px', textTransform: 'uppercase', display: 'block' }}>Public IP</span>
+                      <strong style={{ color: '#fcfbf7' }}>{selectedReport.threat_infrastructure.ip_address || 'Unresolved'}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: '#80cbc4', fontSize: '10px', textTransform: 'uppercase', display: 'block' }}>Network Provider</span>
+                      <strong style={{ color: '#fcfbf7' }}>{selectedReport.threat_infrastructure.isp || selectedReport.threat_infrastructure.organization || 'N/A'}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: '#80cbc4', fontSize: '10px', textTransform: 'uppercase', display: 'block' }}>Autonomous System</span>
+                      <strong style={{ color: '#fcfbf7' }}>{selectedReport.threat_infrastructure.asn || 'N/A'}</strong>
+                    </div>
+                    {selectedReport.threat_infrastructure.domain && (
+                      <div>
+                        <span style={{ color: '#80cbc4', fontSize: '10px', textTransform: 'uppercase', display: 'block' }}>Domain</span>
+                        <strong style={{ color: '#fcfbf7' }}>{selectedReport.threat_infrastructure.domain}</strong>
+                      </div>
+                    )}
+                  </div>
+
+                  {showGuardianMap && (
+                    <div style={{ marginTop: '12px' }}>
+                      <ThreatInfrastructureMap
+                        location={selectedReport.threat_infrastructure}
+                        height="340px"
+                        theme="guardian"
+                      />
+                    </div>
+                  )}
+
+                  <div
+                    style={{
+                      marginTop: '8px',
+                      fontSize: '10.5px',
+                      color: '#80cbc4',
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    ℹ Threat infrastructure location is approximate and is derived from public network information associated with the suspicious destination. It may represent hosting infrastructure, CDN points of presence, VPN/proxy infrastructure, or ISP routing infrastructure and does not identify the physical location of an individual.
+                  </div>
                 </div>
               )}
 

@@ -20,9 +20,11 @@ from app.schemas.security_schema import (
 )
 from app.ai.message_detector import predict_message_scam
 from app.services.document_scanner import analyze_document_content
+from app.services.document_url_extractor import extract_urls_from_text
 from app.services.link_scanner import analyze_link_url
 from app.services.message_scanner import analyze_message_text
 from app.services.incident_report_service import create_incident_report_from_scan
+from app.services.threat_geolocation_service import create_threat_location_for_scan
 from app.utils.security import get_db, require_role
 
 router = APIRouter(
@@ -150,6 +152,20 @@ def analyze_message(
             logger.error(f"Failed to automatically generate incident report for message scan #{scan.id}: {rep_err}")
             report_generated = False
 
+        # Phase 18A/B: Optional threat infrastructure geolocation for HIGH_RISK messages containing URLs
+        try:
+            urls_res = extract_urls_from_text(body.message)
+            if urls_res.get("urls"):
+                first_url = urls_res["urls"][0].get("url")
+                if first_url:
+                    create_threat_location_for_scan(
+                        db=db,
+                        security_scan=scan,
+                        suspicious_url=first_url
+                    )
+        except Exception as geo_err:
+            logger.error(f"Failed to geolocate threat infrastructure for message scan #{scan.id}: {geo_err}")
+
     return {
         "risk_level": final_risk_level,
         "risk_score": combined_score,
@@ -244,6 +260,16 @@ def analyze_link(
         except Exception as rep_err:
             logger.error(f"Failed to automatically generate incident report for link scan #{scan.id}: {rep_err}")
             report_generated = False
+
+        # Phase 18A: Optional threat infrastructure geolocation for HIGH_RISK link detections
+        try:
+            create_threat_location_for_scan(
+                db=db,
+                security_scan=scan,
+                suspicious_url=body.url
+            )
+        except Exception as geo_err:
+            logger.error(f"Failed to geolocate threat infrastructure for link scan #{scan.id}: {geo_err}")
 
     return {
         "url": result["url"],
@@ -357,6 +383,30 @@ async def analyze_document(
         except Exception as rep_err:
             logger.error(f"Failed to automatically generate incident report for document scan #{scan.id}: {rep_err}")
             report_generated = False
+
+        # Phase 18A/B: Optional threat infrastructure geolocation for HIGH_RISK documents with URLs or QR codes
+        try:
+            target_url = None
+            url_candidates = result.get("url_analysis", {}).get("urls", [])
+            for u in url_candidates:
+                if u.get("risk_level") in ["HIGH RISK", "SUSPICIOUS"] or u.get("risk_score", 0) >= 60:
+                    target_url = u.get("url")
+                    break
+            if not target_url and url_candidates:
+                target_url = url_candidates[0].get("url")
+            if not target_url:
+                for qr in result.get("qr_analysis", {}).get("qr_codes", []):
+                    if qr.get("payload_type") == "URL" and qr.get("risk_score", 0) >= 60:
+                        target_url = qr.get("payload")
+                        break
+            if target_url:
+                create_threat_location_for_scan(
+                    db=db,
+                    security_scan=scan,
+                    suspicious_url=target_url
+                )
+        except Exception as geo_err:
+            logger.error(f"Failed to geolocate threat infrastructure for document scan #{scan.id}: {geo_err}")
 
     return {
         "filename": result["filename"],

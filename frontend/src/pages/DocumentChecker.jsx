@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { api } from '../services/api';
 import UserLayout from '../components/UserLayout';
+import ThreatInfrastructureMap from '../components/ThreatInfrastructureMap';
 import styles from './DocumentChecker.module.css';
 
 export default function DocumentChecker() {
@@ -307,6 +308,11 @@ export default function DocumentChecker() {
               <div className={styles.unscannableWarningBox}>
                 ⚠ This file could not be fully analyzed. Do not trust it without verifying the source.
               </div>
+            )}
+
+            {/* ── THREAT INFRASTRUCTURE GEOLOCATION MAP (PHASE 18B) ── */}
+            {(result.risk_level === 'HIGH RISK' || result.risk_level === 'HIGH_RISK') && result.scan_id && (
+              <ThreatInfrastructureMap scanId={result.scan_id} />
             )}
 
             {/* Recommended Guidance Box */}

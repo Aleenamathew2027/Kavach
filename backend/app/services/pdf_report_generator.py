@@ -28,6 +28,12 @@ REPORT_DISCLAIMER_TEXT = (
     "with any police department, Cyber Crime Cell, or government law-enforcement authority."
 )
 
+THREAT_INFRA_DISCLAIMER_TEXT = (
+    "Threat infrastructure location is approximate and is derived from public network information associated "
+    "with the suspicious destination. It may represent hosting infrastructure, CDN points of presence, "
+    "VPN/proxy infrastructure, or ISP routing infrastructure and does not identify the physical location of an individual."
+)
+
 
 def generate_incident_report_pdf(report_data: Dict[str, Any], is_guardian_view: bool = False) -> bytes:
     """
@@ -228,6 +234,96 @@ def generate_incident_report_pdf(report_data: Dict[str, Any], is_guardian_view: 
         for q in qr_codes:
             q_payload = q.get("payload", "QR Code") if isinstance(q, dict) else str(q)
             elements.append(Paragraph(f"• Embedded QR Payload: <code>{q_payload}</code>", body_style))
+        elements.append(Spacer(1, 10))
+
+    # Phase 18C: Threat Infrastructure Location Section
+    threat_infra = report_data.get("threat_infrastructure")
+    if threat_infra and threat_infra.get("available"):
+        elements.append(Paragraph("THREAT INFRASTRUCTURE LOCATION", section_heading_style))
+
+        infra_table_data = []
+
+        # Domain & IP
+        d_val = threat_infra.get("domain") or "N/A"
+        ip_val = threat_infra.get("ip_address") or "N/A"
+        infra_table_data.append([
+            Paragraph("<b>Domain:</b>", body_style),
+            Paragraph(str(d_val), body_style),
+            Paragraph("<b>IP Address:</b>", body_style),
+            Paragraph(str(ip_val), body_style),
+        ])
+
+        # Country & Region
+        infra_table_data.append([
+            Paragraph("<b>Country:</b>", body_style),
+            Paragraph(str(threat_infra.get("country") or "N/A"), body_style),
+            Paragraph("<b>Region:</b>", body_style),
+            Paragraph(str(threat_infra.get("region") or "N/A"), body_style),
+        ])
+
+        # City & Timezone
+        infra_table_data.append([
+            Paragraph("<b>City:</b>", body_style),
+            Paragraph(str(threat_infra.get("city") or "N/A"), body_style),
+            Paragraph("<b>Timezone:</b>", body_style),
+            Paragraph(str(threat_infra.get("timezone") or "N/A"), body_style),
+        ])
+
+        # ISP & Organization
+        infra_table_data.append([
+            Paragraph("<b>ISP:</b>", body_style),
+            Paragraph(str(threat_infra.get("isp") or "N/A"), body_style),
+            Paragraph("<b>Organization:</b>", body_style),
+            Paragraph(str(threat_infra.get("organization") or "N/A"), body_style),
+        ])
+
+        # ASN & Location Source
+        infra_table_data.append([
+            Paragraph("<b>ASN:</b>", body_style),
+            Paragraph(str(threat_infra.get("asn") or "N/A"), body_style),
+            Paragraph("<b>Location Source:</b>", body_style),
+            Paragraph(str(threat_infra.get("location_source") or "IP-API"), body_style),
+        ])
+
+        # Accuracy Radius & Coordinates
+        rad_val = threat_infra.get("accuracy_radius")
+        rad_str = f"{rad_val} km" if (rad_val is not None and rad_val != "") else "Accuracy radius unavailable."
+
+        lat = threat_infra.get("latitude")
+        lon = threat_infra.get("longitude")
+        coord_str = f"{lat}, {lon}" if (lat is not None and lon is not None) else "Unavailable"
+
+        infra_table_data.append([
+            Paragraph("<b>Accuracy Radius:</b>", body_style),
+            Paragraph(rad_str, body_style),
+            Paragraph("<b>Coordinates:</b>", body_style),
+            Paragraph(coord_str, body_style),
+        ])
+
+        infra_table = Table(infra_table_data, colWidths=[1.3 * inch, 2.2 * inch, 1.3 * inch, 2.2 * inch])
+        infra_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+            ('BOX', (0, 0), (-1, -1), 0.75, colors.HexColor("#cbd5e1")),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        elements.append(infra_table)
+        elements.append(Spacer(1, 6))
+
+        # Disclaimer immediately below section
+        infra_disclaimer_data = [[Paragraph(f"<i>{THREAT_INFRA_DISCLAIMER_TEXT}</i>", disclaimer_style)]]
+        infra_disclaimer_table = Table(infra_disclaimer_data, colWidths=[7.0 * inch])
+        infra_disclaimer_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f1f5f9")),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        elements.append(infra_disclaimer_table)
         elements.append(Spacer(1, 10))
 
     # 8. Recommended Actions

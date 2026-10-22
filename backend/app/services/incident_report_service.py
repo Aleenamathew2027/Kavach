@@ -180,6 +180,36 @@ def generate_pdf_for_report(
         mask_private=is_guardian
     )
 
+    threat_infra = getattr(report, "threat_infrastructure", None)
+    if not threat_infra or not threat_infra.get("available"):
+        from app.models.threat_location import ThreatLocation
+        if report.security_scan_id:
+            loc = db.query(ThreatLocation).filter(
+                ThreatLocation.security_scan_id == report.security_scan_id
+            ).first()
+            if loc and (loc.lookup_status == "SUCCESS" or loc.ip_address):
+                threat_infra = {
+                    "available": True,
+                    "domain": loc.domain,
+                    "ip_address": loc.ip_address,
+                    "country": loc.country,
+                    "region": loc.region,
+                    "city": loc.city,
+                    "latitude": loc.latitude,
+                    "longitude": loc.longitude,
+                    "accuracy_radius": loc.accuracy_radius,
+                    "isp": loc.isp,
+                    "organization": loc.organization,
+                    "asn": loc.asn,
+                    "timezone": loc.timezone,
+                    "location_source": loc.location_source,
+                    "lookup_status": loc.lookup_status,
+                }
+            else:
+                threat_infra = {"available": False}
+        else:
+            threat_infra = {"available": False}
+
     data_for_pdf = {
         "report_id": report.report_id,
         "incident_type": report.incident_type,
@@ -191,6 +221,7 @@ def generate_pdf_for_report(
         "sanitized_evidence": sanitized_ev,
         "detected_indicators": report.sanitized_evidence.get("detected_indicators", []),
         "report_metadata": report.report_metadata or {},
+        "threat_infrastructure": threat_infra,
         "recommended_action": (
             "1. Do NOT click links or QR codes in this incident.<br/>"
             "2. Do NOT transfer money or share passwords/OTPs.<br/>"

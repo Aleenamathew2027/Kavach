@@ -8,6 +8,26 @@ class IncidentReportGenerateRequest(BaseModel):
     title: Optional[str] = None
 
 
+class ThreatInfrastructureSummary(BaseModel):
+    available: bool = False
+    domain: Optional[str] = None
+    ip_address: Optional[str] = None
+    country: Optional[str] = None
+    region: Optional[str] = None
+    city: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    accuracy_radius: Optional[float] = None
+    isp: Optional[str] = None
+    organization: Optional[str] = None
+    asn: Optional[str] = None
+    timezone: Optional[str] = None
+    location_source: Optional[str] = None
+    lookup_status: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class IncidentReportResponse(BaseModel):
     id: int
     report_id: str
@@ -24,5 +44,6 @@ class IncidentReportResponse(BaseModel):
     status: str
     sanitized_evidence: Dict[str, Any]
     report_metadata: Dict[str, Any]
+    threat_infrastructure: Optional[ThreatInfrastructureSummary] = None
 
     model_config = ConfigDict(from_attributes=True)

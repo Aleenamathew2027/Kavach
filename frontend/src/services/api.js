@@ -110,6 +110,7 @@ export const api = {
   getSecurityAlerts: () => request('/security/alerts'),
   markAlertRead: (id) => request(`/security/alerts/${id}/read`, { method: 'PATCH' }),
   getSecuritySummary: () => request('/security/summary'),
+  getThreatLocations: (scanId) => request(`/security/threat-locations/${scanId}`),
 
   // Role Dashboards & Management
   getUserDashboard: () => request('/user/dashboard'),

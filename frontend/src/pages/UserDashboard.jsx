@@ -713,6 +713,27 @@ export default function UserDashboard() {
                       </span>
                     </div>
 
+                    {rep.threat_infrastructure?.available && (
+                      <div style={{ marginTop: '8px', marginBottom: '2px' }}>
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            color: '#f87171',
+                            background: 'rgba(239, 68, 68, 0.12)',
+                            border: '1px solid rgba(239, 68, 68, 0.3)',
+                            padding: '3px 8px',
+                            borderRadius: '3px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          🌐 Infrastructure: {[rep.threat_infrastructure.city, rep.threat_infrastructure.country].filter(Boolean).join(', ') || 'Located'}
+                        </span>
+                      </div>
+                    )}
+
                     <p className={styles.reportSummaryText}>
                       A Cyber Security Incident Report / Complaint Draft has been automatically
                       compiled. This document records digital evidence and threat telemetry suitable

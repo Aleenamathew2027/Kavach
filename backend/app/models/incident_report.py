@@ -32,3 +32,60 @@ class IncidentReport(Base):
     user = relationship("User", backref="incident_reports")
     security_scan = relationship("SecurityScan", backref="incident_reports")
     security_alert = relationship("SecurityAlert", backref="incident_reports")
+
+    @property
+    def threat_infrastructure(self) -> Dict[str, Any]:
+        """
+        Retrieves approximate threat infrastructure geolocation details if available.
+        Does NOT expose internal DB IDs or claim physical scammer location.
+        """
+        from sqlalchemy.orm import object_session
+        from app.models.threat_location import ThreatLocation
+
+        if not self.security_scan_id:
+            return {"available": False}
+
+        session = object_session(self)
+        if session is not None:
+            loc = session.query(ThreatLocation).filter(
+                ThreatLocation.security_scan_id == self.security_scan_id
+            ).first()
+            if loc and (loc.lookup_status == "SUCCESS" or loc.ip_address):
+                return {
+                    "available": True,
+                    "domain": loc.domain,
+                    "ip_address": loc.ip_address,
+                    "country": loc.country,
+                    "region": loc.region,
+                    "city": loc.city,
+                    "latitude": loc.latitude,
+                    "longitude": loc.longitude,
+                    "accuracy_radius": loc.accuracy_radius,
+                    "isp": loc.isp,
+                    "organization": loc.organization,
+                    "asn": loc.asn,
+                    "timezone": loc.timezone,
+                    "location_source": loc.location_source,
+                    "lookup_status": loc.lookup_status,
+                }
+        elif self.security_scan and getattr(self.security_scan, "threat_locations", None):
+            for loc in self.security_scan.threat_locations:
+                if loc.lookup_status == "SUCCESS" or loc.ip_address:
+                    return {
+                        "available": True,
+                        "domain": loc.domain,
+                        "ip_address": loc.ip_address,
+                        "country": loc.country,
+                        "region": loc.region,
+                        "city": loc.city,
+                        "latitude": loc.latitude,
+                        "longitude": loc.longitude,
+                        "accuracy_radius": loc.accuracy_radius,
+                        "isp": loc.isp,
+                        "organization": loc.organization,
+                        "asn": loc.asn,
+                        "timezone": loc.timezone,
+                        "location_source": loc.location_source,
+                        "lookup_status": loc.lookup_status,
+                    }
+        return {"available": False}

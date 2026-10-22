@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { api } from '../services/api';
 import UserLayout from '../components/UserLayout';
+import ThreatInfrastructureMap from '../components/ThreatInfrastructureMap';
 import styles from './LinkChecker.module.css';
 
 export default function LinkChecker() {
@@ -236,6 +237,11 @@ export default function LinkChecker() {
                   ))}
                 </ul>
               </div>
+            )}
+
+            {/* ── THREAT INFRASTRUCTURE GEOLOCATION MAP (PHASE 18B) ── */}
+            {(result.verdict === 'HIGH RISK' || result.risk_level === 'HIGH RISK') && result.scan_id && (
+              <ThreatInfrastructureMap scanId={result.scan_id} />
             )}
 
             <div className={styles.actionBox}>
