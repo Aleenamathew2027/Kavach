@@ -26,7 +26,11 @@ from typing import Any, Dict, Optional, Tuple
 import pypdf
 import docx
 from PIL import Image
-import pytesseract
+
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
 
 try:
     import fitz  # PyMuPDF
@@ -45,6 +49,9 @@ def check_tesseract_availability() -> Tuple[bool, Optional[str]]:
     Checks whether Tesseract OCR binary is available via environment variable TESSERACT_CMD,
     system PATH, or standard installation directories.
     """
+    if pytesseract is None:
+        return False, None
+
     # 1. Environment variable override
     env_tess_cmd = os.getenv("TESSERACT_CMD")
     if env_tess_cmd and os.path.exists(env_tess_cmd):
@@ -120,7 +127,7 @@ def ocr_pdf_pages(file_bytes: bytes) -> Tuple[str, Optional[float]]:
     Performs fallback OCR on PDF page images when no selectable text exists.
     Requires PyMuPDF (fitz) and Tesseract binary.
     """
-    if fitz is None:
+    if fitz is None or pytesseract is None:
         return "", None
 
     try:
@@ -177,6 +184,9 @@ def extract_text_from_image(file_bytes: bytes) -> Tuple[str, Optional[float], bo
     Runs Tesseract OCR on raw image bytes (PNG, JPG, JPEG, BMP, WEBP).
     Returns (extracted_text, average_confidence, success).
     """
+    if pytesseract is None:
+        return "", None, False
+
     try:
         img = Image.open(io.BytesIO(file_bytes))
         # Convert paletted or RGBA to RGB for Tesseract compatibility
