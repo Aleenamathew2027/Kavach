@@ -80,7 +80,7 @@ export default function DocumentChecker() {
     const lvl = riskLevel.toString().toUpperCase();
     if (lvl === 'HIGH RISK' || lvl === 'HIGH_RISK') return styles.badgeHigh;
     if (lvl === 'SUSPICIOUS') return styles.badgeSuspicious;
-    if (lvl === 'UNKNOWN' || lvl === 'OCR_UNAVAILABLE' || lvl === 'FAILED') return styles.badgeUnknown;
+    if (lvl === 'UNKNOWN' || lvl === 'OCR_UNAVAILABLE' || lvl === 'FAILED' || lvl === 'UNSCANNABLE') return styles.badgeUnknown;
     return styles.badgeSafe;
   };
 
@@ -164,7 +164,9 @@ export default function DocumentChecker() {
               </div>
               <div className={styles.scoreGroup}>
                 <span className={styles.scoreLabel}>OVERALL RISK SCORE</span>
-                <span className={styles.scoreNumber}>{result.risk_score}/100</span>
+                <span className={styles.scoreNumber}>
+                  {result.risk_level === 'UNSCANNABLE' ? '--/100' : `${result.risk_score}/100`}
+                </span>
               </div>
             </div>
 
@@ -173,19 +175,37 @@ export default function DocumentChecker() {
               <div className={styles.engineGrid}>
                 <div className={styles.engineCard}>
                   <div className={styles.engineLabel}>TEXT ML RISK</div>
-                  <div className={styles.engineScore}>{result.threat_breakdown.text_risk_score}/100</div>
-                  <div className={styles.engineSub}>{result.text_analysis?.verdict || 'SAFE'}</div>
+                  <div className={styles.engineScore}>
+                    {result.text_analysis?.verdict === 'OCR_UNAVAILABLE' || result.text_analysis?.verdict === 'UNSCANNABLE'
+                      ? '--/100'
+                      : `${result.threat_breakdown.text_risk_score}/100`}
+                  </div>
+                  <div className={styles.engineSub}>
+                    {result.text_analysis?.verdict === 'OCR_UNAVAILABLE'
+                      ? 'OCR Unavailable'
+                      : result.text_analysis?.verdict === 'NO_TEXT_FOUND'
+                      ? 'No Text Found'
+                      : (result.text_analysis?.verdict || 'SAFE')}
+                  </div>
                 </div>
 
                 <div className={styles.engineCard}>
                   <div className={styles.engineLabel}>URL SCAM RISK</div>
-                  <div className={styles.engineScore}>{result.threat_breakdown.url_risk_score}/100</div>
+                  <div className={styles.engineScore}>
+                    {result.risk_level === 'UNSCANNABLE' && (!result.url_analysis || result.url_analysis.url_count === 0)
+                      ? '--/100'
+                      : `${result.threat_breakdown.url_risk_score}/100`}
+                  </div>
                   <div className={styles.engineSub}>{result.url_analysis?.url_count || 0} Link(s) Analyzed</div>
                 </div>
 
                 <div className={styles.engineCard}>
                   <div className={styles.engineLabel}>QR CODE RISK</div>
-                  <div className={styles.engineScore}>{result.threat_breakdown.qr_risk_score}/100</div>
+                  <div className={styles.engineScore}>
+                    {result.risk_level === 'UNSCANNABLE' && (!result.qr_analysis || !result.qr_analysis.qr_found)
+                      ? '--/100'
+                      : `${result.threat_breakdown.qr_risk_score}/100`}
+                  </div>
                   <div className={styles.engineSub}>{result.qr_analysis?.qr_count || 0} QR(s) Detected</div>
                 </div>
               </div>

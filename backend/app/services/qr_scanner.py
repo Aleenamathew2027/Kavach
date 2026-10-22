@@ -151,31 +151,63 @@ def classify_qr_payload(payload: str) -> Dict[str, Any]:
 def detect_qr_codes_in_image(img_bgr: np.ndarray, page_num: Optional[int] = None) -> List[Dict[str, Any]]:
     """
     Detects and decodes QR codes in a single BGR image array using OpenCV's QRCodeDetector.
+    Employs ArUco marker-based QR detection and image preprocessing fallbacks for maximum resilience.
     """
     if img_bgr is None or img_bgr.size == 0:
         return []
 
-    detector = cv2.QRCodeDetector()
     detected_payloads: List[str] = []
 
-    # Try multi-detection first
-    try:
-        retval, decoded_info, _, _ = detector.detectAndDecodeMulti(img_bgr)
-        if retval and decoded_info:
-            for info in decoded_info:
-                if info and info.strip():
-                    detected_payloads.append(info.strip())
-    except Exception as e:
-        logger.debug(f"OpenCV detectAndDecodeMulti failed: {e}")
+    # 1. Try OpenCV QRCodeDetectorAruco if available (handles noisy/tilted/complex QR codes)
+    if hasattr(cv2, "QRCodeDetectorAruco"):
+        try:
+            aruco_det = cv2.QRCodeDetectorAruco()
+            retval, decoded_info, _, _ = aruco_det.detectAndDecodeMulti(img_bgr)
+            if retval and decoded_info:
+                for info in decoded_info:
+                    if info and info.strip():
+                        detected_payloads.append(info.strip())
+        except Exception as e:
+            logger.debug(f"QRCodeDetectorAruco multi failed: {e}")
 
-    # Fallback to single QR detection if multi returned nothing
+    # 2. Try standard QRCodeDetector multi-detection
     if not detected_payloads:
         try:
-            retval, _, _ = detector.detectAndDecode(img_bgr)
-            if retval and retval.strip():
-                detected_payloads.append(retval.strip())
+            detector = cv2.QRCodeDetector()
+            retval, decoded_info, _, _ = detector.detectAndDecodeMulti(img_bgr)
+            if retval and decoded_info:
+                for info in decoded_info:
+                    if info and info.strip():
+                        detected_payloads.append(info.strip())
+        except Exception as e:
+            logger.debug(f"OpenCV detectAndDecodeMulti failed: {e}")
+
+    # 3. Fallback to single QR detection
+    if not detected_payloads:
+        try:
+            detector = cv2.QRCodeDetector()
+            retval, info, _ = detector.detectAndDecode(img_bgr)
+            if retval and info and info.strip():
+                detected_payloads.append(info.strip())
         except Exception as e:
             logger.debug(f"OpenCV detectAndDecode failed: {e}")
+
+    # 4. Fallback: try grayscale and adaptive thresholding if not detected
+    if not detected_payloads:
+        try:
+            gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+            detector = cv2.QRCodeDetector()
+            retval, info, _ = detector.detectAndDecode(gray)
+            if retval and info and info.strip():
+                detected_payloads.append(info.strip())
+            else:
+                # Try Otsu threshold
+                _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+                retval, info_th, _ = detector.detectAndDecode(thresh)
+                if retval and info_th and info_th.strip():
+                    detected_payloads.append(info_th.strip())
+        except Exception as e:
+            logger.debug(f"OpenCV grayscale QR fallback failed: {e}")
 
     # Deduplicate payloads for this image
     unique_payloads = list(dict.fromkeys(detected_payloads))
