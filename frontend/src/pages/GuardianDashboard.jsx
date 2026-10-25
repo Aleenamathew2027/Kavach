@@ -217,6 +217,13 @@ export default function GuardianDashboard() {
           </div>
 
           <div className={styles.quickNavCards}>
+            <Link to="/guardian/chat" className={styles.quickCard}>
+              <span className={styles.quickIcon}>💬</span>
+              <div>
+                <strong>Private User Chat</strong>
+                <p>Private messaging &amp; voice notes</p>
+              </div>
+            </Link>
             <Link to="/guardian/protected-user" className={styles.quickCard}>
               <span className={styles.quickIcon}>👤</span>
               <div>

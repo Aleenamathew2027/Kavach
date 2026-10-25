@@ -1,0 +1,101 @@
+.playerContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: rgba(10, 20, 50, 0.5);
+  border: 1px solid rgba(217, 203, 194, 0.15);
+}
+
+.playerOwn {
+  background: rgba(224, 197, 143, 0.15);
+  border-color: rgba(224, 197, 143, 0.3);
+}
+
+.playerPeer {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.playBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--kavach-quicksand, #e0c58f);
+  color: var(--kavach-royal-blue, #0d1a3a);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.playBtn:hover:not(:disabled) {
+  transform: scale(1.05);
+  opacity: 0.92;
+}
+
+.playBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.waveformArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scrubberWrap {
+  position: relative;
+  height: 6px;
+  background: rgba(217, 203, 194, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.progressTrack {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--kavach-quicksand, #e0c58f);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.rangeInput {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.timeRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--kavach-shellstone, #d9cbc2);
+  opacity: 0.85;
+  font-family: monospace;
+}
+
+.errorText {
+  font-size: 11px;
+  color: #fca5a5;
+  font-style: italic;
+}

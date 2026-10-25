@@ -28,6 +28,14 @@ export default function UserSecurity() {
       linkText: 'Open Document Scanner →',
     },
     {
+      icon: '🎙️',
+      title: 'Live Voice Scam & Vishing Guardian',
+      desc: 'Real-time Malayalam + English two-person voice call monitoring with semantic vishing risk analysis, credential theft detection, and advisory warnings.',
+      status: 'ACTIVE',
+      link: '/user/live-voice',
+      linkText: 'Launch Live Voice Guardian →',
+    },
+    {
       icon: '🛡️',
       title: 'Deepfake & Payment Fraud Firewall',
       desc: 'Continuous threat heuristics detecting synthetic voice impersonation, deceptive UPI payment handles, and urgent unauthorized fund requests.',

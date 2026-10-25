@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { api, clearAuth } from '../services/api';
+import { guardianChatService } from '../services/guardianChatService';
 import AIAssistantWidget from './AIAssistantWidget';
 import styles from './UserLayout.module.css';
 
@@ -17,6 +18,7 @@ export default function UserLayout({
 
   const [userProfile, setUserProfile] = useState(null);
   const [unreadAlertsCount, setUnreadAlertsCount] = useState(0);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Security group is open if on any security route or toggled by user
@@ -26,6 +28,7 @@ export default function UserLayout({
     '/user/link-checker',
     '/user/document-checker',
     '/user/qr-scanner',
+    '/user/live-voice',
   ].some((r) => location.pathname.startsWith(r));
 
   const [securityMenuOpen, setSecurityMenuOpen] = useState(isSecurityRoute);
@@ -39,14 +42,18 @@ export default function UserLayout({
   useEffect(() => {
     async function loadHeaderData() {
       try {
-        const [profile, alerts] = await Promise.all([
+        const [profile, alerts, conv] = await Promise.all([
           api.getMe().catch(() => null),
           api.getSecurityAlerts().catch(() => []),
+          guardianChatService.getConversation().catch(() => null),
         ]);
         if (profile) setUserProfile(profile);
         if (Array.isArray(alerts)) {
           const unread = alerts.filter((a) => !a.is_read).length;
           setUnreadAlertsCount(unread);
+        }
+        if (conv && typeof conv.unread_count === 'number') {
+          setUnreadChatCount(conv.unread_count);
         }
       } catch (err) {
         console.error('Failed to load user layout data:', err);
@@ -167,6 +174,14 @@ export default function UserLayout({
               >
                 <span>• QR Scanner</span>
               </Link>
+              <Link
+                to="/user/live-voice"
+                className={`${styles.subMenuItem} ${
+                  location.pathname === '/user/live-voice' ? styles.subMenuItemActive : ''
+                }`}
+              >
+                <span>• Live Voice Guardian</span>
+              </Link>
             </div>
           )}
 
@@ -193,6 +208,18 @@ export default function UserLayout({
 
           {/* Section: Protection */}
           <span className={styles.navSectionLabel}>PROTECTION</span>
+          <Link
+            to="/user/guardian-chat"
+            className={`${styles.sidebarLink} ${
+              location.pathname === '/user/guardian-chat' ? styles.sidebarLinkActive : ''
+            }`}
+          >
+            <span className={styles.navIcon}>💬</span>
+            <span>Private Guardian Chat</span>
+            {unreadChatCount > 0 && (
+              <span className={styles.sidebarBadge}>{unreadChatCount}</span>
+            )}
+          </Link>
           <Link
             to="/user/assistant"
             className={`${styles.sidebarLink} ${
@@ -247,6 +274,17 @@ export default function UserLayout({
           KAVACH<span className={styles.brandDot}>.</span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Link
+            to="/user/guardian-chat"
+            className={styles.headerAlertBtn}
+            style={{ padding: '6px 10px' }}
+            title="Private Guardian Chat"
+          >
+            💬
+            {unreadChatCount > 0 && (
+              <span className={styles.alertCountBadge}>{unreadChatCount}</span>
+            )}
+          </Link>
           <Link to="/user/alerts" className={styles.headerAlertBtn} style={{ padding: '6px 10px' }}>
             🔔
             {unreadAlertsCount > 0 && (
@@ -325,6 +363,15 @@ export default function UserLayout({
           QR Scanner
         </Link>
         <Link
+          to="/user/live-voice"
+          className={`${styles.mobileDrawerLink} ${
+            location.pathname === '/user/live-voice' ? styles.mobileDrawerLinkActive : ''
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          Live Voice Guardian
+        </Link>
+        <Link
           to="/user/alerts"
           className={`${styles.mobileDrawerLink} ${
             location.pathname === '/user/alerts' ? styles.mobileDrawerLinkActive : ''
@@ -350,6 +397,15 @@ export default function UserLayout({
           onClick={() => setMobileMenuOpen(false)}
         >
           Guardian Access
+        </Link>
+        <Link
+          to="/user/guardian-chat"
+          className={`${styles.mobileDrawerLink} ${
+            location.pathname === '/user/guardian-chat' ? styles.mobileDrawerLinkActive : ''
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          💬 Private Guardian Chat {unreadChatCount > 0 ? `(${unreadChatCount})` : ''}
         </Link>
         <Link
           to="/user/assistant"
@@ -393,6 +449,20 @@ export default function UserLayout({
           </div>
 
           <div className={styles.headerActions}>
+            <Link
+              to="/user/guardian-chat"
+              className={styles.headerGuardianChatBtn}
+              title="Private Guardian Chat"
+            >
+              <span className={styles.chatIcon}>💬</span>
+              <span className={styles.chatBtnLabel}>Private Guardian Chat</span>
+              {unreadChatCount > 0 && (
+                <span className={styles.chatBadge} title={`${unreadChatCount} unread message(s)`}>
+                  {unreadChatCount > 9 ? '9+' : unreadChatCount}
+                </span>
+              )}
+            </Link>
+
             <Link to="/user/alerts" className={styles.headerAlertBtn} title="View Alerts">
               <span>🔔</span>
               <span>Alerts</span>

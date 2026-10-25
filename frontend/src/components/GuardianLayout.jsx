@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { api, clearAuth } from '../services/api';
+import { guardianChatService } from '../services/guardianChatService';
 import GuardianAIAssistantWidget from './GuardianAIAssistantWidget';
 import styles from './GuardianLayout.module.css';
 
@@ -9,6 +10,7 @@ const NAV_SECTIONS = [
     group: 'OVERVIEW',
     items: [
       { label: 'Dashboard', icon: '◈', path: '/guardian/dashboard' },
+      { label: 'Private User Chat', icon: '💬', path: '/guardian/chat' },
     ],
   },
   {
@@ -44,10 +46,19 @@ export default function GuardianLayout({ children }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [guardianData, setGuardianData] = useState(null);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
 
   useEffect(() => {
     api.getGuardianDashboard().then(setGuardianData).catch(() => {});
-  }, []);
+    guardianChatService
+      .getConversation()
+      .then((conv) => {
+        if (conv && typeof conv.unread_count === 'number') {
+          setUnreadChatCount(conv.unread_count);
+        }
+      })
+      .catch(() => {});
+  }, [location.pathname]);
 
   useEffect(() => {
     // Close mobile sidebar on navigation
@@ -78,17 +89,24 @@ export default function GuardianLayout({ children }) {
         {NAV_SECTIONS.map((section) => (
           <div key={section.group} className={styles.navGroup}>
             <span className={styles.navGroupLabel}>{section.group}</span>
-            {section.items.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`${styles.navItem} ${isActive(item.path) ? styles.navItemActive : ''}`}
-              >
-                <span className={styles.navIcon}>{item.icon}</span>
-                <span className={styles.navLabel}>{item.label}</span>
-                {isActive(item.path) && <span className={styles.activeBar} />}
-              </Link>
-            ))}
+            {section.items.map((item) => {
+              const active = isActive(item.path);
+              const isChat = item.path === '/guardian/chat';
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`${styles.navItem} ${active ? styles.navItemActive : ''}`}
+                >
+                  <span className={styles.navIcon}>{item.icon}</span>
+                  <span className={styles.navLabel}>{item.label}</span>
+                  {isChat && unreadChatCount > 0 && (
+                    <span className={styles.sidebarBadge}>{unreadChatCount}</span>
+                  )}
+                  {active && <span className={styles.activeBar} />}
+                </Link>
+              );
+            })}
           </div>
         ))}
       </nav>
@@ -132,6 +150,40 @@ export default function GuardianLayout({ children }) {
 
       {/* Main area */}
       <div className={styles.mainWrapper}>
+        {/* Desktop Top Header with Prominent Private User Chat button */}
+        <header className={styles.topHeader}>
+          <div className={styles.headerLeft}>
+            <span className={styles.monitoringDot} />
+            <span className={styles.monitoringLabel}>MONITORING:</span>
+            <strong className={styles.monitoringName}>{protectedName}</strong>
+          </div>
+
+          <div className={styles.headerActions}>
+            <Link
+              to="/guardian/chat"
+              className={styles.headerChatBtn}
+              title="Private User Chat"
+            >
+              <span className={styles.chatIcon}>💬</span>
+              <span className={styles.chatBtnLabel}>Private User Chat</span>
+              {unreadChatCount > 0 && (
+                <span className={styles.chatBadge} title={`${unreadChatCount} unread message(s)`}>
+                  {unreadChatCount > 9 ? '9+' : unreadChatCount}
+                </span>
+              )}
+            </Link>
+
+            <Link to="/guardian/alerts" className={styles.headerAlertBtn} title="Security Alerts">
+              <span>⚡</span>
+              <span>Alerts</span>
+            </Link>
+
+            <Link to="/guardian/settings" className={styles.headerSettingsBtn} title="Guardian Settings">
+              <span>⚙</span>
+            </Link>
+          </div>
+        </header>
+
         {/* Mobile top bar */}
         <div className={styles.mobileTopBar}>
           <button
@@ -144,6 +196,16 @@ export default function GuardianLayout({ children }) {
           <div className={styles.mobileBrand}>
             <span>🛡</span> KAVACH GUARDIAN
           </div>
+          <Link
+            to="/guardian/chat"
+            className={styles.mobileChatBtn}
+            title="Private User Chat"
+          >
+            💬
+            {unreadChatCount > 0 && (
+              <span className={styles.mobileChatBadge}>{unreadChatCount}</span>
+            )}
+          </Link>
         </div>
 
         <main className={styles.main}>

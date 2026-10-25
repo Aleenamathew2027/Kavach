@@ -25,6 +25,7 @@ import app.models.security_action
 import app.models.security_preference
 import app.models.scan_feedback
 import app.models.threat_location
+import app.models.guardian_chat
 from app.models.user import User
 from app.utils.security import hash_password, verify_password
 

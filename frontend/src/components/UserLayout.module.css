@@ -475,6 +475,65 @@
   transform: translateY(-1px);
 }
 
+.headerGuardianChatBtn {
+  background: linear-gradient(135deg, rgba(22, 45, 95, 0.75), rgba(30, 58, 120, 0.85));
+  border: 1px solid rgba(224, 197, 143, 0.4);
+  color: var(--kavach-quicksand, #e0c58f);
+  padding: 7px 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.headerGuardianChatBtn:hover {
+  background: linear-gradient(135deg, rgba(30, 60, 130, 0.9), rgba(40, 75, 160, 0.95));
+  border-color: var(--kavach-quicksand, #e0c58f);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(224, 197, 143, 0.25);
+}
+
+.chatIcon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.chatBtnLabel {
+  font-family: inherit;
+}
+
+.chatBadge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.sidebarBadge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
 /* ── PAGE CONTENT WRAPPER ── */
 .contentArea {
   max-width: 1360px;

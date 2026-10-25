@@ -15,6 +15,7 @@ export default function UserNav({ userName = 'Kavach User' }) {
 
   const navItems = [
     { label: 'Overview', path: '/user/dashboard' },
+    { label: '💬 Private Guardian Chat', path: '/user/guardian-chat' },
     { label: 'Security', path: '/user/security' },
     { label: 'Message Scanner', path: '/user/messages' },
     { label: 'Link Checker', path: '/user/link-checker' },

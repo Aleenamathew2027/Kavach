@@ -292,9 +292,185 @@
   background: var(--guardian-ivory);
 }
 
+/* ── DESKTOP TOP HEADER ── */
+.topHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 36px;
+  background: var(--guardian-white, #FAF9F5);
+  border-bottom: 1px solid var(--guardian-cream, #E8DFCF);
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(10, 119, 112, 0.04);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--guardian-text-dark, #173A38);
+}
+
+.monitoringDot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
+}
+
+.monitoringLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--guardian-muted, #6F807B);
+  text-transform: uppercase;
+}
+
+.monitoringName {
+  font-weight: 700;
+  color: var(--guardian-deep-teal, #005F5B);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* TOP RIGHT PRIVATE USER CHAT BUTTON */
+.headerChatBtn {
+  background: linear-gradient(135deg, var(--guardian-deep-teal, #005F5B), var(--guardian-teal, #0A7770));
+  border: 1px solid rgba(10, 119, 112, 0.3);
+  color: var(--guardian-ivory, #F4F0E6);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(0, 95, 91, 0.2);
+  white-space: nowrap;
+}
+
+.headerChatBtn:hover {
+  background: linear-gradient(135deg, var(--guardian-teal, #0A7770), #089188);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 95, 91, 0.3);
+  color: #ffffff;
+}
+
+.chatIcon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.chatBtnLabel {
+  font-family: inherit;
+}
+
+.chatBadge {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+  box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+}
+
+.headerAlertBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(10, 119, 112, 0.06);
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 8px;
+  color: var(--guardian-text-dark, #173A38);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.headerAlertBtn:hover {
+  background: rgba(10, 119, 112, 0.12);
+  border-color: var(--guardian-teal, #0A7770);
+  color: var(--guardian-teal, #0A7770);
+}
+
+.headerSettingsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(10, 119, 112, 0.06);
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 8px;
+  color: var(--guardian-text-dark, #173A38);
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.headerSettingsBtn:hover {
+  background: rgba(10, 119, 112, 0.12);
+  border-color: var(--guardian-teal, #0A7770);
+  color: var(--guardian-teal, #0A7770);
+}
+
+.sidebarBadge {
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.mobileChatBtn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--guardian-teal, #0A7770);
+  color: var(--guardian-ivory, #F4F0E6);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+  position: relative;
+}
+
+.mobileChatBadge {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
 .main {
   flex: 1;
-  min-height: 100vh;
+  min-height: calc(100vh - 65px);
 }
 
 /* ── MOBILE TOP BAR ── */

@@ -15,6 +15,7 @@ export default function GuardianNav({ guardianName = 'Guardian', protectedUserNa
 
   const navItems = [
     { label: 'Overview', path: '/guardian/dashboard' },
+    { label: '💬 Private User Chat', path: '/guardian/chat' },
     { label: 'Protected User', path: '/guardian/protected-user' },
     { label: 'Security', path: '/guardian/security' },
     { label: 'Alerts', path: '/guardian/alerts' },

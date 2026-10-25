@@ -470,6 +470,25 @@ export default function UserDashboard() {
                   <span>→</span>
                 </div>
               </Link>
+
+              {/* Card 5: Live Voice Guardian */}
+              <Link to="/user/live-voice" className={styles.scannerCard}>
+                <div>
+                  <div className={styles.scannerHeader}>
+                    <div className={styles.scannerIconWrap}>🎙️</div>
+                    <span className={styles.scannerCategory}>REAL-TIME VOICE</span>
+                  </div>
+                  <h3 className={styles.scannerTitle}>Live Voice Guardian</h3>
+                  <p className={styles.scannerDesc}>
+                    Real-time Malayalam + English voice scam &amp; vishing detection during active
+                    two-person voice conversations.
+                  </p>
+                </div>
+                <div className={styles.scannerAction}>
+                  <span>Open Voice Guardian</span>
+                  <span>→</span>
+                </div>
+              </Link>
             </div>
           </section>
 
@@ -610,9 +629,29 @@ export default function UserDashboard() {
                 </h2>
                 <span className={styles.sectionSubtitle}>Family safety network</span>
               </div>
-              <Link to="/user/guardian" style={{ fontSize: '11.5px', color: 'var(--kavach-quicksand)', textDecoration: 'none', fontWeight: 700 }}>
-                Manage Guardian Access →
-              </Link>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                <Link
+                  to="/user/guardian-chat"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(22, 45, 95, 0.75), rgba(30, 58, 120, 0.85))',
+                    border: '1px solid rgba(224, 197, 143, 0.4)',
+                    color: 'var(--kavach-quicksand, #e0c58f)',
+                    padding: '6px 14px',
+                    borderRadius: '4px',
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  💬 Private Guardian Chat
+                </Link>
+                <Link to="/user/guardian" style={{ fontSize: '11.5px', color: 'var(--kavach-quicksand)', textDecoration: 'none', fontWeight: 700 }}>
+                  Manage Access Code →
+                </Link>
+              </div>
             </div>
 
             <p className={styles.guardianIntro}>

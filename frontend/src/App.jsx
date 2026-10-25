@@ -15,7 +15,9 @@ import MessageScanner from './pages/MessageScanner';
 import LinkChecker from './pages/LinkChecker';
 import DocumentChecker from './pages/DocumentChecker';
 import QRScanner from './pages/QRScanner';
+import LiveVoiceGuardian from './pages/LiveVoiceGuardian';
 import UserGuardian from './pages/UserGuardian';
+import UserGuardianChat from './pages/UserGuardianChat';
 import UserReports from './pages/UserReports';
 
 // Admin Role Pages
@@ -35,6 +37,7 @@ import GuardianAlerts from './pages/GuardianAlerts';
 import GuardianActivity from './pages/GuardianActivity';
 import GuardianReports from './pages/GuardianReports';
 import GuardianSettings from './pages/GuardianSettings';
+import GuardianChat from './pages/GuardianChat';
 import AIAssistant from './pages/AIAssistant';
 
 import ProtectedRoute from './components/ProtectedRoute';
@@ -112,6 +115,18 @@ export default function App() {
           }
         />
         <Route
+          path="/user/live-voice"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <LiveVoiceGuardian />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/voice"
+          element={<Navigate to="/user/live-voice" replace />}
+        />
+        <Route
           path="/user/alerts"
           element={
             <ProtectedRoute allowedRoles={['user']}>
@@ -134,6 +149,18 @@ export default function App() {
               <UserGuardian />
             </ProtectedRoute>
           }
+        />
+        <Route
+          path="/user/guardian-chat"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+              <UserGuardianChat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/guardian/chat"
+          element={<Navigate to="/user/guardian-chat" replace />}
         />
         <Route
           path="/user/reports"
@@ -218,6 +245,18 @@ export default function App() {
               <GuardianDashboard />
             </ProtectedRoute>
           }
+        />
+        <Route
+          path="/guardian/messages"
+          element={
+            <ProtectedRoute allowedRoles={['guardian']}>
+              <GuardianChat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guardian/chat"
+          element={<Navigate to="/guardian/messages" replace />}
         />
         <Route
           path="/guardian/protected-user"

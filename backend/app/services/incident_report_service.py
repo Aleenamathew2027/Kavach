@@ -39,6 +39,8 @@ def map_scan_type_to_incident_type(scan_type: str) -> str:
         return "SUSPICIOUS_DOCUMENT"
     elif s_type == "qr":
         return "SUSPICIOUS_QR"
+    elif s_type in ("voice", "live_voice", "vishing"):
+        return "VOICE_VISHING_SCAM"
     return "MULTI_SIGNAL_SCAM"
 
 

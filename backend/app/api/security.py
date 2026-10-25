@@ -152,6 +152,13 @@ def analyze_message(
             logger.error(f"Failed to automatically generate incident report for message scan #{scan.id}: {rep_err}")
             report_generated = False
 
+        if alert:
+            try:
+                from app.services.guardian_notification_service import handle_security_alert_notification
+                handle_security_alert_notification(db, alert)
+            except Exception as notif_err:
+                logger.error(f"Failed to dispatch Guardian chat alert: {notif_err}")
+
         # Phase 18A/B: Optional threat infrastructure geolocation for HIGH_RISK messages containing URLs
         try:
             urls_res = extract_urls_from_text(body.message)
@@ -260,6 +267,13 @@ def analyze_link(
         except Exception as rep_err:
             logger.error(f"Failed to automatically generate incident report for link scan #{scan.id}: {rep_err}")
             report_generated = False
+
+        if alert:
+            try:
+                from app.services.guardian_notification_service import handle_security_alert_notification
+                handle_security_alert_notification(db, alert)
+            except Exception as notif_err:
+                logger.error(f"Failed to dispatch Guardian chat alert for link: {notif_err}")
 
         # Phase 18A: Optional threat infrastructure geolocation for HIGH_RISK link detections
         try:
@@ -383,6 +397,13 @@ async def analyze_document(
         except Exception as rep_err:
             logger.error(f"Failed to automatically generate incident report for document scan #{scan.id}: {rep_err}")
             report_generated = False
+
+        if alert:
+            try:
+                from app.services.guardian_notification_service import handle_security_alert_notification
+                handle_security_alert_notification(db, alert)
+            except Exception as notif_err:
+                logger.error(f"Failed to dispatch Guardian chat alert for document: {notif_err}")
 
         # Phase 18A/B: Optional threat infrastructure geolocation for HIGH_RISK documents with URLs or QR codes
         try:

@@ -10,6 +10,7 @@ from app.models.security_action import SecurityAction
 from app.models.security_preference import SecurityPreference
 from app.models.scan_feedback import ScanFeedback
 from app.models.threat_location import ThreatLocation
+from app.models.guardian_chat import GuardianConversation, GuardianMessage
 
 __all__ = [
     "User",
@@ -24,4 +25,6 @@ __all__ = [
     "SecurityPreference",
     "ScanFeedback",
     "ThreatLocation",
+    "GuardianConversation",
+    "GuardianMessage",
 ]

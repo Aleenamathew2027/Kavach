@@ -142,4 +142,11 @@ export const api = {
 
   // KAVACH AI Assistant (User & Guardian)
   chatWithAI: (body) => request('/ai/chat', { method: 'POST', body: JSON.stringify(body) }),
+
+  // Live Voice Guardian
+  createVoiceSession: (body) => request('/voice/session/create', { method: 'POST', body: JSON.stringify(body || {}) }),
+  joinVoiceSession: (body) => request('/voice/session/join', { method: 'POST', body: JSON.stringify(body) }),
+  getVoiceSession: (sessionId) => request(`/voice/session/${sessionId}`),
+  analyzeVoice: (body) => request('/voice/analyze', { method: 'POST', body: JSON.stringify(body) }),
+  endVoiceSession: (body) => request('/voice/session/end', { method: 'POST', body: JSON.stringify(body) }),
 };

@@ -75,6 +75,8 @@ def health_check():
 from app.api.incident_reports import router as incident_reports_router
 from app.api.ai_chat import router as ai_chat_router
 from app.api.threat_location import router as threat_location_router
+from app.api.live_voice import router as live_voice_router
+from app.api.guardian_chat import router as guardian_chat_router
 
 # Include Routers
 app.include_router(user_router)
@@ -84,3 +86,5 @@ app.include_router(security_router)
 app.include_router(incident_reports_router)
 app.include_router(ai_chat_router)
 app.include_router(threat_location_router)
+app.include_router(live_voice_router)
+app.include_router(guardian_chat_router)

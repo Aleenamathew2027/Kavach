@@ -182,6 +182,80 @@
   background: var(--guardian-teal, #0A7770);
 }
 
+.testSmsBtn {
+  padding: 10px 20px;
+  background: rgba(10, 119, 112, 0.1);
+  color: var(--guardian-teal, #0A7770);
+  border: 1px solid var(--guardian-teal, #0A7770);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.testSmsBtn:hover:not(:disabled) {
+  background: var(--guardian-teal, #0A7770);
+  color: var(--guardian-ivory, #F4F0E6);
+}
+
+.testSmsBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.phoneInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.phoneInput {
+  padding: 10px 14px;
+  border: 1px solid var(--guardian-cream, #E8DFCF);
+  border-radius: 8px;
+  font-size: 13.5px;
+  background: var(--guardian-white, #FAF9F5);
+  color: var(--guardian-text-dark, #173A38);
+  outline: none;
+}
+
+.phoneInput:focus {
+  border-color: var(--guardian-teal, #0A7770);
+}
+
+.providerBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.providerConfigured {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.providerUnconfigured {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
 /* ── DANGER CARD ── */
 .dangerCard {
   background: var(--guardian-white, #FAF9F5);

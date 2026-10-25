@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import UserLayout from '../components/UserLayout';
 import styles from './UserDashboard.module.css';
@@ -55,6 +56,31 @@ export default function UserGuardian() {
       subtitle="Connect someone you trust to help monitor your security telemetry without exposing passwords or private messages."
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+        {/* Quick link to Guardian Chat */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(224, 197, 143, 0.08)', border: '1px solid rgba(224, 197, 143, 0.25)', padding: '14px 20px', borderRadius: '8px' }}>
+          <div>
+            <strong style={{ color: 'var(--kavach-swan-wing)', fontSize: '14px' }}>💬 Guardian Private Chat</strong>
+            <p style={{ margin: '4px 0 0 0', fontSize: '12.5px', color: 'var(--kavach-shellstone)' }}>
+              Direct private messaging and recorded voice notes with your linked guardian.
+            </p>
+          </div>
+          <Link
+            to="/user/guardian-chat"
+            style={{
+              background: 'var(--kavach-quicksand, #e0c58f)',
+              color: 'var(--kavach-royal-blue, #0d1a3a)',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontWeight: 700,
+              fontSize: '13px',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            Open Guardian Chat →
+          </Link>
+        </div>
+
         {/* Guardian Code Generator Card */}
         <section className={styles.guardianPanel}>
           <div className={styles.sectionHeader}>
